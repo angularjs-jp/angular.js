@@ -24,16 +24,17 @@
  </doc:scenario>
 </doc:example>
 
-# Things to notice
+# 注意点
 
-Take a look through the source and note:
+ソースコードと注目点をみていきましょう:
 
 * The script tag that {@link guide/bootstrap bootstraps} the Angular environment.
-* The text {@link api/ng.directive:input input form control} which is
-  bound to the greeting name text.
-* There is no need for listener registration and event firing on change events.
-* The implicit presence of the `name` variable which is in the root {@link api/ng.$rootScope.Scope scope}.
-* The double curly brace `{{markup}}`, which binds the name variable to the greeting text.
+* headタグの中の一番上にあるスクリプトタグはAngularの環境を{@link guide/bootstrap 自動的に初期化}します。
+* Hello以下に続く文字は{@link api/ng.directive:input インプットフォーム}から入力されたテキストと同じになります。
+* リスナの登録と変更時に発火するイベントは必要ありません。
+* 暗黙の存在である変数nameはroot{@link api/ng.$rootScope.Scope スコープ}に含まれています。
+* ふたつの波括弧`{{markup}}`は変数nameをHello以下の文字にバインドさせます。
 * The concept of {@link guide/dev_guide.templates.databinding data binding}, which reflects any
 changes to the
   input field in the greeting text.
+* {@link guide/dev_guide.templates.databinding データバインディング}の構想では、インプットフォームの全ての変化をHello以下に反映させます。
