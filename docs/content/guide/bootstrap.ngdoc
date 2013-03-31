@@ -1,17 +1,15 @@
 @ngdoc overview
-@name Developer Guide: Bootstrap
+@name 開発者向けガイド：ブートストラップ
 @description
 
-# Overview
+# 概要
 
-This page explains the Angular initialization process and how you can manually initialize Angular
-if necessary.
+このページでは、Angularの初期化の手順と、手動で初期化する必要があればどのようにそれが行えるかを説明していきます。
 
 
-# Angular `<script>` Tag
+# Angular `<script>` タグ 
 
-This example shows the recommended path for integrating Angular with what we call automatic
-initialization.
+以下の例では、いわゆる自動初期化におけるAngularの推奨された使い方を示します。
 
 
 <pre>
@@ -24,48 +22,34 @@ initialization.
 </html>
 </pre>
 
-  * Place the `script` tag at the bottom of the page. Placing script tags at the end of the page
-    improves app load time because the HTML loading is not blocked by loading of the `angular.js`
-    script. You can get the latest bits from {@link http://code.angularjs.org}. Please don't link
-    your production code to this URL, as it will expose a security hole on your site. For
-    experimental development linking to our site is fine.
-    * Choose: `angular-[version].js` for a human-readable file, suitable for development and
-      debugging.
-    * Choose: `angular-[version].min.js` for a compressed and obfuscated file, suitable for use in
-      production.
-  * Place `ng-app` to the root of your application, typically on the `<html>` tag if you want
-    angular to auto-bootstrap your application.
+  * `script`タグはページの最下部に配置します。scriptタグをページの最下部に配置することで、`angular.js`の読み込みによるHTMLの読み込みブロックが発生しないので、アプリケーションの読み込み時間を改善できます。最新のファイルは{@link http://code.angularjs.org/}から取得できます。セキュリティホールをさらすことになるので、プロダクションコードにこのURLのリンクを用いてはいけません。開発段階のコードに用いることは問題ありません。
+    * 選択肢：`angular-[version].js`は、人が読める、開発とデバッグに適切なファイルです。
+    * 選択肢：`angular-[version].min.js`は、プロダクションレベルで使うのに適切な、圧縮され難読化されたファイルです。
+  * 自動的にangularを起動したければ、アプリケーションのルートに、一般的には、`<html>`タグに`ng-app`を配置します。
 
         <html ng-app>
 
-  * If you choose to use the old style directive syntax `ng:` then include xml-namespace in `html`
-    to make IE happy. (This is here for historical reasons, and we no longer recommend use of
-    `ng:`.)
+  * 古いスタイルの構文`ng:`を使用する場合、IEを幸せにするため、`html`にxml-namespaceが含まれます。(これは歴史的な理由によるもので、`ng:`を使用することは現在推奨されていません。)
 
         <html xmlns:ng="http://angularjs.org">
 
 
 
-# Automatic Initialization
+# 自動初期化
 
-Angular initializes automatically upon `DOMContentLoaded` event, at which point Angular looks for
-the {@link api/ng.directive:ngApp `ng-app`} directive which
-designates your application root. If the {@link
-api/ng.directive:ngApp `ng-app`} directive is found then Angular
-will:
+`DOMContentLoaded`のタイミングでAngularは自動的に初期化します。この時、Angularはアプリケーションのルートに指定されている{@link api/ng.directive:ngApp `ng-app`}の命令を探します。
+{@link api/ng.directive:ngApp `ng-app`}の命令が見つかれば、Angularは以下のことを行います。:
 
-  * load the {@link guide/module module} associated with the directive.
-  * create the application {@link api/AUTO.$injector injector}
-  * compile the DOM treating the {@link api/ng.directive:ngApp
-    `ng-app`} directive as the root of the compilation. This allows you to tell it to treat only a
-    portion of the DOM as an Angular application.
+  * 命令に関連づけられた{@link guide/module モジュール}の読み込み。
+  * アプリケーションの{@link api/AUTO.$injector インジェクター}を生成。
+  * Angularにコンパイルされるルートとして、{@link api/ng.directive:ngApp `ng-app`}の命令を処理するDOMをコンパイルします。このDOMの部分のみをAngularのアプリケーションとして取り扱うことができます。
 
 
 <pre>
 <!doctype html>
 <html ng-app="optionalModuleName">
   <body>
-    I can add: {{ 1+2 }}.
+    足し算ができます: {{ 1+2 }}。
     <script src="angular.js"></script>
   </body>
 </html>
@@ -73,22 +57,19 @@ will:
 
 
 
-# Manual Initialization
+# 手動初期化
 
 
-If you need to have more control over the initialization process, you can use a manual
-bootstrapping method instead. Examples of when you'd need to do this include using script loaders
-or the need to perform an operation before Angular compiles a page.
+初期化の過程でより多くのことをする必要がある場合は、手動で初期化することができます。 そうしなければならないケースでは、スクリプトローダーを用いるかAngularがページをコンパイルする前に処理を行う必要があります。
 
 
-Here is an example of manually initializing Angular. The example is equivalent to using the {@link
-api/ng.directive:ngApp ng-app} directive.
+以下はAngularの手動初期化の例です。この例は{@link api/ng.directive:ngApp ng-app}の命令を用いることと同じ意味を持ちます。
 
 <pre>
 <!doctype html>
 <html xmlns:ng="http://angularjs.org">
   <body>
-    Hello {{'World'}}!
+    こんにちわ {{'世界'}}!
     <script src="http://code.angularjs.org/angular.js"></script>
     <script>
        angular.element(document).ready(function() {
@@ -99,10 +80,7 @@ api/ng.directive:ngApp ng-app} directive.
 </html>
 </pre>
 
-This is the sequence that your code should follow:
+コードは以下の手順に従います。:
 
-  1. After the page and all of the code is loaded, find the root of the HTML template, which is
-  typically the root of the document.
-
-  2. Call {@link api/angular.bootstrap} to {@link compiler compile} the template into an
-  executable, bi-directionally bound application.
+  1. ページと全てのコードが読み込まれたら、HTMLテンプレートのルート、一般的にはドキュメントルートを探します。
+  2. 実行可能で双方向にバインドされたアプリケーションにテンプレートを{@link compiler コンパイル}するために{@link api/angular.bootstrap}を呼び出します。
