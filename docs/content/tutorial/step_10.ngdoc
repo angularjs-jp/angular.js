@@ -1,26 +1,24 @@
 @ngdoc overview
-@name Tutorial: 10 - Event Handlers
+@name Tutorial: 10 - イベントハンドラー
 @description
 
 <ul doc-tutorial-nav="10"></ul>
 
 
-In this step, you will add a clickable phone image swapper to the phone details page.
+このステップでは、スマートフォン詳細ページにクリック可能なスマートフォン画像のスワッパーを追加します。
 
 
 <div doc-tutorial-reset="10"></div>
 
 
-The phone details view displays one large image of the current phone and several smaller thumbnail
-images. It would be great if we could replace the large image with any of the thumbnails just by
-clicking on the desired thumbnail image. Let's have a look at how we can do this with Angular.
+スマートフォン詳細ビューは現在のスマートフォンの１枚の大きな画像と複数のより小さいサムネイル画像を表示します。見たいサムネイル画像をクリックすることで、大きな画像をサムネイル画像で置き換えることができたら素敵でしょう。Angularを使ってこれをどう実現するかを見てみましょう。
 
-The most important changes are listed below. You can see the full diff on {@link
+主な変更点は以下に挙げます。完全な差分は{@link
 https://github.com/angular/angular-phonecat/compare/step-9...step-10
-GitHub}:
+GitHub}で見ることができます：
 
 
-## Controller
+## コントローラー
 
 __`app/js/controllers.js`:__
 <pre>
@@ -39,13 +37,12 @@ function PhoneDetailCtrl($scope, $routeParams, $http) {
 //PhoneDetailCtrl.$inject = ['$scope', '$routeParams', '$http'];
 </pre>
 
-In the `PhoneDetailCtrl` controller, we created the `mainImageUrl` model property and set its
-default value to the first phone image URL.
+`PhoneDetailCtrl`コントローラーの中で、モデルプロパティ`mainImageUrl`を作り、そのデフォルト値を最初のスマートフォン画像のURLに設定しました。
 
-We also created a `setImage` event handler function that will change the value of `mainImageUrl`.
+また、`mainImageUrl`の値を変更する`setImage`イベントハンドラーを作りました。
 
 
-## Template
+## テンプレート
 
 __`app/partials/phone-detail.html`:__
 <pre>
@@ -61,23 +58,18 @@ __`app/partials/phone-detail.html`:__
 ...
 </pre>
 
-We bound the `ngSrc` directive of the large image to the `mainImageUrl` property.
+大きな画像の`ngSrc`ディレクティブを`mainImageUrl`プロパティに結びつけました。
 
-We also registered an {@link api/ng.directive:ngClick `ngClick`}
-handler with thumbnail images. When a user clicks on one of the thumbnail images, the handler will
-use the `setImage` event handler function to change the value of the `mainImageUrl` property to the
-URL of the thumbnail image.
+また、{@link api/ng.directive:ngClick `ngClick`}ハンドラーをサムネイル画像に登録しました。ユーザーがサムネイル画像のどれかをクリックすると、このハンドラーは`setImage`イベントハンドラー関数を使って`mainImageUrl`プロパティの値をサムネイル画像のURLに変更します。
 
 <div style="display: none">
 TODO!
 <img  class="diagram" src="img/tutorial/tutorial_10-11_final.png">
 </div>
 
-## Test
+## テスト
 
-To verify this new feature, we added two end-to-end tests. One verifies that the main image is set
-to the first phone image by default. The second test clicks on several thumbnail images and
-verifies that the main image changed appropriately.
+この新しい機能を確認するためにエンドツーエンドテストを２つ追加しました。１つは、メイン画像がデフォルトで最初のスマートフォンの画像にセットされることを確認します。２つ目のテストはいくつかのサムネイル画像をクリックして、メイン画像が適切に変更されることを確認します。
 
 __`test/e2e/scenarios.js`:__
 <pre>
@@ -102,24 +94,21 @@ __`test/e2e/scenarios.js`:__
 });
 </pre>
 
-You can now rerun `./scripts/e2e-test.sh` or refresh the browser tab with the end-to-end test
-runner to see the tests run, or you can see them running on {@link
-http://angular.github.com/angular-phonecat/step-8/test/e2e/runner.html
-Angular's server}.
+`./scripts/e2e-test.sh`を再実行、またはエンドツーエンドテストランナーのブラウザタブを更新してテストの実行を見るか、もしくは{@link
+http://angular.github.com/angular-phonecat/step-10/test/e2e/runner.html
+Angularのサーバー}でテストの実行を見て下さい。
 
-# Experiments
+# 実験
 
-* Let's add a new controller method to `PhoneDetailCtrl`:
+* `PhoneDetailCtrl`に新しいコントローラーメソッドを追加しましょう：
 
           $scope.hello = function(name) {
               alert('Hello ' + (name || 'world') + '!');
           }
 
-  and add:
+  そして次を`phone-details.html`テンプレートに加えましょう：
 
           <button ng-click="hello('Elmo')">Hello</button>
-
-  to the `phone-details.html` template.
 
 <div style="display: none">
 TODO!
@@ -132,10 +121,9 @@ template remains operational.
 </div>
 
 
-# Summary
+# まとめ
 
-With the phone image swapper in place, we're ready for {@link step_11 step 11} (the last step!) to
-learn an even better way to fetch data.
+スマートフォン画像のスワップ機能ができたので、{@link step_11 ステップ11}（最後のステップです！）でデータを取得するよりよい方法を学ぶ準備ができました。
 
 
 <ul doc-tutorial-nav="10"></ul>
