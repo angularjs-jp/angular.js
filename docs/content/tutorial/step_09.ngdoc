@@ -1,31 +1,28 @@
 @ngdoc overview
-@name Tutorial: 9 - Filters
+@name Tutorial: 9 - フィルター
 @description
 
 <ul doc-tutorial-nav="9"></ul>
 
 
-In this step you will learn how to create your own custom display filter.
+このステップではカスタム表示フィルターの作り方を学びます。
 
 
 <div doc-tutorial-reset="9"></div>
 
 
-Navigate to one of the detail pages.
+詳細ページの１つに移動して下さい。
 
-In the previous step, the details page displayed either "true" or "false" to indicate whether
-certain phone features were present or not. We have used a custom filter to convert those text
-strings into glyphs: ✓ for "true", and ✘ for "false". Let's see what the filter code looks like.
+前ステップでは、詳細ページはスマートフォンに特定の機能があるかどうかを示すために"true"または"false"を表示していました。カスタムフィルターを使ってこうしたテキスト文字列を記号（✓を"true"、✘を"false"の代わりに）に変換しました。フィルターのコードがどのような感じなのか見てみましょう。
 
-The most important changes are listed below. You can see the full diff on {@link
+主な変更点は以下に挙げます。完全な差分は{@link
 https://github.com/angular/angular-phonecat/compare/step-8...step-9
-GitHub}:
+GitHub}で見ることができます：
 
 
-## Custom Filter
+## カスタムフィルター
 
-In order to create a new filter, you are going to create a `phonecatFilters` module and register
-your custom filter with this module:
+新しいカスタムフィルターを作るために、`phonecatFilters`モジュールを作り、カスタムフィルターをこのモジュールに登録します：
 
 __`app/js/filters.js`:__
 <pre>
@@ -36,12 +33,9 @@ angular.module('phonecatFilters', []).filter('checkmark', function() {
 });
 </pre>
 
-The name of our filter is "checkmark". The `input` evaluates to either `true` or `false`, and we
-return one of two unicode characters we have chosen to represent true or false (`\u2713` and
-`\u2718`).
+フィルターの名前は"checkmark"です。`input`は`true`または`false`に評価され、その値に応じて予め選んだtrueまたはfalseを表す２つのユニコード文字（`\u2713`と`\u2718`）のうち１つが返されます。
 
-Now that our filter is ready, we need to register the `phonecatFilters` module as a dependency for
-our main `phonecat` module.
+こうしてフィルターが準備できたので、`phonecatFilters`モジュールをメインの`phonecat`モジュールが依存するものとして登録します。
 
 __`app/js/app.js`:__
 <pre>
@@ -51,10 +45,9 @@ angular.module('phonecat', ['phonecatFilters']).
 </pre>
 
 
-## Template
+## テンプレート
 
-Since the filter code lives in the `app/js/filters.js` file, we need to include this file in our
-layout template.
+フィルターのコードは`app/js/filters.js`の中にあるので、このファイルをレイアウトテンプレートの中に含める必要があります。
 
 __`app/index.html`:__
 <pre>
@@ -64,11 +57,11 @@ __`app/index.html`:__
 ...
 </pre>
 
-The syntax for using filters in Angular templates is as follows:
+Angularテンプレートの中でフィルタを使う記法は次の通りです：
 
     {{ expression | filter }}
 
-Let's employ the filter in the phone details template:
+スマートフォン詳細テンプレートの中でこのフィルターを使ってみましょう：
 
 
 
@@ -85,9 +78,9 @@ __`app/partials/phone-detail.html`:__
 </pre>
 
 
-## Test
+## テスト
 
-Filters, like any other component, should be tested and these tests are very easy to write.
+他の全てのコンポーネントと同様、フィルターはテストされるべきです。そしてこのテストを書くのも非常に簡単です。
 
 __`test/unit/filtersSpec.js`:__
 <pre>
@@ -107,33 +100,29 @@ describe('filter', function() {
 });
 </pre>
 
-Note that you need to configure our test injector with the `phonecatFilters` module before any of
-our filter tests execute.
+フィルターのテストが実行される前に、テストインジェクターを`phonecatFilters`モジュールで設定しておく必要があることに注意して下さい。
 
-You should now see the following output in the Testacular tab:
+次の出力をTestacularのタブで確認できるはずです：
 
         Chrome 22.0: Executed 4 of 4 SUCCESS (0.034 secs / 0.012 secs)
 
 
-# Experiments
+# 実験
 
-* Let's experiment with some of the {@link api/ng.$filter built-in Angular filters} and add the
-following bindings to `index.html`:
+* いくつかの{@link api/ng.$filter Angularのビルトインフィルター}を使って実験してみましょう。次のバインディングを`index.html`に追加して下さい：
   * `{{ "lower cap string" | uppercase }}`
   * `{{ {foo: "bar", baz: 23} | json }}`
   * `{{ 1304375948024 | date }}`
   * `{{ 1304375948024 | date:"MM/dd/yyyy @ h:mma" }}`
 
-*  We can also create a model with an input element, and combine it with a filtered binding. Add
-the following to index.html:
+* インプット要素を使ってモデルを作り、フィルターが適用されたバインディングに結びつけることもできます。次をindex.htmlに加えましょう：
 
         <input ng-model="userInput"> Uppercased: {{ userInput | uppercase }}
 
 
-# Summary
+# まとめ
 
-Now that you have learned how to write and test a custom filter, go to {@link step_10 step 10} to
-learn how we can use Angular to enhance the phone details page further.
+これでカスタムフィルターの書き方、テストの仕方を学びました。{@link step_10 ステップ10}に進んでスマートフォン詳細ページをさらに進化させるためにAngularをどのように使うことができるかを学びましょう。
 
 
 <ul doc-tutorial-nav="9"></ul>
