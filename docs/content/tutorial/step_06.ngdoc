@@ -4,26 +4,23 @@
 
 <ul doc-tutorial-nav="6"></ul>
 
-
-In this step, you will add thumbnail images for the phones in the phone list, and links that, for
-now, will go nowhere. In subsequent steps you will use the links to display additional information
-about the phones in the catalog.
+このステップでは、電話帳にサムネイル画像と、画像のリンクを加えます。
+今後のステップではカタログ内の電話情報としてリンクを表示させます。
 
 
 <div doc-tutorial-reset="6"></div>
 
+リンクと電話帳内にある画像を見てください。
 
-You should now see links and images of the phones in the list.
-
-The most important changes are listed below. You can see the full diff on {@link
+これは列挙前のとても大事な情報です。あなたは差分をみることができます{@link
 https://github.com/angular/angular-phonecat/compare/step-5...step-6
 GitHub}:
 
 
 ## Data
 
-Note that the `phones.json` file contains unique ids and image urls for each of the phones. The
-urls point to the `app/img/phones/` directory.
+`phones.json`ファイルはそれぞれの電話番号にユニークなIDと画像URLが含まれています。
+このURLは`app/img/phones/`以下をさしています。
 
 __`app/phones/phones.json`__ (sample snippet):
 <pre>
@@ -55,18 +52,13 @@ __`app/index.html`:__
 ...
 </pre>
 
-To dynamically generate links that will in the future lead to phone detail pages, we used the
-now-familiar double-curly brace binding in the `href` attribute values. In step 2, we added the
-`{{phone.name}}` binding as the element content. In this step the `{{phone.id}}` binding is used in
-the element attribute.
+電話詳細ページの変数置換が動的生成されようとするとき、もっとも近い２重カッコの`href`アトリビュート値が選ばれます。
+step2では`{{phone.name}}`を加えました。このステップでは要素アトリビュート内にある`{{phone.id}}`を使います。
 
-We also added phone images next to each record using an image tag with the {@link
-api/ng.directive:ngSrc ngSrc} directive. That directive prevents the
-browser from treating the angular `{{ expression }}` markup literally, and initiating a request to
-invalid url `http://localhost:8000/app/{{phone.imageUrl}}`, which it would have done if we had only
-specified an attribute binding in a regular `src` attribute (`<img  class="diagram" src="{{phone.imageUrl}}">`).
-Using the `ngSrc` directive prevents the browser from making an http request to an invalid location.
-
+再度電話画像をそれぞれのレコードで使用しているタグに付いている{@link
+api/ng.directive:ngSrc ngSrc}に加えます。このディレクティブはangular `{{ expression }}` markupからのブラウザ置換を防止するのと、
+無効なURLである`http://localhost:8000/app/{{phone.imageUrl}}`を初期化します、一般的なsrcアトリビュート内にある一つだけ定義されたアトリビュートにバインディングされます。
+ブラウザが無効な場所を指すhttp requestで作ろうとした場合bgSrcディレクティブは防止されます。
 
 ## Test
 
@@ -81,31 +73,25 @@ __`test/e2e/scenarios.js`__:
 ...
 </pre>
 
-We added a new end-to-end test to verify that the app is generating correct links to the phone
-views that we will implement in the upcoming steps.
+私達は新しい end-to-end テストを確認する方法を加えました。　今後のstepでアプリケーションがphone views への正しいリンクを生成する処理を実装します
 
-You can now rerun `./scripts/e2e-test.sh` or refresh the browser tab with the end-to-end test
-runner to see the tests run, or you can see them running on {@link
+あなたは`./scripts/e2e-test.sh`が処理を戻すかブラウザの更新処理を行うことでend-to-end testが動く様子を見れます。
+テスト結果はこちらで確認できます{@link
 http://angular.github.com/angular-phonecat/step-6/test/e2e/runner.html
 Angular's server}.
 
 
 # Experiments
 
-* Replace the `ng-src` directive with a plain old `src` attribute. Using tools such as Firebug,
-or Chrome's Web Inspector, or inspecting the webserver access logs, confirm that the app is indeed
-making an extraneous request to `/app/%7B%7Bphone.imageUrl%7D%7D` (or
+* srcアトリビュートのついた`ng-src`ディレクティブを置換します。 Firebug、chrome Web Inspector もしくは webサーバのアクセスログ を使います。 アプリケーションは無関係なリクエストを送ります。`/app/%7B%7Bphone.imageUrl%7D%7D` (or
 `/app/{{phone.imageUrl}}`).
 
-  The issue here is that the browser will fire a request for that invalid image address as soon as
-it hits the `img` tag, which is before Angular has a chance to evaluate the expression and inject
-the valid address.
+この問題はブラウザが無効な画像アドレスのimgタグのリクエストを打った時 Angular が式を評価するときと値をインジェクトする前におきます
+
 
 
 # Summary
 
-Now that you have added phone images and links, go to {@link step_07 step 7} to learn about Angular
-layout templates and how Angular makes it easy to create applications that have multiple views.
-
+今回は電話画像とリンクをつけました。つぎは {@link step_07 step 7} で Angular layout template　と簡単にマルチビューを行いアプリケーションを作ります。
 
 <ul doc-tutorial-nav="6"></ul>
