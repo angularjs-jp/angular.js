@@ -1,33 +1,29 @@
 @ngdoc overview
-@name Tutorial: 8 - More Templating
+@name Tutorial: 8 - もっとテンプレートについて
 @description
 
 <ul doc-tutorial-nav="8"></ul>
 
 
-In this step, you will implement the phone details view, which is displayed when a user clicks on a
-phone in the phone list.
+このステップでは、ユーザーがスマートフォンリスト上のスマートフォンをクリックした時に表示される詳細ビューを実装します。
 
 
 <div doc-tutorial-reset="8"></div>
 
 
-Now when you click on a phone on the list, the phone details page with phone-specific information
-is displayed.
+リスト上のスマートフォンをクリックすると、そのスマートフォン固有の情報を持つ詳細ページが表示されます。
 
-To implement the phone details view we will use {@link api/ng.$http $http} to fetch
-our data, and we'll flesh out the `phone-detail.html` view template.
+スマートフォン詳細ページを実装するため、データを取得するのに{@link api/ng.$http $http}を使います。そしてビューテンプレート`phone-detail.html`を実際に作っていきます。
 
-The most important changes are listed below. You can see the full diff on {@link
+主な変更点は以下に挙げます。完全な差分は{@link
 https://github.com/angular/angular-phonecat/compare/step-7...step-8
-GitHub}:
+GitHub}で見ることができます：
 
-## Data
+## データ
 
-In addition to `phones.json`, the `app/phones/` directory also contains one json file for each
-phone:
+`phones.json`の他に、`app/phones/`ディレクトリにはスマートフォンごとに１つのjsonファイルが入っています：
 
-__`app/phones/nexus-s.json`:__ (sample snippet)
+__`app/phones/nexus-s.json`:__ (サンプルスニペット)
 <pre>
 {
   "additionalFeatures": "Contour Display, Near Field Communications (NFC),...",
@@ -50,14 +46,12 @@ __`app/phones/nexus-s.json`:__ (sample snippet)
 </pre>
 
 
-Each of these files describes various properties of the phone using the same data structure. We'll
-show this data in the phone detail view.
+それぞれのファイルは、同じデータ構造を使ってスマートフォンの様々な特性を記述しています。このデータをスマートフォン詳細画面に表示します。
 
 
-## Controller
+## コントローラー
 
-We'll expand the `PhoneDetailCtrl` by using the `$http` service to fetch the json files. This works
-the same way as the phone list controller.
+jsonファイルを取得するために、`$http`を使って`PhoneDetailCtrl`を拡張します。これはスマートフォンリストのコントローラーと同じように動きます。
 
 __`app/js/controllers.js`:__
 <pre>
@@ -70,15 +64,12 @@ function PhoneDetailCtrl($scope, $routeParams, $http) {
 //PhoneDetailCtrl.$inject = ['$scope', '$routeParams', '$http'];
 </pre>
 
-To construct the URL for the HTTP request, we use `$routeParams.phoneId` extracted from the current
-route by the `$route` service.
+HTTPリクエストのためのURLを組み立てるため、`$route`サービスによって現在のルートから取り出される`$routeParams.phoneId`を使います。
 
 
-## Template
+## テンプレート
 
-The TBD placeholder line has been replaced with lists and bindings that comprise the phone details.
-Note where we use the angular `{{expression}}` markup and `ngRepeat` to project phone data from
-our model into the view.
+TBDプレースホルダーの行は、スマートフォンの詳細を構成するようにリストとバインディングで置き換えました。モデルからビューにスマートフォンデータを射影するために、angularの`{{expression}}`マークアップと`ngRepeat`をどこで使っているかに注目して下さい。
 
 
 __`app/partials/phone-detail.html`:__
@@ -116,10 +107,9 @@ TODO!
 <img  class="diagram" src="img/tutorial/tutorial_08-09_final.png">
 </div>
 
-## Test
+## テスト
 
-We wrote a new unit test that is similar to the one we wrote for the `PhoneListCtrl` controller in
-step 5.
+ステップ５で`PhoneListCtrl`コントローラーのために書いたものと似たようなユニットテストを新しく書きました。
 
 __`test/unit/controllersSpec.js`:__
 <pre>
@@ -147,13 +137,12 @@ __`test/unit/controllersSpec.js`:__
 ...
 </pre>
 
-You should now see the following output in the Testacular tab:
+次の出力をTestacularのタブで確認できるはずです：
 
     Chrome 22.0: Executed 3 of 3 SUCCESS (0.039 secs / 0.012 secs)
 
 
-We also added a new end-to-end test that navigates to the Nexus S detail page and verifies that the
-heading on the page is "Nexus S".
+Nexus Sの詳細ページに遷移しページの見出しが"Nexus S"であることを確認するという新しいエンドツーエンドテストも追加しました。
 
 __`test/e2e/scenarios.js`:__
 <pre>
@@ -173,22 +162,19 @@ __`test/e2e/scenarios.js`:__
 </pre>
 
 
-You can now rerun `./scripts/e2e-test.sh` or refresh the browser tab with the end-to-end test
-runner to see the tests run, or you can see them running on {@link
+`./scripts/e2e-test.sh`を再実行、またはエンドツーエンドテストランナーのブラウザタブを更新してテストの実行を見るか、もしくは{@link
 http://angular.github.com/angular-phonecat/step-8/test/e2e/runner.html
-Angular's server}.
+Angular's server}でテストの実行を見て下さい。
 
 
-# Experiments
+# 実験
 
-* Using the {@link guide/dev_guide.e2e-testing Angular's end-to-end test runner API}, write a test
-that verifies that we display 4 thumbnail images on the Nexus S details page.
+* {@link guide/dev_guide.e2e-testing Angularのエンドツーエンドテスト実行API}を使って、Nexus Sの詳細ページに４つのサムネイル画像が表示されることを確認するテストを書いて下さい。
 
 
-# Summary
+# まとめ
 
-Now that the phone details view is in place, proceed to {@link step_09 step 9} to learn how to
-write your own custom display filter.
+これでスマートフォン詳細画面ができました。{@link step_09 ステップ９}に進んでカスタム表示フィルターの書き方を学びましょう。
 
 
 <ul doc-tutorial-nav="8"></ul>
