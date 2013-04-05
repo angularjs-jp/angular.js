@@ -3,29 +3,21 @@
 @name Developer Guide: E2E Testing
 @description
 
-As applications grow in size and complexity, it becomes unrealistic to rely on manual testing to
-verify the correctness of new features, catch bugs and notice regressions.
+アプリケーションが肥大化し複雑さを増すと､手動でのテストに頼って新しい機能が正しく動いていることを確認するのは非現実的になります｡
 
-To solve this problem, we have built an Angular Scenario Runner which simulates user interactions
-that will help you verify the health of your Angular application.
+この問題に対処するために､我々Angular開発チームは Angularシナリオランナーを開発しました｡Angularシナリオランナーは､ユーザーの操作をシミュレートすることで､Angularアプリケーションが常に正しく動いていることを検証する手助けをします｡
 
-# Overview
-You will write scenario tests in JavaScript, which describe how your application should behave,
-given a certain interaction in a specific state. A scenario is comprised of one or more `it` blocks
-(you can think of these as the requirements of your application), which in turn are made of
-**commands** and **expectations**. Commands tell the Runner to do something with the application
-(such as navigate to a page or click on a button), and expectations tell the Runner to assert
-something about the state (such as the value of a field or the current URL). If any expectation
-fails, the runner marks the `it`  as "failed" and continues on to the next one. Scenarios may also
-have **beforeEach** and **afterEach** blocks, which will be run before (or after) each `it`  block,
-regardless of whether they pass or fail.
+# 概要
+テストシナリオはJavaScriptで記述します｡シナリオには特定の状況のユーザー操作に対して､アプリケーションがどのような振る舞いをするのかを詳しく書きます｡
+シナリオは一つまたは複数の`it`ブロック(これをアプリケーションの要求仕様とみなすことが出来るでしょう)から成り､`it`ブロックは**コマンド**や**期待値の確認**から構成されます｡
+コマンドはテストランナーにアプリケーションの操作（たとえばページ移動とかボタンクリックとか）をするように指示するもので､期待値の確認はテストランナーに状態の確認（たとえば入力フィールドの値とか現在のURLとか）をするよう指示します｡
+期待値の確認が失敗すると､テストランナーはその`it`ブロックを「失敗」として記録し､次のテストケースを実行します｡シナリオに**beforeEach**ブロックや**afterEach**ブロックがある場合､各`it`ブロックが実行される前後にそれらが実行されます｡これらの前後処理は`it`ブロックが成功しているか失敗しているかに関わらず実行されます｡
 
 <img src="img/guide/scenario_runner.png">
 
-In addition to the above elements, scenarios may also contain helper functions to avoid duplicating
-code in the `it` blocks.
+上記の要素に加えて､シナリオには`it`内での処理の重複を避けるための関数を含めることもできます｡
 
-Here is an example of a simple scenario:
+シナリオの例は次のようになります:
 <pre>
 describe('Buzz Client', function() {
 it('should filter results', function() {
@@ -41,8 +33,11 @@ This scenario describes the requirements of a Buzz Client, specifically, that it
 filter the stream of the user. It starts by entering a value in the 'user' input field, clicking
 the only button on the page, and then it verifies that there are 10 items listed. It then enters
 'Bees' in the 'filterText' input field and verifies that the list is reduced to a single item.
+このシナリオにはBuzzクライアントの要求仕様を記述してあります｡それによるとBuzzクライアントはユーザーに表示する内容をフィルタリング出来なければいけません｡
+まず`user`入力フィールドに値を入力し､ページにある唯一のボタンをクリックすると､10個のアイテムが表示されることを検証します｡
+次に､`filterText`入力フィールドに`Bees`と入力すると､リストが1つのアイテムに減ることを検証します｡
 
-The API section below lists the available commands and expectations for the Runner.
+次のAPIセクションではテストランナーで利用可能なコマンドと期待値の確認方法の一覧を示します｡
 
 # API
 Source: {@link https://github.com/angular/angular.js/blob/master/src/ngScenario/dsl.js}
@@ -50,6 +45,7 @@ Source: {@link https://github.com/angular/angular.js/blob/master/src/ngScenario/
 ## pause()
 Pauses the execution of the tests until you call `resume()` in the console (or click the resume
 link in the Runner UI).
+
 
 ## sleep(seconds)
 Pauses the execution of the tests for the specified number of `seconds`.
