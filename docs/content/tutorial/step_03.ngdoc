@@ -1,33 +1,27 @@
 @ngdoc overview
-@name Tutorial: 3 - Filtering Repeaters
+@name Tutorial: 3 - リピーターのフィルタリング
 @description
 
 <ul doc-tutorial-nav="3"></ul>
 
 
-We did a lot of work in laying a foundation for the app in the last step, so now we'll do something
-simple; we will add full text search (yes, it will be simple!). We will also write an end-to-end
-test, because a good end-to-end test is a good friend. It stays with your app, keeps an eye on it,
-and quickly detects regressions.
+前のステップではアプリの基礎部分を作る過程でたくさんのことをしました。なので今度は簡単なことをやりましょう。全文検索を追加します（そう、簡単なはずです！）。それからエンドツーエンドのテストも書きます。優れたエンドツーエンドテストは素敵なお友達だからです。それはあなたのアプリと共にあり、片時も目を離さず、素早くリグレッションに気づいてくれます。
 
 
 <div doc-tutorial-reset="3"></div>
 
 
-The app now has a search box. Notice that the phone list on the page changes depending on what a
-user types into the search box.
+今度はアプリに検索ボックスがつきました。ページ上のスマートフォンのリストはユーザーが検索ボックスにタイプしたものによって変化します。
 
-The most important differences between Steps 2 and 3 are listed below. You can see the full diff on
-{@link https://github.com/angular/angular-phonecat/compare/step-2...step-3
- GitHub}:
+ステップ２と３の主な変更点は以下に挙げます。完全な差分は{@link https://github.com/angular/angular-phonecat/compare/step-2...step-3 GitHub}で見ることができます：
 
 
-## Controller
+## コントローラー
 
-We made no changes to the controller.
+コントローラーには何も変更を加えていません。
 
 
-## Template
+## テンプレート
 
 __`app/index.html`:__
 <pre>
@@ -54,38 +48,25 @@ __`app/index.html`:__
   </div>
 </pre>
 
-We added a standard HTML `<input>` tag and used Angular's
-{@link api/ng.filter:filter $filter} function to process the input for the
-{@link api/ng.directive:ngRepeat ngRepeat} directive.
+標準HTMLの`<input>`タグを追加し、{@link api/ng.directive:ngRepeat ngRepeat}ディレクティブへの入力の処理にはAngularの{@link api/ng.filter:filter $filter}関数を使いました。
 
-This lets a user enter search criteria and immediately see the effects of their search on the phone
-list. This new code demonstrates the following:
+これでユーザーはスマートフォンリストに対して検索条件を入力し、直ちに検索結果を確認できるようになります。この新しいコードは次のことをしています：
 
-* Data-binding: This is one of the core features in Angular. When the page loads, Angular binds the
-name of the input box to a variable of the same name in the data model and keeps the two in sync.
+* データバインディング：これはAngularのコアな機能の１つです。ページが読み込まれると、Angularはインプットボックスの名前をデータモデル内の同じ名前の変数にバインドし、２つを同期した状態に保ちます。
 
-  In this code, the data that a user types into the input box (named __`query`__) is immediately
-available as a filter input in the list repeater (`phone in phones | filter:`__`query`__). When
-changes to the data model cause the repeater's input to change, the repeater efficiently updates
-the DOM to reflect the current state of the model.
+  このコードでは、ユーザーがインプットボックスに打ち込んだデータ（__`query`__と呼びましょう）は直ちにリストリピーター（`phone in phones | filter:`__`query`__）内のフィルターインプットとして使われます。データモデルへの変更がリピーターの入力に変化を生じさせると、リピーターはモデルの現在の状態を反映するためにDOMを効率的に更新します。
 
       <img  class="diagram" src="img/tutorial/tutorial_03.png">
 
-* Use of the `filter` filter: The {@link api/ng.filter:filter filter} function uses the
-`query` value to create a new array that contains only those records that match the `query`.
+* `filter`フィルターの利用：{@link api/ng.filter:filter filter}関数は`query`に一致するレコードだけを含む新しい配列を生成するために`query`の値を使います。
 
-  `ngRepeat` automatically updates the view in response to the changing number of phones returned
-by the `filter` filter. The process is completely transparent to the developer.
+  `ngRepeat`は、`filter`フィルターから返されるスマートフォンの数が変化するのに応じてビューを自動的に更新します。この処理は開発者の目に触れずに行われます。
 
-## Test
+## テスト
 
-In Step 2, we learned how to write and run unit tests. Unit tests are perfect for testing
-controllers and other components of our application written in JavaScript, but they can't easily
-test DOM manipulation or the wiring of our application. For these, an end-to-end test is a much
-better choice.
+ステップ２では、単体テストの書き方・実行の仕方を学びました。単体テストはコントローラーやJavaScriptで書かれたアプリ内のその他のコンポーネントをテストするのに最適ですが、DOM操作やアプリ内の連携は簡単にはテストできません。こうしたことに関しては、エンドツーエンドのテストの方がずっとましな選択肢になります。
 
-The search feature was fully implemented via templates and data-binding, so we'll write our first
-end-to-end test, to verify that the feature works.
+テンプレートやデータバインディングによって検索機能は完全に実装できたので、初めてのエンドツーエンドのテストを書いて、この機能が上手く動くことを確認しましょう。
 
 __`test/e2e/scenarios.js`:__
 <pre>
@@ -111,59 +92,43 @@ describe('PhoneCat App', function() {
 });
 </pre>
 
-Even though the syntax of this test looks very much like our controller unit test written with
-Jasmine, the end-to-end test uses APIs of {@link guide/dev_guide.e2e-testing Angular's end-to-end
-test runner}.
+このテストのシンタックスはJasmineで書かれたコントローラーの単体テストにそっくりですが、エンドツーエンドのテストは{@link guide/dev_guide.e2e-testing Angular's end-to-end test runner}のAPIを使っています。
 
-To run the end-to-end test, open one of the following in a new browser tab:
+エンドツーエンドのテストを実行するには、ブラウザの新しいタブで次のどれかを開きましょう：
 
-* node.js users: {@link http://localhost:8000/test/e2e/runner.html}
-* users with other http servers:
-`http://localhost:[port-number]/[context-path]/test/e2e/runner.html`
-* casual reader: {@link http://angular.github.com/angular-phonecat/step-3/test/e2e/runner.html}
+* node.jsユーザー：{@link http://localhost:8000/test/e2e/runner.html}
+* その他のhttpサーバーのユーザー：`http://localhost:[port-number]/[context-path]/test/e2e/runner.html`
+* このページを読んでいるだけの人: {@link http://angular.github.com/angular-phonecat/step-3/test/e2e/runner.html}
 
-Previously we've seen how Testacular can be used to execute unit tests. Well, it can also run the
-end-to-end tests! Use `./scripts/e2e-test.sh` script for that. End-to-end tests are slow, so unlike
-with unit tests, Testacular will exit after the test run and will not automatically rerun the test
-suite on every file change. To rerun the test suite, execute the `e2e-test.sh` script again.
+先の章では単体テストを実行するためにTestacularをどう使うかを見ました。でもTestacularはエンドツーエンドのテストを走らせるのにも使えるんです！スクリプト`./scripts/e2e-test.sh`を使って下さい。エンドツーエンドのテストは遅いので、単体テストの時とは違ってTestacularはテストが終わると終了し、ファイルが変更されるたびに自動で再実行するようなことはありません。テストセットを再実行するには、`e2e-test.sh`スクリプトをもう一度実行して下さい。
 
-This test verifies that the search box and the repeater are correctly wired together. Notice how
-easy it is to write end-to-end tests in Angular. Although this example is for a simple test, it
-really is that easy to set up any functional, readable, end-to-end test.
+このテストは検索ボックスとリピーターが正常に連携されていることを確認します。Angularにおいてエンドツーエンドのテストを書くのが如何に簡単か見て下さい。これは簡単なテストを例にとってはいますが、機能的で読み易いエンドツーエンドのテストを書くのは本当にこんなに簡単なのです。
 
-# Experiments
+# 実験
 
-* Display the current value of the `query` model by adding a `{{query}}` binding into the
-`index.html` template, and see how it changes when you type in the input box.
+* `{{query}}`バインディングを`index.html`テンプレートに加えてモデル`query`の現在の値を表示し、インプットボックスにタイプするにつれてそれがどのように変化するのかを見てみましょう。
 
-* Let's see how we can get the current value of the `query` model to appear in the HTML page title.
+* HTMLページのタイトルに表示させる`query`モデルの現在値がどのように取得できるのか見てみましょう。
 
-  You might think you could just add the {{query}} to the title tag element as follows:
+  `{{query}}`を次のようにただtitleタグの要素に加えればいいと思うかもしれません：
 
           <title>Google Phone Gallery: {{query}}</title>
 
-  However, when you reload the page, you won't see the expected result. This is because the "query"
-model lives in the scope defined by the body element:
+  でも、ページを再読み込みすると期待した結果は得られません。これは"query"モデルがbody要素で定義されたスコープの中にあるためです。
 
           <body ng-controller="PhoneListCtrl">
 
-  If you want to bind to the query model from the `<title>` element, you must __move__ the
-`ngController` declaration to the HTML element because it is the common parent of both the body
-and title elements:
+  もしも`<title>`要素からqueryモデルにバインドしたければ、`ngController`宣言をHTML要素に__移動__しないといけません。なぜならHTML要素はbodyとtitle両方の親だからです：
 
           <html ng-app ng-controller="PhoneListCtrl">
 
-  Be sure to __remove__ the `ng-controller` declaration from the body element.
+  `ng-controller`宣言をbody要素から__取り除く__ことを忘れないで下さい。
 
-  While using double curlies works fine within the title element, you might have noticed that
-for a split second they are actually displayed to the user while the page is loading. A better
-solution would be to use the {@link api/ng.directive:ngBind
-ngBind} or {@link api/ng.directive:ngBindTemplate
-ngBindTemplate} directives, which are invisible to the user while the page is loading:
+  title要素の中での２重中括弧の使用は上手くいきましたが、ページを読み込んでいる一瞬の間、それが実際ユーザーに見えてしまったことに気づいたかもしれません。よりよい方法は{@link api/ng.directive:ngBind ngBind}ディレクティブか{@link api/ng.directive:ngBindTemplate ngBindTemplate}ディレクティブを使うことです。これらはページ読み込み中ユーザーから見えません。
 
           <title ng-bind-template="Google Phone Gallery: {{query}}">Google Phone Gallery</title>
 
-* Add the following end-to-end test into the `describe` block within `test/e2e/scenarios.js`:
+* 次のエンドツーエンドのテストを`test/e2e/scenarios.js`の`describe`ブロックに追加しましょう：
 
   <pre>
     it('should display the current filter value within an element with id "status"',
@@ -179,22 +144,16 @@ ngBindTemplate} directives, which are invisible to the user while the page is lo
     });
   </pre>
 
-  Refresh the browser tab with the end-to-end test runner to see the test fail. To make the test
-pass, edit the `index.html` template to add a `div` or `p` element with `id` `"status"` and content
-with the `query` binding, prefixed by "Current filter:". For instance:
+  エンドツーエンドのテストランナーを開いたブラウザタブを更新してテストが失敗することを確かめましょう。テストを成功させるには`index.html`テンプレートを編集して、`id`として`"status"`、中身に"Current filter:"に続けて`query`バインディングを持つ`div`または`p`要素を追加しましょう。例えば：
 
           <div id="status">Current filter: {{query}}</div>
 
-* Add a `pause()` statement inside of an end-to-end test and rerun it. You'll see the runner pause;
-this gives you the opportunity to explore the state of your application while it is displayed in
-the browser. The app is live! You can change the search query to prove it. Notice how useful this
-is for troubleshooting end-to-end tests.
+* `pause()`文をエンドツーエンドのテストの中に追加して、テストを再実行します。ランナーが途中で止まるはずです。これによって、ブラウザに表示されているアプリケーションの状態を調べることができます。アプリは実行中です！検索文字列を変えればこのことが確認できます。エンドツーエンドのテストをトラブルシュートする上でこれはとても役に立ちます。
 
 
-# Summary
+# まとめ
 
-We have now added full text search and included a test to verify that search works! Now let's go on
-to {@link step_04 step 4} to learn how to add sorting capability to the phone app.
+全文検索と、検索が機能することを確認するためのテストを追加しました！{@link step_04 step 4}に進んでスマートフォンアプリにソート機能を追加する方法を学びましょう。
 
 
 <ul doc-tutorial-nav="3"></ul>
