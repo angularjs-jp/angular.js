@@ -1,70 +1,71 @@
 @ngdoc overview
-@name Developer Guide: i18n and l10n
+@name Developer Guide: i18n および l10n
 @description
 
-# I18n and L10n in AngularJS
+# AngularJSにおける i18n および L10n
 
-**What is i18n and l10n?**
+**i18nおよびl10nとは？**
 
-Internationalization, abbreviated i18n, is the process of developing products in such a way that
-they can be localized for languages and cultures easily. Localization, abbreviated l10n, is the
-process of adapting applications and text to enable their usability in a particular cultural or
-linguistic market. For application developers, internationalizing an application means abstracting
-all of the strings and other locale-specific bits (such as date or currency formats) out of the
-application. Localizing an application means providing translations and localized formats for the
-abstracted bits.
+国際化(Internationalization)、略してi18nは、製品開発プロセスにおいて、言語と文化へのローカライズを容易にする方法です。
 
-**What level of support for i18n/l10n is currently in Angular?**
+地域化(Localization)、略してl10nは、特定の文化や言語マーケットでのユーザビリティを向上させるために、アプリケーションやテキストを順応させるプロセスです。 
 
-Currently, Angular supports i18n/l10n for {@link
+アプリケーション開発者にとって、アプリケーションの国際化を行う事は、アプリケーションから全ての文字列やロケール固有の要素(例えば、日付や通貨形式)を抽象化することを意味します。 
+アプリケーションの地域化を行う事は、翻訳と、抽象化された要素のためにローカライズされたフォーマットを提供することを意味します。
+
+**Angularにおいてi18nおよびl10nは、現在どの程度サポートしていますか？**
+
+Angularでは、現在、{@link
 http://docs.angularjs.org/#!/api/ng.filter:date datetime}, {@link
-http://docs.angularjs.org/#!/api/ng.filter:number number} and {@link
-http://docs.angularjs.org/#!/api/ng.filter:currency currency} filters.
+http://docs.angularjs.org/#!/api/ng.filter:number number} および {@link
+http://docs.angularjs.org/#!/api/ng.filter:currency currency} フィルタにおいて、i18n/L10nをサポートしています。
 
-Additionally, Angular supports localizable pluralization support provided by the {@link
-api/ng.directive:ngPluralize ngPluralize directive}.
+さらに、Angularでは {@link
+api/ng.directive:ngPluralize ngPluralize directive}によって、複数形のローカライズを可能とする機能をサポートしています。
 
-All localizable Angular components depend on locale-specific rule sets managed by the {@link
-api/ng.$locale $locale service}.
+すべてのローカライズ可能なAngular要素では、ロケール固有ルールセットの管理を {@link
+api/ng.$locale $locale service}に依存しています.
 
-For readers who want to jump straight into examples, we have a few web pages that showcase how to
-use Angular filters with various locale rule sets. You can find these examples either on {@link
-https://github.com/angular/angular.js/tree/master/i18n/e2e Github} or in the i18n/e2e folder of
-Angular development package.
+サンプルに直接ジャンプしたい読者のために。複数のロケールルールセットを用いて、どのようにAngularフィルタを使うかのショーケースを、何枚かのWebページとしてご用意しました。
+あなたはこれらのサンプルを、{@link
+https://github.com/angular/angular.js/tree/master/i18n/e2e Github}上 または、Angular開発パッケージに含まれたi18/e2efフォルダのどちらかで閲覧できます。
 
-**What is a locale id?**
+**ロケールIDとは？**
 
-A locale is a specific geographical, political, or cultural region. The most commonly used locale
-ID consists of two parts: language code and country code. For example, en-US, en-AU, zh-CN are all
-valid locale IDs that have both language codes and country codes. Because specifying a country code
-in locale ID is optional,  locale IDs such as en, zh,  and sk are also valid. See the {@link
-http://userguide.icu-project.org/locale ICU } website for more information about using locale IDs.
+ロケールは、特定の地理的、政治的、または文化的な地域です。
+最も一般的なロケールIDは、言語コード および 国コードの、2つの部分から成ります。
+例えば、en-US、en-AU、zh-CNは、いずれも有効なロケールIDであり、言語コードと国コードの両方を持っています。
 
-**Supported locales in Angular**
-Angular separates number and datetime format rule sets into different files, each file for a
-particular locale. You can find a list of currently supported locales {@link
-https://github.com/angular/angular.js/tree/master/i18n/locale here}
-# Providing locale rules to Angular
+ロケールIDに国コードを指定するかどうかは任意であるため、en、zh、そして sk のようなロケールIDも有効です。
+ロケールIDを使うにあたって、詳しい情報は {@link
+http://userguide.icu-project.org/locale ICU }のWebサイトを参照してください。
 
-There are two approaches to providing locale rules to Angular:
+**Angularでサポートされるロケール**
 
-**1. Pre-bundled rule sets**
+Angularでは、数値(number)と日付フォーマット(datetime)のルールセットを、ロケールごとに異なるファイルとして分割しています。
+現在サポートされているロケールは{@link
+https://github.com/angular/angular.js/tree/master/i18n/locale こちら} で閲覧できます。
 
-You can pre-bundle the desired locale file with Angular by concatenating the content of the
-locale-specific file to the end of `angular.js` or `angular.min.js` file.
+# Angularにロケールルールを提供する
 
-For example on *nix, to create a an angular.js file that contains localization rules for german
-locale, you can do the following:
+Angularにロケールルールを提供するには、2つのアプローチがあります。
+
+**1. ルールセットを予めバンドルする**
+
+あなたは、`angular.js`または`angular.min.js`ファイルの末尾に、
+ロケール固有ファイルの内容を結合することで、希望するロケールファイルをAngularに予めバンドルしておくことができます。
+
+例えば、* nix上(訳注: Linux または Unix)で、ドイツ語のローカライズルールが含まれた angular.js ファイルを生成するには、次の操作で実行できます:
 
 `cat angular.js i18n/angular-locale_de-ge.js > angular_de-ge.js`
 
-When the application containing `angular_de-ge.js` script instead of the generic angular.js script
-starts, Angular is automatically pre-configured with localization rules for the german locale.
+通常のangular.jsスクリプトの代わりに、angular_de-ge.js スクリプトをアプリケーションに含めておくと、
+アプリケーションが開始されるとき、Angularにはドイツ語のローカライズルールが自動的に適用されます。
 
-**2. Including locale js script in index.html page**
+**2. index.htmlページ でロケールのjsスクリプトをインクルードする**
 
-You can also include the locale specific js file in the index.html page. For example, if one client
-requires German locale, you would serve index_de-ge.html which will look something like this:
+あなたはまた、ロケール固有のjsファイルを index.htmlページでインクルードすることもできます。
+例えば、もしクライアントがドイツ語のロケールを必要とするならば、あなたはこのような index_de-ge.html をサーブすることになります:
 
 <pre>
 <html ng-app>
@@ -77,48 +78,52 @@ requires German locale, you would serve index_de-ge.html which will look somethi
 </html>
 </pre>
 
-**Comparison of the two approaches**
-Both approaches described above requires you to prepare different index.html pages or js files for
-each locale that your app may be localized into. You also need to configure your server to serve
-the correct file that correspond to the desired locale.
+**2つのアプローチの比較**
 
-However, the second approach (Including locale js script in index.html page) is likely to be slower
-because an extra script needs to be loaded.
+どちらのアプローチにおいても、アプリがローカライズされる可能性のあるロケールごとに、異なる index.html ページ または jsファイルを用意しておく必要があります。
+また、要求されるロケールに一致する正しいファイルがサーブされるように、サーバを設定しておかなければなりません。
 
+しかしながら、2つ目のアプローチ(index.htmlページでロケールのjsスクリプトをインクルードする方法)は、通常よりも、余分にスクリプトを読み込む必要があり、遅くなる可能性があります。
 
-# "Gotchas"
+# "注意点"
 
-**Currency symbol "gotcha"**
+**通貨記号の"注意点"**
 
-Angular's {@link http://docs.angularjs.org/#!/api/ng.filter:currency currency filter} allows
-you to use the default currency symbol from the {@link api/ng.$locale locale service},
-or you can provide the filter with a custom currency symbol. If your app will be used only in one
-locale, it is fine to rely on the default currency symbol. However, if you anticipate that viewers
-in other locales might use your app, you should provide your own currency symbol to make sure the
-actual value is understood.
+Angularの{@link http://docs.angularjs.org/#!/api/ng.filter:currency currency フィルタ}によって、
+{@link api/ng.$locale locale service}のデフォルトの通貨記号を使うことができます。もしくは、カスタムな通貨記号を使ったフィルタを提供することもできます。
 
-For example, if you want to display account balance of 1000 dollars with the following binding
-containing currency filter: `{{ 1000 | currency }}`, and your app is currently in en-US locale.
-'$1000.00' will be shown. However, if someone in a different local (say, Japan) views your app, her
-browser will specify the locale as ja, and the balance of '¥1000.00' will be shown instead. This
-will really upset your client.
+もし、アプリが、単一のロケールのみで使われる場合は、デフォルトの通貨記号のみに頼っても構いません。
+しかし、他のロケールの閲覧者からも使われることが予想できる場合は、実際の値を理解するために、あなた自身の通貨記号を明示しなければなりません。
 
-In this case, you need to override the default currency symbol by providing the {@link
-http://docs.angularjs.org/#!/api/ng.filter:currency currency filter} with a currency symbol as
-a parameter when you configure the filter, for example, {{ 1000 | currency:"USD$"}}. This way,
-Angular will always show a balance of 'USD$1000' and disregard any locale changes.
+例えば、もしあなたが、通貨フィルタを含んでいる以下のバインディング:
+`{{ 1000 | currency }}`
+において、1000ドルのアカウント残高を表示したいとします。
 
-**Translation length "gotcha"**
+現在、アプリのロケールはen-USです。この場合、'$1000.00'と表示されます。
 
-Keep in mind that translated strings/datetime formats can vary greatly in length. For example,
-`June 3, 1977` will be translated to Spanish as `3 de junio de 1977`. There are bound to be other
-more extreme cases. Hence, when internationalizing your apps, you need to apply CSS rules
-accordingly and do thorough testing to make sure UI components do not overlap.
+しかしながら、もし、異なるロケール(例えば、日本)の誰かが、アプリを表示したとします。
+彼女のブラウザにはロケールとしてjaが指定されています。この場合、アカウント残高には代わりに、'￥1000.00'と表示されます。
+これではクライアントを混乱させてしまうでしょう。
 
+このケースにおいては、{@link
+http://docs.angularjs.org/#!/api/ng.filter:currency currency フィルタ}によって提供されるデフォルトの通貨記号を、
+フィルタを設定する際の通貨記号パラメータとして、例えば 
+`{{1000 | currency: "USD $"}}`
+のようにオーバライドする必要があります。
 
-**Timezones**
+これにより、Angularはアカウント残高を常に 'USD $ 1000' と表示し、任意のロケール変更は無視されます。
 
-Keep in mind that Angular datetime filter uses the time zone settings of the browser. So the same
-application will show different time information depending on the time zone settings of the
-computer that the application is running on. Neither Javascript nor Angular currently supports
-displaying the date with a timezone specified by the developer.
+**翻訳された文字列長の"注意点"**
+
+翻訳された文字列/日時フォーマットは、文字長が大きく変化するという事を覚えておいてください。
+例えば、`June 3, 1977`は、スペイン語に翻訳されると、`3 de junio de 1977`になります。
+
+他にも、もっと極端なケースがあるかもしれません。
+このため、アプリを国際化する際には、このことを考慮した上でCSSのルールを適用しなければなりません。そして、UI要素が重なることがないよう、徹底的にテストを行なってください。
+
+**タイムゾーンについての注意点**
+
+Angularのdatetimeフィルタでは、ブラウザのタイムゾーン設定が使われるという事を覚えておいてください。
+従って、同じアプリケーションであっても、表示される時間情報は、そのアプリケーションが動作しているコンピュータのタイムゾーン設定に依存するため、異なって表示されます。
+
+現在のところ、JavaScriptとAngularJSのどちらにおいても、日付を表示する際に、開発者がタイムゾーンを指定することはできません。
