@@ -4,22 +4,22 @@
 
 <ul doc-tutorial-nav="6"></ul>
 
-このステップでは、電話帳にサムネイル画像と、画像のリンクを加えます。
-今後のステップではカタログ内の電話情報としてリンクを表示させます。
+このステップでは、電話のリストにサムネイル画像と、今のところは空のリンクを加えます。
+今後のステップでは、このリンク先で、カタログ内の電話についての詳細情報を表示するように変更します。
 
 
 <div doc-tutorial-reset="6"></div>
 
-リンクと電話帳内にある画像を見てください。
+リンクと電話リスト内にある画像を見てください。
 
-これは列挙前のとても大事な情報です。あなたは差分をみることができます{@link
+下記に大事な変更を列挙しておきます。完全な差分を見ることもできます{@link
 https://github.com/angular/angular-phonecat/compare/step-5...step-6
 GitHub}:
 
 
 ## Data
 
-`phones.json`ファイルはそれぞれの電話番号にユニークなIDと画像URLが含まれています。
+`phones.json`ファイルはそれぞれの電話にユニークなIDと画像URLが含まれています。
 このURLは`app/img/phones/`以下をさしています。
 
 __`app/phones/phones.json`__ (sample snippet):
@@ -52,13 +52,10 @@ __`app/index.html`:__
 ...
 </pre>
 
-電話詳細ページの変数置換が動的生成されようとするとき、もっとも近い２重カッコの`href`アトリビュート値が選ばれます。
-step2では`{{phone.name}}`を加えました。このステップでは要素アトリビュート内にある`{{phone.id}}`を使います。
+電話詳細ページへのリンクを動的に生成するために、href 属性値の中で、もうおなじみである、2重カーリーブレイスでの変数バインディングを使います。
+step2 では要素のコンテントとして {{phone.name}} を使いました。ここでは {{phone.id}} バインディングを要素の属性内で使います。
 
-再度電話画像をそれぞれのレコードで使用しているタグに付いている{@link
-api/ng.directive:ngSrc ngSrc}に加えます。このディレクティブはangular `{{ expression }}` markupからのブラウザ置換を防止するのと、
-無効なURLである`http://localhost:8000/app/{{phone.imageUrl}}`を初期化します、一般的なsrcアトリビュート内にある一つだけ定義されたアトリビュートにバインディングされます。
-ブラウザが無効な場所を指すhttp requestで作ろうとした場合bgSrcディレクティブは防止されます。
+また、それぞれのレコードの隣に、{@link api/ng.directive:ngSrc ngSrc} ディレクティブを使った画像タグによって、電話画像を表示します。このディレクティブは、ブラウザーが angular の {{ expression }} マークアップを（変数置換無しに）そのまま解釈し、無効な URL である http://localhost:8000/app/{{phone.imageUrl}} へのリクエストを送信することを防ぎます。もし素直に通常の src 属性内で変数バインディングを使用してしまう（<img class="diagram" src="{{phone.imageUrl}}">）と、この無効なリクエストが発生するわけです。ngSrc ディレクティブを使えば無効な場所へブラウザーがリクエストを送信することを防ぎます。
 
 ## Test
 
@@ -73,9 +70,9 @@ __`test/e2e/scenarios.js`__:
 ...
 </pre>
 
-私達は新しい end-to-end テストを確認する方法を加えました。　今後のstepでアプリケーションがphone views への正しいリンクを生成する処理を実装します
+今後のステップで実装する電話の詳細情報へのリンクが正しく生成されているかを確認する end-to-end テストを加えました。
 
-あなたは`./scripts/e2e-test.sh`が処理を戻すかブラウザの更新処理を行うことでend-to-end testが動く様子を見れます。
+./scripts/e2e-test.sh を再度実行するか、end-to-end テストランナーを表示しているブラウザータブを再読み込みすることでテストが動く様子を見れます。
 テスト結果はこちらで確認できます{@link
 http://angular.github.com/angular-phonecat/step-6/test/e2e/runner.html
 Angular's server}.
@@ -83,15 +80,13 @@ Angular's server}.
 
 # Experiments
 
-* srcアトリビュートのついた`ng-src`ディレクティブを置換します。 Firebug、chrome Web Inspector もしくは webサーバのアクセスログ を使います。 アプリケーションは無関係なリクエストを送ります。`/app/%7B%7Bphone.imageUrl%7D%7D` (or
-`/app/{{phone.imageUrl}}`).
+* `ng-src` ディレクティブを従来の src 属性に置き換えてみましょう。Firebug や Chrome の Web Inspector などのツールを使うか、ウェブサーバーのアクセスログを見て、/app/%7B%7Bphone.imageUrl%7D%7D （または /app/{{phone.imageUrl}}）などへ無駄なリクエストを送っていることを確認してみましょう。
 
-この問題はブラウザが無効な画像アドレスのimgタグのリクエストを打った時 Angular が式を評価するときと値をインジェクトする前におきます
-
+この問題は、ブラウザが無効な画像アドレスの img タグを見た瞬間、つまり Angular が式を評価して有効なアドレスをインジェクトする前に、リクエストを送信してしまうことが原因です。
 
 
 # Summary
 
-今回は電話画像とリンクをつけました。つぎは {@link step_07 step 7} で Angular layout template　と簡単にマルチビューを行いアプリケーションを作ります。
+今回は電話画像とリンクをつけました。つぎは {@link step_07 step 7} で Angular layout template を学びます。Angular なら簡単に複数の view を持つアプリケーションを作れることを実感してください。
 
 <ul doc-tutorial-nav="6"></ul>
