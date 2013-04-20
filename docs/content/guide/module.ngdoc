@@ -1,39 +1,44 @@
 @ngdoc overview
-@name Developer Guide: Modules
+@name Developer Guide: モジュール
 @description
 
-# What is a Module?
+# モジュール (Module) とは?
 
-Most applications have a main method which instantiates, wires, and bootstraps the application.
-Angular apps don't have a main method. Instead modules declaratively specify how an application
-should be bootstrapped. There are several advantages to this approach:
+たいていのアプリケーションには、
+アプリケーションのインスタンス作成・準備・初期化を行う 
+main メソッドが 1 つあります。
+Angular のアプリケーションは、 main メソッドがありません。
+その代わり、モジュールがどのようにアプリケーションが初期化されるべきかを宣言的に指定します。
+このようなアプローチを行うことには、次のようなメリットがあります。
 
-  * The process is more declarative which is easier to understand
-  * In unit-testing there is no need to load all modules, which may aid in writing unit-tests.
-  * Additional modules can be loaded in scenario tests, which can override some of the
-    configuration and help end-to-end test the application
-  * Third party code can be packaged as reusable modules.
-  * The modules can be loaded in any/parallel order (due to delayed nature of module execution).
+  * 初期化プロセスが宣言的になり、より理解しやすくなります。
+  * ユニットテストを行うとき、すべてのモジュールをロードする必要がなくなり、
+    ユニットテストの準備が簡単になります。
+  * シナリオテストでは追加のモジュールをロードすることができ、
+    一部の設定を上書きしてアプリケーションの end-to-end テストが簡単にできるようになります。
+  * サードパーティのコードを再利用可能なモジュールとしてパッケージ化することができます。
+  * モジュールはどのような順序でも、並列でもロードすることができます。
+    (モジュールの実行が本質的に遅延型なので)
 
+# 基本
 
-# The Basics
+急いでいる方向け: Hello World モジュールを動かすにはどうすればいいのか?
 
-Ok, I'm in a hurry. How do I get a Hello World module working?
-
-Important things to notice:
+重要なポイント:
 
   * {@link api/angular.Module Module} API
-  * Notice the reference to the `myApp` module in the `<html ng-app="myApp">`, it is what
-    bootstraps the app using your module.
+  * `<html ng-app="myApp">` にある、 `myApp` モジュールへの参照に注目してください。
+    この参照があることで、アプリケーションは `myApp` 
+    モジュールを使って初期化されるようになります。
 
 <doc:example module='myApp'>
   <doc:source>
     <script>
-      // declare a module
+      // モジュールの宣言
       var myAppModule = angular.module('myApp', []);
 
-      // configure the module.
-      // in this example we will create a greeting filter
+      // モジュールの設定
+      // この例では、greeting filter を作成する
       myAppModule.filter('greet', function() {
        return function(name) {
           return 'Hello, ' + name + '!';
@@ -49,23 +54,24 @@ Important things to notice:
 
 
 
-# Recommended Setup
+# 推奨する設定
 
-While the example above is simple, it will not scale to large applications. Instead we recommend
-that you break your application to multiple modules like this:
+上記の例はシンプルですが、大規模なアプリケーションには適用できません。
+次のように、アプリケーションを複数のモジュールに分割することをおすすめします。
 
-  * A service module, for service declaration
-  * A directive module, for directive declaration
-  * A filter module, for filter declaration
-  * And an application level module which depends on the above modules, and which has
-    initialization code.
+  * service モジュール: service の定義用
+  * directive モジュール: directive の定義用
+  * filter モジュール: filter の定義用
+  * 上記のモジュールに依存し、初期化コードを含む、アプリケーションレベルモジュール
 
-The reason for this breakup is that in your tests, it is often necessary to ignore the
-initialization code, which tends to be difficult to test. By putting it into a separate module it
-can be easily ignored in tests. The tests can also be more focused by only loading the modules
-that are relevant to tests.
+なぜこのようにモジュールを分割するかというと、テストを行うとき、
+初期化コードを無視しなければならないことがよくあり、
+そのせいでテストを書くのが難しくなるからです。
+初期化コードを別のモジュールにしておくことで、テストでは簡単に無視することができます。
+また、テストに関係があるモジュールのみロードすることで、
+テストはより対象機能に集中したものになります。
 
-The above is only a suggestion, so feel free to tailor it to your needs.
+上記の分割方法はあくまで一例で、必要に応じて変更してもかまいません。
 
 <doc:example module='xmpl'>
   <doc:source>
@@ -92,15 +98,15 @@ The above is only a suggestion, so feel free to tailor it to your needs.
 
       angular.module('xmpl', ['xmpl.service', 'xmpl.directive', 'xmpl.filter']).
         run(function(greeter, user) {
-          // This is effectively part of the main method initialization code
+          // この部分は実質的な main メソッドの初期化コードです。
           greeter.localize({
-            salutation: 'Bonjour'
+            salutation: 'こんにちは'
           });
-          user.load('World');
+          user.load('世界');
         })
 
 
-      // A Controller for your app
+      // アプリケーションのコントローラ
       var XmplController = function($scope, greeter, user) {
         $scope.greeting = greeter.greet(user.name);
       }
@@ -113,39 +119,39 @@ The above is only a suggestion, so feel free to tailor it to your needs.
 
 
 
-# Module Loading & Dependencies
+# モジュールのロードと依存関係
 
-A module is a collection of configuration and run blocks which get applied to the application
-during the bootstrap process. In its simplest form the module consist of collection of two kinds
-of blocks:
+モジュールは、アプリケーションの初期化プロセスで適用される、configuration と run
+ブロックの集合です。最も単純なモジュールは、 2 種類のブロックからなります。
 
-  1. **Configuration blocks** - get executed during the provider registrations and configuration
-    phase. Only providers and constants can be injected into configuration blocks. This is to
-    prevent accidental instantiation of services before they have been fully configured.
-  2. **Run blocks** - get executed after the injector is created and are used to kickstart the
-    application. Only instances and constants can be injected into run blocks. This is to prevent
-    further system configuration during application run time.
+  1. **Configuration ブロック** - provider の登録と設定フェーズで実行されます。
+     configuration ブロックには provider と定数のみ含めることができます。
+     これは、 service が完全に設定される前に service がインスタンス化されるのを防ぐためです。
+  2. **Run ブロック** - injector が生成された後に実行され、
+     アプリケーションを開始するために使われます。
+     run ブロックには、インスタンスと定数のみ含めることができます。
+     これは、アプリケーションが動作し始めた後に、システムの設定が変更されるのを防ぐためです。
 
 <pre>
 angular.module('myModule', []).
   config(function(injectables) { // provider-injector
-    // This is an example of config block.
-    // You can have as many of these as you want.
-    // You can only inject Providers (not instances)
-    // into the config blocks.
+    // これは、 configuration ブロックの例です。
+    // 必要なだけ、複数記述することができます。
+    // configutaion ブロックには、 Provider (インスタンスではなく)のみ
+    // 注入することができます。
   }).
   run(function(injectables) { // instance-injector
-    // This is an example of a run block.
-    // You can have as many of these as you want.
-    // You can only inject instances (not Providers)
-    // into the run blocks
+    // これは、 run ブロックの例です。
+    // 必要なだけ、複数記述することができます。
+    // run ブロックには、インスタンス (Provider ではなく) のみ
+    // 注入することができます。
   });
 </pre>
 
-## Configuration Blocks
 
-There are some convenience methods on the module which are equivalent to the config block. For
-example:
+## Configuration ブロック
+
+モジュールには、configuration ブロックに相当する、便利なメソッドがあります。
 
 <pre>
 angular.module('myModule', []).
@@ -154,7 +160,7 @@ angular.module('myModule', []).
   directive('directiveName', ...).
   filter('filterName', ...);
 
-// is same as
+// 下記のコードと同じ効果があります
 
 angular.module('myModule', []).
   config(function($provide, $compileProvider, $filterProvider) {
@@ -165,42 +171,54 @@ angular.module('myModule', []).
   });
 </pre>
 
-The configuration blocks get applied in the order in which they are registered. The only exception
-to it are constant definitions, which are placed at the beginning of all configuration blocks.
-
-## Run Blocks
-
-Run blocks are the closest thing in Angular to the main method. A run block is the code which
-needs to run to kickstart the application. It is executed after all of the service have been
-configured and the injector has been created. Run blocks typically contain code which is hard
-to unit-test, and for this reason should be declared in isolated modules, so that they can be
-ignored in the unit-tests.
-
-## Dependencies
-
-Modules can list other modules as their dependencies. Depending on a module implies that required
-module needs to be loaded before the requiring module is loaded. In other words the configuration
-blocks of the required modules execute before the configuration blocks or the requiring module.
-The same is true for the run blocks. Each module can only be loaded once, even if multiple other
-modules require it.
-
-## Asynchronous Loading
-
-Modules are a way of managing $injector configuration, and have nothing to do with loading of
-scripts into a VM. There are existing projects which deal with script loading, which may be used
-with Angular. Because modules do nothing at load time they can be loaded into the VM in any order
-and thus script loaders can take advantage of this property and parallelize the loading process.
+この configuration ブロックは、登録された順に適用されます。
+唯一の例外は、定数の宣言で、 configuration ブロックの先頭に置く必要があります。
 
 
-# Unit Testing
+## Run ブロック
 
-In its simplest form a unit test is a way of instantiating a subset of the application in test and
-then applying a stimulus to it. It is important to realize that each module can only be loaded
-once per injector. Typically an app has only one injector. But in tests, each test has its own
-injector, which means that the modules are loaded multiple times per VM. Properly structured
-modules can help with unit testing, as in this example:
+run ブロックは Angular における main メソッドに最も近いものです。
+run ブロックには、アプリケーションを開始するために実行しなければならないコードを記述します。
+run ブロックのコードは、すべての service の設定が終わり、 
+injector が生成された後に実行されます。
+たいていの run ブロックには、ユニットテストするのが難しいコードが含まれているため、
+独立したモジュールに宣言してユニットテストでは無視できるようにしておくべきです。
 
-In all of these examples we are going to assume this module definition:
+
+## 依存関係
+
+モジュールには、依存する他のモジュールのリストを書くことができます。
+あるモジュール A が別のモジュール B に依存するということは、モジュール A 
+がロードされる前にモジュール B がロードされなければならないことを意味します。
+別の言い方をすると、モジュール B の configuration ブロックは モジュール A の 
+configuration ブロックより前に実行されなければなりません。
+同じことが run ブロックにも当てはまります。
+複数のモジュールがあるモジュールに依存する場合でも、そのモジュールは一度だけロードされます。
+
+
+## 非同期ロード
+
+モジュールは、 $injector の設定を管理する方法であり、
+スクリプトを VM に読み込むこととは関係ありません。
+スクリプトのロードを取り扱うプロジェクトはすでに存在しており、
+それらを Angular と組み合わせて使うこともできます。
+モジュールはロードされたときには何もしないため、どんな順番で VM に読み込んでも問題ありません。
+したがって、スクリプトローダーはモジュールのロード処理を並列化することができます。
+
+
+# ユニットテスト
+
+最もシンプルなユニットテストでは、アプリケーションのサブセットをインスタンス化し、
+そのインスタンスに刺激を与えます。
+ここで、それぞれのモジュールは injector 1 つごとに 
+1 度しかロードされないということに注意が必要です。
+たいていの場合、アプリケーションは 1 つの injector しか持っていません。
+しかしテストでは、各テストが独自の injector を持っているため、
+モジュールが 1 つの VM に複数回ロードされることがありえます。
+モジュールが適切な構造を持っていれば、下記のようにユニットテストに役立ちます。
+
+以下の例のすべてで、このようなモジュールが定義されていることを前提にします。
+
 <pre>
   angular.module('greetMod', []).
 
@@ -219,30 +237,30 @@ In all of these examples we are going to assume this module definition:
     });
 </pre>
 
-Let's write some tests:
+テストを書いてみましょう。
 <pre>
 describe('myApp', function() {
-  // load the relevant application modules then load a special
-  // test module which overrides the $window with a mock version,
-  // so that calling window.alert() will not block the test
-  // runner with a real alert box. This is an example of overriding
-  // configuration information in tests.
+  // 関連するアプリケーションモジュールをロードし、 $window をモックバージョンに置き換える、
+  // テスト用の特別なモジュールをロードします。
+  // これは、 window.alert を呼び出したときに、本物のアラートボックスが表示されて
+  // テストランナーが停止するのを防ぐためです。
+  // これは、テストで configuration 情報を上書きする例です。
   beforeEach(module('greetMod', function($provide) {
     $provide.value('$window', {
       alert: jasmine.createSpy('alert')
     });
   }));
 
-  // The inject() will create the injector and inject the greet and
-  // $window into the tests. The test need not concern itself with
-  // wiring of the application, only with testing it.
+  // inject() は injector を生成し、 greet と $window をテストに注入します。
+  // テストはアプリケーションの準備について気にする必要がなく、
+  // テストのことだけに集中できます。
   it('should alert on $window', inject(function(greet, $window) {
     greet('World');
     expect($window.alert).toHaveBeenCalledWith('Hello World!');
   }));
 
-  // this is another way of overriding configuration in the
-  // tests using an inline module and inject methods.
+  // 下記は、 configuration を書き換える別の方法です。
+  // このテストでは、インラインモジュールと注入メソッドを使用しています。
   it('should alert using the alert service', function() {
     var alertSpy = jasmine.createSpy('alert');
     module(function($provide) {
