@@ -2,7 +2,7 @@
 @name Tutorial
 @description
 
-AngularJSを入門する一番の方法は、このチュートリアルを最後までやり遂げることです。このチュートリアルではAngularJSアプリの構築をひと通り体験することができます。
+AngularJSに入門する一番の方法は、このチュートリアルを最後までやり遂げることです。このチュートリアルではAngularJSアプリの構築をひと通り体験することができます。
 あなたが構築するアプリはAndroidデバイスの一覧を表示するカタログアプリです。興味のあるデバイスのみをフィルタして表示することができ、また任意のデバイスの詳細を見ることもできます。
 
 <img class="diagram" src="img/tutorial/catalog_screen.png" width="488" height="413">
@@ -11,10 +11,10 @@ AngularJSを入門する一番の方法は、このチュートリアルを最�
 
 * ユーザーのアクションに対して即座に変更される動的なビューを構築するためのクライアントサイドのデータバインディングとDI (Dependency Injection)の使い方
 * DOM操作なしでどうやってデータのリスナーをAngularが生成するか
-* ウェブアプリをより良く簡単にテストするための方法
+* ウェブアプリをより良く、より簡単にテストするための方法
 * データをアプリに登録するといった一般的なウェブ作業をより簡単に行うためのAngular servicesの使い方
 
-すべての作業は、どのブラウザであっても、素のままで動作します！
+すべての作業は、どのブラウザであっても、変更なしで動作します！
 
 このチュートリアルを終えるときには、あなたは次のことが出来るようになっています:
 
@@ -25,7 +25,7 @@ AngularJSを入門する一番の方法は、このチュートリアルを最�
 * テストの作成と実行
 * AngularJSについてさらに学ぶためのリソースを見つけられること
 
-このチュートリアルでは、ユニットテストやエンドツーエンドテストを書き、実行することを含めた、シンプルなアプリケーションを構築するプロセス全体を学ぶことができます。各ステップの最後にある「エクスペリメント」セクションではAngularJSと作成しているアプリケーションについてより理解するための追加の問を提供しています。
+このチュートリアルでは、ユニットテストやエンドツーエンドテストを書き、実行することを含めた、シンプルなアプリケーションを構築するプロセス全体を学ぶことができます。各ステップの最後にある「追加の課題」セクションではAngularJSと作成しているアプリケーションについてより理解するための追加の課題を提供しています。
 
 全てのチュートリアルは2時間ほどで進めることができるでしょう。もしくは深く突っ込んで、楽しい一日を過ごしたいかもしれませんね。
 でも、もし短い入門を探しているのであれば、{@link misc/started Getting Started} ドキュメントを読んでください。
@@ -42,10 +42,10 @@ AngularJSを入門する一番の方法は、このチュートリアルを最�
 <div class="tabbable" show="true">
   <div class="tab-pane well" id="git-mac" title="Git on Mac/Linux">
     <ol>
-      <li><p>単体テストを実行するには、Node.jsのとTestacularが必要になりますので、ターミナルウィンドウで次のコマンドを実行して、<a href="http://nodejs.org/">Node.js</a>の v0.8以上がインストールされていることと<code>node</code>が<code>PATH</code>で実行可能になっていることを確認してください:
+      <li><p>単体テストを実行するには、Node.jsとKarmaが必要になりますので、ターミナルウィンドウで次のコマンドを実行して、<a href="http://nodejs.org/">Node.js</a>の v0.8以上がインストールされていることと<code>node</code>が<code>PATH</code>で実行可能になっていることを確認してください:
       </p>
       <pre>node --version</pre>
-      <p>もし<a href="http://vojtajina.github.com/testacular">Testacular</a>が未インストールであればこちらもインストールしてください:</p>
+      <p>もし<a href="http://karma-runner.github.io/">Karma</a>が未インストールであればこちらもインストールしてください:</p>
       <pre>npm install -g testacular</pre>
       <li><p>Gitも必要です。Gitは<a href="http://git-scm.com/download">Git site</a>から入手できます。</p></li>
       <li><p>次のコマンドを実行して、<a
@@ -55,7 +55,7 @@ href="https://github.com/angular/angular-phonecat">Github</a>にあるangular-ph
       <li><p>カレントディレクトリを<code>angular-phonecat</code> に変更します:</p>
       <pre>cd angular-phonecat</pre>
       <p>チュートリアルの手順では、angular-phonecatディレクトリからすべてのコマンドを実行していると仮定します。</p></li>
-      <li><p>システム上で実行されているHTTPサーバが必要になります。通常はMacとLinuxマシンにはapacheがプリインストールされていますが、もしインストールしてない場合は<code>node</code>でバンドルされているシンプルなhttpサーバー、<code>scripts/web-server.js</code>を実行してください。</p></li>
+      <li><p>システム上で動作するHTTPサーバが必要になります。通常はMacとLinuxマシンにはapacheがプリインストールされていますが、もしインストールしてない場合は<code>node</code>にバンドルされているシンプルなhttpサーバー、<code>scripts/web-server.js</code>を実行してください。</p></li>
     </ol>
   </div>
 
@@ -63,7 +63,7 @@ href="https://github.com/angular/angular-phonecat">Github</a>にあるangular-ph
     <ol>
       <li><p>単体テストを実行するには、Node.jsのとTestacularが必要になりますので、ターミナルウィンドウで次のコマンドを実行して、<a href="http://nodejs.org/">Node.js</a>の v0.8以上がインストールされていることと<code>node</code>が<code>PATH</code>で実行可能になっていることを確認してください:</p>
         <pre>node --version</pre>
-        <p>もし<a href="http://vojtajina.github.com/testacular">Testacular</a>が未インストールであればこちらもインストールしてください:</p>
+        <p>もし<a href="http://karma-runner.github.io/">Karma</a>が未インストールであればこちらもインストールしてください:</p>
         <pre>npm install -g testacular</pre>
       </li>
       <li><p>Gitも必要です。Gitは<a href="http://git-scm.com/download">Git site</a>から入手できます。</p></li>
@@ -76,10 +76,10 @@ href="https://github.com/angular/angular-phonecat">Github</a>にあるangular-ph
       <p>チュートリアルの手順では、angular-phonecatディレクトリからすべてのコマンドを実行していると仮定します。</p>
       <p>すべての<code>git</code>コマンドはGit bashから実行してください。</p>
       <p>その他の<code>test.bat</code>や<code>e2e-test.bat</code>はWindowsのコマンドラインから実行してください。</li>
-      <li><p>システム上で実行されているHTTPサーバが必要になります。もしインストールしてない場合は<code>node</code>でバンドルされているシンプルなhttpサーバー、<code>scripts\web-server.js</code>を実行してください。</p></li>
+      <li><p>システム上で動作するHTTPサーバが必要になります。もしインストールしてない場合は<code>node</code>にバンドルされているシンプルなhttpサーバー、<code>scripts\web-server.js</code>を実行してください。</p></li>
     </ol>
   </div>
 
-あと必要なのは、お使いのコンピュータにWebブラウザと好きなテキストエディタをインストールしておくことだけです。さあ、このクールなチュートリアルをやり終えましょう！
+その他に必要なことは、お使いのコンピュータにWebブラウザと好きなテキストエディタをインストールしておくことだけです。さあ、このクールなチュートリアルをやり終えましょう！
 
 {@link step_00 <span class="btn btn-primary">チュートリアルを始める</span>}
