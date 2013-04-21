@@ -9,7 +9,7 @@ phonecatアプリを構築する準備ができました。このステップで
 <div class="tabbable" show="true" ng-model="$cookies.platformPreference">
   <div class="tab-pane well" id="git-mac" title="Git on Mac/Linux" value="gitUnix">
     <ol>
-      <li><p>angular-phonecat ディレクトリで次のコマンドを実行します:</p>
+      <li><p>angular-phonecatディレクトリで次のコマンドを実行します:</p>
       <pre>git checkout -f step-0</pre>
       <p>ワークスペースは、ステップ0のチュートリアルアプリの状態にリセットされます。</p>
       <p>今後もチュートリアルのステップ毎に、そのステップ番号にあわせてこの操作を繰り返す必要があります。尚、この操作を行うと、作業ディレクトリで行なった全ての変更は失われます。</p></li>
@@ -37,7 +37,7 @@ href="http://localhost:8000/app/index.html">http://localhost:8000/app/index.html
 
   <div class="tab-pane well" id="git-win" title="Git on Windows" value="gitWin">
     <ol>
-      <li><p>Git bashを開いて、次のコマンドを実行（angular-phonecatディレクトリで）します:</p>
+      <li><p>Git bashを開いて、 (angular-phonecatディレクトリで) 次のコマンドを実行します:</p>
       <pre>git checkout -f step-0</pre>
       <p>ワークスペースは、ステップ0のチュートリアルアプリの状態にリセットされます。</p>
       <p>今後もチュートリアルのステップ毎に、そのステップ番号にあわせてこの操作を繰り返す必要があります。尚、この操作を行うと、作業ディレクトリで行なった全ての変更は失われます。</p></li>
@@ -63,7 +63,7 @@ href="http://localhost:8000/app/index.html">http://localhost:8000/app/index.html
 </div>
 
 
-これで、ブラウザでページを見ることができます。まだぱっとしませんが、問題ありません。
+これで、ブラウザでページを見ることができます。まだアプリはぱっとしませんが、問題ありません。
 
 "Nothing here yet!" と表示されたHTMLページは下記のコードで構成されています。
 このコー​​ドには、今後必要になる、いくつかの重要なAngularの要素が含まれています。
@@ -89,23 +89,23 @@ __`app/index.html`:__
 
 
 
-## このコー​​ドは何をやっている？
+## このコードがやっていること
 
 * `ng-app` ディレクティブ:
 
           <html ng-app>
 
-  `ng-app` 属性はAngular directive を表しています（ディレクティブの名前は`ngApp` 、Angularでは属性名に`name-with-dashes` を、対応するディレクティブ名に`camelCase`を使用します）。これは、Angularがアプリケーションのルート要素であると見なす要素にフラグを設定するために使用されます。これにより、アプリケーション開発者は、Angularアプリケーションとして扱われる部分をHTMLページ全体にするかもしくはその一部だけにするかを選ぶことができます。
+  `ng-app` 属性はAngular directive を表しています (ディレクティブの名前は`ngApp` 、Angularでは属性名に`name-with-dashes` を、対応するディレクティブ名に`camelCase`を使用します) 。これは、Angularがアプリケーションのルート要素であると見なす要素にフラグを設定するために使用されます。これにより、アプリケーション開発者は、Angularアプリケーションとして扱われる部分をHTMLページ全体にするかもしくはその一部だけにするかを選ぶことができます。
 
 * AngularJS scriptタグ:
 
           <script src="lib/angular/angular.js">
 
-  このコードは`angular.js`スクリプトをダウンロードし、HTMLが完全にダウンロードされたときにブラウザで実行される callbackを登録します。コールバックが実行されると、Angularは{@link api/ng.directive:ngApp ngApp}ディレクティブを探します。AngularがngAppディレクティブを見つけた場合、`ngApp`ディレクティブが定義された要素をアプリケーションDOMのルートとしてブートします。
+  このコードは`angular.js`スクリプトをダウンロードし、HTMLが完全にダウンロードされたときにブラウザで実行される callbackを登録します。コールバックが実行されると、Angularは{@link api/ng.directive:ngApp ngApp}ディレクティブを探します。AngularがngAppディレクティブを見つけた場合、`ngApp`ディレクティブが定義された要素をアプリケーションDOMのルートとして起動します。
 
-* 式を持つ2重波括弧バインディング:
+* 2重波括弧バインディングの中に式が入っています:
 
-          Nothing here {{'yet' + '!'}}`
+          Nothing here {{'yet' + '!'}}
 
   この行は、テンプレート機能の基本的な特徴を示しています。2重波括弧`{{ }}`で示されるバインディングや`'yet' + '!'`のようなシンプルな式がこのバインディングで使われています。
 
@@ -114,27 +114,27 @@ __`app/index.html`:__
   期待通りにこのテンプレートはAngularによって処理され、HTMLページには次のテキストが表示されます：
   "Nothing here yet!"
 
-## AngularJSアプリをブートする
+## AngularJSアプリを起動する
 
-自動的にAngularJSアプリをブートする`ngApp`ディレクティブを使用することは非常に簡単で、ほとんどの場合に適しています。スクリプトローダーを使用しているときなど、高度なケースでは、アプリをブートするために{@link guide/bootstrap imperative / manual way}を使用することができます。
+自動的にAngularJSアプリを起動する`ngApp`ディレクティブを使用することは非常に簡単で、ほとんどの場合に適した選択肢です。スクリプトローダーを使用しているときなど、高度なケースでは、アプリを起動するために{@link guide/bootstrap imperative / manual way}を使用することができます。
 
-アプリのブート中に発生する3つの重要な事があります:
+アプリの起動中に発生する3つの重要な事があります:
 
-1. アプリ内のDI (Dependency Injection)に使用されるinjectorが作成します。
+1. アプリ内のDI (Dependency Injection)に使用される{@link api/AUTO.$injector injector}が作成されます。
 
-2. 次にinjectorはアプリケーションのモデルのコンテキストになるルートスコープを作成します。
+2. 次にinjectorはアプリケーションのモデルのコンテキストになる{@link api/ng.$rootScope ルートスコープ}を作成します。
 
 3. 次にAngularは`ngApp`ルート要素から始まり、途中で見つけたディレクティブやバインディングを処理しDOMをレンダリングします。
 
 
-アプリケーションが起動されると、モデルを変更する可能性のあるブラウザイベント（マウスクリック、キー入力や着信HTTP応答など）を待受ます。一度そのようなイベントが発生したら、Angularはそれがモデルの変化を引き起こしたかどうかを検出し、変更が検出された場合、影響を受けるすべてのバインディングを更新することにより、ビューを反映します。
+アプリケーションが起動されると、モデルを変更する可能性のあるブラウザイベント (マウスクリック、キー入力や着信HTTP応答など) を待ち受けます。一度そのようなイベントが発生したら、Angularはそれがモデルの変化を引き起こしたかどうかを検出し、変更が検出された場合、影響を受けるすべてのバインディングを更新することにより、ビューに反映します。
 
 アプリケーションの構造は今のところ非常にシンプルです。テンプレートには、1ディレクティブと1つの静的バインディングが含まれており、モデルは空です。
 
 <img class="diagram" src="img/tutorial/tutorial_00.png">
 
 
-## 作業ディレクトリ内のすべてのファイルは何?
+## 作業ディレクトリ内のすべてのファイルについて
 
 作業ディレクトリ内のファイルのほとんどは典型的なAngularプロジェクトの立ち上げに使われる{@link
 https://github.com/angular/angular-seed angular-seed project}プロジェクトから来たものです。angular-seedプロジェクトは最新のAngularライブラリ、テストライブラリ、スクリプト及びシンプルなサンプルアプリケーションを含んでいます。またすべて典型的なwebアプリを開発するために事前設定済みです。
@@ -143,12 +143,12 @@ https://github.com/angular/angular-seed angular-seed project}プロジェクト�
 
 * サンプルアプリを削除
 * `app/img/phones/`に携帯電話の画像を追加
-* `app/phones/`に携帯電話のデータファイル（JSON形式）を追加
+* `app/phones/`に携帯電話のデータファイル (JSON形式) を追加
 * `app/css/`と`app/img/`に[Bootstrap](http://twitter.github.com/bootstrap/)のファイルを追加
 
 
 
-# エクスペリメント
+# 追加の課題
 
 * 算術演算をするような評価式をindex.htmlに追加してください:
 
