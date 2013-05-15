@@ -1,56 +1,48 @@
 @ngdoc overview
-@name Developer Guide: HTML Compiler
+@name 開発者向けガイド: HTMLコンパイラ
 @description
 
-# Overview
+# 概要
 
-Angular's {@link api/ng.$compile HTML compiler} allows the developer to teach the
-browser new HTML syntax. The compiler allows you to attach behavior to any HTML element or attribute
-and even create new HTML element or attributes with custom behavior. Angular calls these behavior
-extensions {@link api/ng.$compileProvider#directive directives}.
+Angularの {@link api/ng.$compile HTMLコンパイラ} はブラウザに新たなHTMLの文法を伝えます。 このコンパイラは、
+HTML要素や属性に振る舞いを与えたり、新しいHTML要素や属性を生成します。Angularではこれらの振る舞いを{@link
+api/ng.$compileProvider#directive directives}と呼びます。
 
-HTML has a lot of constructs for formatting the HTML for static documents in a declarative fashion.
-For example if something needs to be centered, there is no need to provide instructions to the
-browser how the window size needs to be divided in half so that center is found, and that this
-center needs to be aligned with the text's center. Simply add `align="center"` attribute to any
-element to achieve the desired behavior. Such is the power of declarative language.
+HTMLは宣言によって静的なドキュメントを形成する構造部品を多く持っています。 例えば、何かを中央に配置する必要が
+あるとき、中央を検知して文字を中央寄せにするために、ウィンドウサイズを 半分に分割する命令は必要はありません。
+単純に、`align="center"`を要素に追加すれば望んだ振る舞いが達成されます。そういったものが宣言型言語の特長です。
 
-But the declarative language is also limited, since it does not allow you to teach the browser new
-syntax. For example there is no easy way to get the browser to align the text at 1/3 the position
-instead of 1/2. What is needed is a way to teach browser new HTML syntax.
+ですが、宣言型言語は制限があるので、新たな文法をブラウザに伝えることは許可されません。例えば、ブラウザに文字を
+2分の1でなく3分の1の位置に寄せさせる方法は簡単にはありません。必要なことはブラウザに新たなHTMLの文法を伝える
+手段です。
 
-Angular comes pre-bundled with common directives which are useful for building any app. We also
-expect that you will create directives that are specific to your app. These extension become a
-Domain Specific Language for building your application.
+Angularはアプリケーションを構築するのに有用となる一般的なdirectiveが予めバンドルされています。また、あなたの
+アプリケーションに特化したdirectivesを生成することも想定してあります。これらの拡張機能はアプリケーション構築の
+ためのドメイン特化言語となります。
 
-All of this compilation takes place in the web browser; no server side or pre-compilation step is
-involved.
+このコンパイルはすべてがウェブブラウザ内で起こります。サーバサイドや事前のコンパイルは含みません。
 
 
-# Compiler
+# コンパイラ
 
-Compiler is an angular service which traverses the DOM looking for attributes. The compilation
-process happens into two phases.
+コンパイラはDOMを横断して属性を探すAngularのサービスです。コンパイルは2段階で起きます。
 
-  1. **Compile:** traverse the DOM and collect all of the directives. The result is a linking
-  function.
+  1. **コンパイル:** DOMを横断し全てのdirectivesを集めます。その結果はリンクしている機能です。
 
-  2. **Link:** combine the directives with a scope and produce a live view. Any changes in the
-  scope model are reflected in the view, and any user interactions with the view are reflected
-  in the scope model. This makes the scope model the single source of truth.
+  2. **リンク:** directivesをスコープと連結し、ライブビューを生み出します。スコープのモデルにおける 全ての
+  変更はビューに反映され、全てのユーザのビューにおける操作はスコープのモデルに反映されます。これがスコープの
+  モデルの唯一真実の源になります。
 
-Some directives such {@link api/ng.directive:ngRepeat
-`ng-repeat`} clone DOM elements once for each item in collection. Having a compile and link phase
-improves performance since the cloned template only needs to be compiled once, and then linked
-once for each clone instance.
+{@link api/ng.directive:ngRepeat `ng-repeat`}のようなdirectivesのいくつかは、collectionの各項目に応じてDOM要素を
+一度クローンします。コンパイルとリンクは、クローンされたテンプレートを一度だけコンパイルすれば良く、そこでインスタンス
+毎に一度リンクすればよいのでパフォーマンスを改善します。
 
 
-# Directive
+# ディレクティブ
 
-A directive is a behavior which should be triggered when specific HTML constructs are encountered in
-the compilation process. The directives can be placed in element names, attributes, class names, as
-well as comments. Here are some equivalent examples of invoking the {@link
-api/ng.directive:ngBind `ng-bind`} directive.
+ディレクティブは、コンパイルの過程で特別なHTMLを構築する場面でトリガーさせておくべき振る舞いです。
+ディレクティブは、要素の名前にも属性にもclass名にもコメントにさえも配置できます。以下は、{@link
+api/ng.directive:ngBind `ng-bind`}ディレクティブを呼び出すのと同様のある用例です。
 
 <pre>
   <span ng-bind="exp"></span>
@@ -59,12 +51,10 @@ api/ng.directive:ngBind `ng-bind`} directive.
   <!-- directive: ng-bind exp -->
 </pre>
 
-A directive is just a function which executes when the compiler encounters it in the DOM. See {@link
-api/ng.$compileProvider#directive directive API} for in-depth documentation on how
-to write directives.
+ディレクティブはDOMにおいてコンパイラが呼ばれたときに実行される機能です。 ディレクティブをどのように記述
+するかを深く知るには{@link api/ng.$compileProvider#directive directive API}を 読んでください。
 
-Here is a directive which makes any element draggable. Notice the `draggable` attribute on the
-`<span>` element.
+以下はどんな要素でもドラッグ可能にしたディレクティブです。`<span>`要素の`draggable`属性をみてください。
 
 <example module="drag">
   <file name="script.js">
@@ -102,40 +92,33 @@ Here is a directive which makes any element draggable. Notice the `draggable` at
       });
   </file>
   <file name="index.html">
-    <span draggable>Drag ME</span>
+    <span draggable>ドラッグしてください</span>
   </file>
 </example>
 
 
-The presence of the `draggable` attribute on any element gives the element new behavior. The beauty of
-this approach is that we have taught the browser a new trick. We have extended the vocabulary of
-what the browser understands in a way which is natural to anyone who is familiar with HTML
-principles.
+どの要素にでも`draggable`属性を与えることはその要素の新たな振る舞いです。このアプローチの美しさは、新しいトリックを
+ブラウザに教えることにあります。私たちはHTMLの原理に親しんだ誰にでも自然な方法で、ブラウザが理解できる語彙を増やしました。
 
 
-# Understanding View
+# ビューの理解
 
-There are many templating systems out there. Most of them consume a static string template and
-combine it with data, resulting in a new string. The resulting text is then `innerHTML`ed into
-an element.
+テンプレートエンジンは数多く存在します。その多くは新たな文字列を表示するのに、静的な文字列のテンプレートを使い、
+データと結合します。表示された文字列は要素の`innerHTML`となります。
 
 <img src="img/One_Way_Data_Binding.png">
 
-This means that any changes to the data need to be re-merged with the template and then
-`innerHTML`ed into the DOM. Some of the issues with this approach are: reading user input and merging it with data,
-clobbering user input by overwriting it, managing the whole update process, and lack of behavior
-expressiveness.
+これは、データへの変更がテンプレートと再度マージし、DOMに対して`innerHTML`を実行する必要があることを意味します。
+この手法の幾つかの問題: ユーザーが入力した情報の読み込みとデータとのマージ、ユーザーの入力した情報の上書き、全ての更新
+手続きの管理、振る舞いの表現力の欠如。
 
-Angular is different. The Angular compiler consumes the DOM with directives, not string templates.
-The result is a linking function, which when combined with a scope model results in a live view. The
-view and scope model bindings are transparent. No action from the developer is needed to update
-the view. And because no `innerHTML` is used there are no issues of clobbering user input.
-Furthermore, Angular directives can contain not just text bindings, but behavioral constructs as
-well.
-
+Angularは違います。Angularのコンパイラは文字列のテンプレートではなくDOMをディレクティブと一緒に使います。その結果は、
+ライブビューにおけるスコープのモデルと結合した際の、リンクしている機能です。ビューとスコープのモデルのバインディング
+は明白なものです。開発者はビューの更新のために何ら行動をとる必要はありません。`innerHTML`が使われないことはユーザーの
+入力を上書きする問題がないことを意味します。さらに、Angularのdirectivesはテキストのバインディングだけでなく、振る舞いの
+構成も同様に含みます。
 <img src="img/Two_Way_Data_Binding.png">
 
-The Angular approach produces a stable DOM. This means that the DOM element instance bound to a model
-item instance does not change for the lifetime of the binding. This means that the code can get
-hold of the elements and register event handlers and know that the reference will not be destroyed
-by template data merge.
+Angularのアプローチは安定したDOMを生み出します。それはDOM要素のインスタンスをモデル要素のインスタンスにバインドする
+ことによって、そのバインディングの生存期間を変更しないことを意味しています。これはコードが要素を取得し、イベント
+ハンドラを登録し、参照することがテンプレートのデータをマージによって破壊されないことを意味します。
