@@ -2,114 +2,84 @@
 @name Tutorial
 @description
 
-A great way to get introduced to AngularJS is to work through this tutorial, which walks you through
-the construction of an AngularJS web app. The app you will build is a catalog that displays a list
-of Android devices, lets you filter the list to see only devices that interest you, and then view
-details for any device.
+AngularJSに入門する一番の方法は、このチュートリアルを最後までやり遂げることです。このチュートリアルではAngularJSアプリの構築をひと通り体験することができます。
+あなたが構築するアプリはAndroidデバイスの一覧を表示するカタログアプリです。興味のあるデバイスのみをフィルタして表示することができ、また任意のデバイスの詳細を見ることもできます。
 
 <img class="diagram" src="img/tutorial/catalog_screen.png" width="488" height="413">
 
-Work through the tutorial to see how Angular makes browsers smarter — without the use of extensions
-or plug-ins. As you work through the tutorial, you will:
+チュートリアルを進めることで、Angularがいかにブラウザをスマートにするかを目の当たりにするでしょう。拡張機能やプラグインは必要ありません。このチュートリアルを通して以下のことを学ぶことができます:
 
-* See examples of how to use client-side data binding and dependency injection to build dynamic
-views of data that change immediately in response to user actions.
-* See how Angular creates listeners on your data without the need for DOM manipulation.
-* Learn a better, easier way to test your web apps.
-* Learn how to use Angular services to make common web tasks, such as getting data into your app,
-easier.
+* ユーザーのアクションに対して即座に変更される動的なビューを構築するためのクライアントサイドのデータバインディングとDI (Dependency Injection)の使い方
+* DOM操作なしでどうやってデータのリスナーをAngularが生成するか
+* ウェブアプリをより良く、より簡単にテストするための方法
+* データをアプリに登録するといった一般的なウェブ作業をより簡単に行うためのAngular servicesの使い方
 
-And all of this works in any browser without modification to the browser!
+すべての作業は、どのブラウザであっても、変更なしで動作します！
 
-When you finish the tutorial you will be able to:
+このチュートリアルを終えるときには、あなたは次のことが出来るようになっています:
 
-* Create a dynamic application that works in any browser.
-* Define the differences between Angular and common JavaScript frameworks.
-* Understand how data binding works in AngularJS.
-* Use the angular-seed project to quickly boot-strap your own projects.
-* Create and run tests.
-* Identify resources for learning more about AngularJS.
+* 任意のブラウザで動作するダイナミックなアプリの作成
+* AngularJSと一般的なJavaScriptフレームワークとの違いの理解
+* AngularJSでデータバインディングを行う方法の理解
+* angular-seed プロジェクトを使って、あなた自身のプロジェクトの素早い立ち上げ
+* テストの作成と実行
+* AngularJSについてさらに学ぶためのリソースを見つけられること
 
-The tutorial guides you through the entire process of building a simple application, including
-writing and running unit and end-to-end tests. Experiments at the end of each step provide
-suggestions for you to learn more about AngularJS and the application you are building.
+このチュートリアルでは、ユニットテストやエンドツーエンドテストを書き、実行することを含めた、シンプルなアプリケーションを構築するプロセス全体を学ぶことができます。各ステップの最後にある「追加の課題」セクションではAngularJSと作成しているアプリケーションについてより理解するための追加の課題を提供しています。
 
-You can go through the whole tutorial in a couple of hours or you may want to spend a pleasant day
-really digging into it. If you're looking for a shorter introduction to AngularJS, check out the
-{@link misc/started Getting Started} document.
+全てのチュートリアルは2時間ほどで進めることができるでしょう。もしくは深く突っ込んで、楽しい一日を過ごしたいかもしれませんね。
+でも、もし短い入門を探しているのであれば、{@link misc/started Getting Started} ドキュメントを読んでください。
 
 
 
 
 
 
+# コード作業
 
-# Working with the code
-
-You can follow this tutorial and hack on the code in either the Mac/Linux or the Windows
-environment. The tutorial relies on the use of Git versioning system for source code management.
-You don't need to know anything about Git to follow the tutorial. Select one of the tabs below
-and follow the instructions for setting up your computer.
+このチュートリアルは、Mac / Linuxのいずれか または、Windows環境上で行うことが出来ます。チュートリアルは、ソースコード管理のためGitに依存しています。このチュートリアルを行うためにGitについて全て知る必要はありません。以下のいずれかのタブを選択し、お使いのコンピュータをセットアップするための手順に従ってください。
 
 <div class="tabbable" show="true">
   <div class="tab-pane well" id="git-mac" title="Git on Mac/Linux">
     <ol>
-      <li><p>You will need Node.js and Testacular to run unit tests, so please verify that you have
-      <a href="http://nodejs.org/">Node.js</a> v0.8 or better installed
-      and that the <code>node</code> executable is on your <code>PATH</code> by running the following
-      command in a terminal window:</p>
+      <li><p>単体テストを実行するには、Node.jsとKarmaが必要になりますので、ターミナルウィンドウで次のコマンドを実行して、<a href="http://nodejs.org/">Node.js</a>の v0.8以上がインストールされていることと<code>node</code>が<code>PATH</code>で実行可能になっていることを確認してください:
+      </p>
       <pre>node --version</pre>
-      <p>Additionally install <a href="http://vojtajina.github.com/testacular">Testacular</a> if you
-      don't have it already:</p>
+      <p>もし<a href="http://karma-runner.github.io/">Karma</a>が未インストールであればこちらもインストールしてください:</p>
       <pre>npm install -g testacular</pre>
-      <li><p>You'll also need Git, which you can get from
-         <a href="http://git-scm.com/download">the Git site</a>.</p></li>
-      <li><p>Clone the angular-phonecat repository located at <a
-href="https://github.com/angular/angular-phonecat">Github</a> by running the following command:</p>
+      <li><p>Gitも必要です。Gitは<a href="http://git-scm.com/download">Git site</a>から入手できます。</p></li>
+      <li><p>次のコマンドを実行して、<a
+href="https://github.com/angular/angular-phonecat">Github</a>にあるangular-phonecatリポジトリのクローンを作成します:</p>
       <pre>git clone git://github.com/angular/angular-phonecat.git</pre>
-      <p>This command creates the <code>angular-phonecat</code> directory in your current
-directory.</p></li>
-      <li><p>Change your current directory to <code>angular-phonecat</code>:</p>
+      <p>このコマンドは、カレントディレクトリ内に<code>angular-phonecat</code>ディレクトリを作成します。</p></li>
+      <li><p>カレントディレクトリを<code>angular-phonecat</code> に変更します:</p>
       <pre>cd angular-phonecat</pre>
-      <p>The tutorial instructions assume you are running all commands from the angular-phonecat
-directory.</p></li>
-      <li><p>You will need an http server running on your system. Mac and Linux machines typically
-have Apache pre-installed, but If you don't already have one installed, you can use <code>node</code>
-to run <code>scripts/web-server.js</code>,  a simple bundled http server.</p></li>
+      <p>チュートリアルの手順では、angular-phonecatディレクトリからすべてのコマンドを実行していると仮定します。</p></li>
+      <li><p>システム上で動作するHTTPサーバが必要になります。通常はMacとLinuxマシンにはapacheがプリインストールされていますが、もしインストールしてない場合は<code>node</code>にバンドルされているシンプルなhttpサーバー、<code>scripts/web-server.js</code>を実行してください。</p></li>
     </ol>
   </div>
 
   <div class="tab-pane well" id="git-win" title="Git on Windows">
     <ol>
-      <li><p>You will need Node.js and Testacular to run unit tests, so please verify that you have
-        <a href="http://nodejs.org/">Node.js</a> v0.8 or better installed
-        and that the <code>node</code> executable is on your <code>PATH</code> by running the following
-        command in a terminal window:</p>
+      <li><p>単体テストを実行するには、Node.jsのとTestacularが必要になりますので、ターミナルウィンドウで次のコマンドを実行して、<a href="http://nodejs.org/">Node.js</a>の v0.8以上がインストールされていることと<code>node</code>が<code>PATH</code>で実行可能になっていることを確認してください:</p>
         <pre>node --version</pre>
-        <p>Additionally install <a href="http://vojtajina.github.com/testacular">Testacular</a> if you
-           don't have it already:</p>
+        <p>もし<a href="http://karma-runner.github.io/">Karma</a>が未インストールであればこちらもインストールしてください:</p>
         <pre>npm install -g testacular</pre>
       </li>
-      <li><p>You'll also need Git, which you can get from
-               <a href="http://git-scm.com/download">the Git site</a>.</p></li>
-      <li><p>Clone the angular-phonecat repository located at <a
-      href="https://github.com/angular/angular-phonecat">Github</a> by running the following command:</p>
+      <li><p>Gitも必要です。Gitは<a href="http://git-scm.com/download">Git site</a>から入手できます。</p></li>
+      <li><p>次のコマンドを実行して、<a
+href="https://github.com/angular/angular-phonecat">Github</a>にあるangular-phonecatリポジトリのクローンを作成します:</p>
       <pre>git clone git://github.com/angular/angular-phonecat.git</pre>
-      <p>This command creates the angular-phonecat directory in your current directory.</p></li>
-      <li><p>Change your current directory to angular-phonecat.</p>
+      <p>このコマンドは、カレントディレクトリ内に<code>angular-phonecat</code>ディレクトリを作成します。</p></li>
+      <li><p>カレントディレクトリを<code>angular-phonecat</code> に変更します:</p>
       <pre>cd angular-phonecat</pre>
-      <p>The tutorial instructions assume you are running all commands from the angular-phonecat
-directory.</p>
-      <p>You should run all <code>git</code> commands from Git bash.</p>
-      <p>Other commands like <code>test.bat</code> or <code>e2e-test.bat</code> should be
-executed from the Windows command line.</li>
-      <li><p>You need an http server running on your system, but if you don't already have one
-already installed, you can use <code>node</code> to run <code>scripts\web-server.js</code>, a simple
-bundled http server.</p></li>
+      <p>チュートリアルの手順では、angular-phonecatディレクトリからすべてのコマンドを実行していると仮定します。</p>
+      <p>すべての<code>git</code>コマンドはGit bashから実行してください。</p>
+      <p>その他の<code>test.bat</code>や<code>e2e-test.bat</code>はWindowsのコマンドラインから実行してください。</li>
+      <li><p>システム上で動作するHTTPサーバが必要になります。もしインストールしてない場合は<code>node</code>にバンドルされているシンプルなhttpサーバー、<code>scripts\web-server.js</code>を実行してください。</p></li>
     </ol>
   </div>
 
-The last thing to do is to make sure your computer has a web browser and a good text editor
-installed. Now, let's get some cool stuff done!
+その他に必要なことは、お使いのコンピュータにWebブラウザと好きなテキストエディタをインストールしておくことだけです。さあ、このクールなチュートリアルをやり終えましょう！
 
-{@link step_00 <span class="btn btn-primary">Get Started!</span>}
+{@link step_00 <span class="btn btn-primary">チュートリアルを始める</span>}
