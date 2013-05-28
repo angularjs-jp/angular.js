@@ -2,11 +2,13 @@
 @name Developer Guide
 @description
 
-Welcome to the angular Developer Guide. If you are here to learn the details of how to use angular
-to develop web apps, you've come to the right place.
+Angular の開発者ガイドへようこそ。
+もしあなたが、 Angular をどうやって Web アプリケーション開発に使うのか、
+詳細に学ぼうとしているなら、この開発者ガイドを見て正解です。
 
-If you are completely or relatively unfamiliar with angular, you may want to check out one or both
-of the following documents before returning here to the Developer Guide:
+もしあなたが、 Angular についてまったく、もしくはあまりよく知らないのであれば、
+下記のドキュメントを参照してから、
+この開発者ガイドを読み始めたほうがいいかもしれません。
 
-* {@link misc/started Getting Started}
-* {@link tutorial/index Angular Tutorial}
+* {@link misc/started はじめに}
+* {@link tutorial/index Angular チュートリアル}

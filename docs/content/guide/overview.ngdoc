@@ -1,79 +1,99 @@
 @ngdoc overview
-@name Developer Guide: Overview
+@name Developer Guide: 概要
 @description
 
 
-# What Is Angular?
+# Angular とは
 
-AngularJS is a structural framework for dynamic web apps. It lets you use HTML as your template
-language and lets you extend HTML's syntax to express your application's components clearly and
-succinctly. Out of the box, it eliminates much of the code you currently write through data
-binding and dependency injection. And it all happens in JavaScript within the browser making it an
-ideal partner with any server technology.
+AngularJS は、動的 Web アプリケーションのためのフレームワークです。
+Angular を使うことで、 HTML をテンプレート言語として使うことができ、
+HTML の文法を拡張してアプリケーションのコンポーネントを明確かつ簡潔に表現することができます。
+特に難しいことをしなくても AngularJS を使えば、あなたが現在書いている、
+データバインディングや依存性注入のコードの大部分を取り除くことができます。
+そして、それらの機能はすべてブラウザの Javascript の中で実現されるため、
+どんなサーバサイドテクノロジとも共存できます。
 
-Angular is what HTML would have been had it been designed for applications. HTML is a great
-declarative language for static documents. It does not contain much in the way of creating
-applications, and as a result building web applications is an exercise in *what do I have to do, so
-that I trick the browser in to doing what I want.*
+もしも HTML がアプリケーションのために設計されていたら、 Angular 
+のようになっていたでしょう。 
+HTML は静的ドキュメントのための素晴らしい宣言型言語です。
+しかし、アプリケーションを作ることを念頭に置かれていないので、
+結果として、 Web アプリケーションを作るということは、 
+*ブラウザをだまして、アプリケーションでやりたいことをやらせるにはどうしたらいいのか* 
+ということに終始してしまいます。
 
-The impedance mismatch between dynamic applications and static documents is often solved as:
+動的なアプリケーションと静的なドキュメントと決定的な違いを埋めるためによく使われるのは、
+下記の方法です。
 
-  * **library** - a collection of functions which are useful when writing web apps. Your code is
-    in charge and it calls into the library when it sees fit. E.g., `jQuery`.
-  * **frameworks** - a particular implementation of a web application, where your code fills in
-    the details. The framework is in charge and it calls into your code when it needs something
-    app specific. E.g., `knockout`, `sproutcore`, etc.
+  * **ライブラリ** - Web アプリケーションを書くために便利な関数の集合です。
+    あなたのコードが主体となり、適切なときにライブラリを呼び出すようにコードを書く必要があります。
+    例: jQuery
 
+  * **フレームワーク** - Web アプリケーションの特定の実装方法にしたがって、
+    詳細なコードを記述します。
+    フレームワークが主体となり、アプリケーション特有の処理が必要になったら、
+    あなたが記述したコードが呼び出されます。
+    例: knockout, sproutcore など
 
-Angular takes another approach. It attempts to minimize the impedance mismatch between document
-centric HTML and what an application needs by creating new HTML constructs. Angular teaches the
-browser new syntax through a construct we call directives. Examples include:
+Angular は、別のアプローチをとっています。
+新たな HTML 構造を作ることにより、静的ドキュメント向けの HTML と 
+Web アプリケーションとの不整合を最小限にすることを目指しています。 
+Angular は directive と呼ばれる新しい HTML 構造の文法をブラウザに伝えます。
+たとえば、下記のようなことを実現しています。
 
-  * Data binding as in `{{}}`.
-  * DOM control structures for repeating/hiding DOM fragments.
-  * Support for forms and form validation.
-  * Attaching code-behind to DOM elements.
-  * Grouping of HTML into reusable components.
+  * `{{}}` を使ったデータバインディング
+  * DOM フラグメントを繰り返したり、隠すための DOM 制御構造
+  * フォームとフォームのバリデーションのサポート
+  * DOM 要素への code-behind のアタッチ
+  * HTML の集合を再利用可能なコンポーネントとして定義
 
+## End-to-end ソリューション
 
+Angular は Web アプリケーションを作るための 
+end-to-end なソリューションを目指しています。
+つまり、 Web アプリケーションを作るという巨大なパズルの 1 ピースではなく、
+すべてが揃った完全な解を目指しているのです。
+このようなことを目指しているので、
+Angular は CRUD アプリケーションがどのように構築されるべきか、
+頑なな方針を持っています。
+しかし、この方針はあくまでスタート地点であり、簡単に変更できるようにもしています。
+Angular は最初から下記の機能を搭載しています。
 
-## End-to-end solution
+  * CRUD アプリケーションを作るために必要なすべて: データバインディング、
+    基本的なテンプレーティング、 directive 、フォームバリデーション、ルーティング、 
+    deep-linking 、最利用可能なコンポーネント、依存性注入
+  * テスト容易性: ユニットテスト、 End-to-End テスト、モック、テストハーネス
+  * 開発を始めるときに使う、ディレクトリ構造とテストスクリプトが揃った、
+    アプリケーションのひな形
 
-Angular tries to be an end-to-end solution, when building a web application. This means it is
-not a single piece in an overall puzzle of building a web application, but an end-to-end solution.
-This makes Angular opinionated about how a CRUD application should be built. But while it is
-opinionated, it also tries to make sure that its opinion is just a starting point, which you can
-easily change. Angular comes with the following out-of-the-box:
+## Angular のいいところ
 
-  * Everything you need to build a CRUD app in a cohesive set: data-binding, basic templating
-    directives, form validation, routing, deep-linking, reusable components, dependency injection.
-  * Testability story: unit-testing, end-to-end testing, mocks, test harnesses.
-  * Seed application with directory layout and test scripts as a starting point.
+Angular は、開発者に見える部分を高度に抽象化することで、
+アプリケーション開発を単純化しています。
+ただし、他の抽象化と同じように、抽象化を行うことで柔軟性が失われます。
+言い換えれば、必ずしもすべてのアプリケーションにとって 
+Angular が適しているわけではないということです。
+Angular は、CRUDアプリケーションを念頭に作られました。
+幸い、Webアプリケーションの 90% は CRUD アプリケーションが占めています。
+しかし、Angular が何に適しているかを理解するためには、 Angular 
+が適していないケースを理解しなければなりません。
 
+ゲームや GUI エディタは、複雑で手の込んだ DOM 操作を行うアプリケーションの良い例です。
+これらの種類のアプリケーションは CRUD アプリケーションとは違い、
+結果として Angular は適していません。このようなケースでは、
+jQueryなどの DOM 操作が直接できるようなライブラリの方が適しているでしょう。
 
-## Angular Sweet Spot
+# Angular サンプルの解説
 
-Angular simplifies application development by presenting a higher level of abstraction to the
-developer. Like any abstraction, it comes at a cost of flexibility. In other words not every app
-is a good fit for Angular. Angular was built for the CRUD application in mind. Luckily CRUD
-applications represent at least 90% of the web applications. But to understand what Angular is
-good at one also has to understand when an app is not a good fit for Angular.
+次のサンプルは、入力フォームがある典型的な CRUD アプリケーションです。
+入力フォームの値はバリデーションが行われ、合計を計算するために使用されます。
+また、合計は特定のロケールにそってフォーマットされます。
+このようなアプリケーションを作成するとき、
+開発者はおおよそ次のような方法を考えるでしょう。
 
-Games, and GUI editors are examples of very intensive and tricky DOM manipulation. These kinds of
-apps are different from CRUD apps, and as a result are not a good fit for Angular. In these cases
-using something closer to bare metal such as `jQuery` may be a better fit.
-
-
-# An Introductory Angular Example
-
-Below is a typical CRUD application which contains a form. The form values are validated, and
-are used to compute the total, which is formatted to a particular locale. These are some common
-concepts which the application developer may face:
-
-  * attaching data-model to the UI.
-  * writing, reading and validating user input.
-  * computing new values based on the model.
-  * formatting output in a user specific locale.
+  * UI にデータモデルをアタッチする
+  * ユーザの入力を読み取り、チェックして、出力する
+  * データモデルから新しい値(合計値)を計算する
+  * ユーザのロケールに合わせて数値をフォーマットして出力する
 
 <example>
   <file name="script.js">
@@ -108,100 +128,125 @@ concepts which the application developer may face:
   </file>
 </example>
 
-Try out the Live Preview above, and then let's walk through the example and describe what's going
-on.
+上のライブプレビューを試しみたら、
+サンプルコードの中で何が行われているか順にみていきましょう。
 
-In the `<html>` tag, we specify that it is an Angular
-application with the `ng-app` directive. The `ng-app` will cause Angular to {@link
-bootstrap auto initialize} your application.
+`<html>` タグでは、Angular のアプリケーションであることを、 `ng-app`
+ディレクティブをつけることで明示しています。 `ng-app` ディレクティブは、
+Angular に {@link bootstrap 自動的な初期化} を実行させます。
+
 
     <html ng-app>
 
-We load Angular using the  `<script>` tag:
+Angular は `<script>` タグで読み込みます。
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/?.?.?/angular.min.js"></script>
 
-From the `ng-model` attribute of the `<input>` tags, Angular automatically sets up two-way data
-binding, and we also demonstrate some easy input validation:
+`<input>` タグの `ng-model` 属性から、 Angular は自動的に 2 
+方向のデータバインディングを行います。
+また、ここで簡単な入力チェックも行なっています。
 
     Quantity: <input type="integer" min="0" ng-model="qty" required >
     Cost: <input type="number" ng-model="cost" required >
 
-These input widgets look normal enough, but consider these points:
+これらの入力項目は十分自然に見えますが、次の 2 点がポイントです。
 
-  * When this page loaded, Angular bound the names of the input widgets (`qty` and `cost`) to
-    variables of the same name. Think of those variables as the "Model" component of the
-    Model-View-Controller design pattern.
-  * Note that the HTML widget {@link api/ng.directive:input input}
-    has special powers. The input invalidates itself by turning red when you enter invalid data or
-    leave the the input fields blank. These new widget behaviors make it easier to implement field
-    validation common in CRUD applications.
+  * ページがロードされたとき、 Angular は入力項目の名前 (`qty` と
+    `cost`) を同じ名前の変数にバインドします。これらの変数は
+    Model-View-Controller デザインパターンの"Model" に相当すると考えて
+    ください。
+  * HTML の {@link api/ng.directive:input input} 
+    要素は特別な機能があることに注意してください。
+    無効なデータを入力したり、入力フィールドが空のとき、
+    入力フィールドは赤色になって無効になります。
+    このような機能を使うと、 
+    CRUD アプリケーションによくある入力フィールドチェックを簡単に実装することができます。
 
-And finally, the mysterious `{{ double curly braces }}`:
+最後に、謎めいた `{{ double curly braces }}` の部分を見てみましょう。
 
          Total: {{qty * cost | currency}}
 
-This notation, `{{ _expression_ }}`, is Angular markup for data-binding. The expression itself can
-be a combination of both an expression and a {@link dev_guide.templates.filters filter}: `{{
-expression | filter }}`. Angular provides filters for formatting display data.
+この `{{ _expression_ }}` という表記法は、
+データバインディングを行うための Angular のマークアップです。 
+expression (式) は、別の `expression`や {@link dev_guide.templates.filters filter} 
+の組み合わせを使用できます。 
+Angular には、表示するデータをフォーマットするためのフィルタが用意されています。
+ 
+上の例で、二重中括弧の中の式は、「入力項目から取得したデータを掛け合わせ、
+その結果を金額としてフォーマットして表示する」ということを Angular に指示しています。
 
-In the example above, the expression in double-curly braces directs Angular to "bind the data we
-got from the input widgets to the display, multiply them together, and format the resulting number
-into output that looks like money."
-
-Notice that we achieved this application behavior not by calling Angular methods, nor by
-implementing application specific behavior as a framework. We achieved the behavior because the
-browser behaved more in line with what is needed for a dynamic web application rather then what is
-needed for a static document. Angular has lowered the impedance mismatch to the point where no
-library/framework calls are needed.
-
+注目すべきは、このアプリケーションの振る舞いを実現するために、
+Angular のメソッドを呼び出したり、
+フレームワークにしたがってアプリケーション特有の振る舞いだけを実装したわけではない、
+ということです。
+ブラウザが、静的ドキュメントではなく、
+動的 Web アプリケーションに適した振る舞いをしているので、
+このようなアプリケーションの振る舞いを実現できているのです。 
+Angular を使うことで、ライブラリやフレームワークを呼び出す必要がなくなり、
+静的ドキュメント向けの HTML と Web 
+アプリケーションとの不整合が軽減されたことがお分かりになったと思います。
 
 # The Zen of Angular
 
-Angular is built around the belief that declarative code is better than imperative when it comes
-to building UIs and wiring software components together, while imperative code is excellent for
-expressing business logic.
+Angular は、 UI を構築するときやソフトウェアのコンポーネント同士を結合するときには、
+命令型のコードよりも宣言型のコードの方が適していて、
+一方でビジネスロジックを記述するには命令型のコードが適している、
+という信念に基づいて作られています。
 
+  * DOM 操作をアプリケーションロジックから切り離すのは、非常に良い考えです。
+    これによって、コードのテスタビリティが劇的に改善します。
+  * アプリケーションのテストが、
+    アプリケーションを書くことと同じくらい大切であると捉えるのは、
+    実に重要なことです。
+    また、アプリケーションがテストしにくいものになるかどうかは、
+    コードの構造によって大きく左右されます。
+  * アプリケーションのクライアントサイド処理と、
+    サーバサイド処理を切り離すのは素晴らしい考えです。
+    これによって、開発作業は同時に進めることができ、
+    それぞれの処理を再利用することができるようになります。
+  * UI の設計からビジネスロジックの記述・テストまでのアプリケーション構築手順を、
+    フレームワークが開発者に示すことができれば、非常に便利です。
+  * 共通のタスクを簡単なものにして、
+    困難なタスクを可能なものにすることは、常にすばらしいことです。
 
-  * It is a very good idea to decouple DOM manipulation from app logic. This dramatically improves
-    the testability of the code.
-  * It is a really, _really_ good idea to regard app testing as equal in importance to app
-    writing. Testing difficulty is dramatically affected by the way the code is structured.
-  * It is an excellent idea to decouple the client side of an app from the server side. This
-    allows development work to progress in parallel, and allows for reuse of both sides.
-  * It is very helpful indeed if the framework guides developers through the entire journey of
-    building an app: from designing the UI, through writing the business logic, to testing.
-  * It is always good to make common tasks trivial and difficult tasks possible.
+Angular を使えば、次のような面倒から解放されます。
 
+  * **コールバックの登録 :** 
+    コールバックの登録を行うコードは、コード全体を散らかしてしまう原因になり、
+    必要なコードを見つけるのが難しくなります。
+    コールバックのような定型コードを取り除くのは良いことです。 
+    _あなたが_ 書かなければならない JavaScript のコードの量を大幅に減らすことができ、
+    アプリケーションが一体何をしているのか把握しやすくなります。
 
+  * **プログラムによる HTML DOM 操作 :** 
+    HTML DOM 操作は AJAX アプリケーションの基礎ですが、
+    厄介で間違いのもとになります。アプリケーションの状態変化に合わせて、
+    UIがどのように変化すべきかを宣言的に記述することで、
+    低レベル DOM 操作のコードを書くタスクから解放されます。
+    Angular で書かれたたいていのアプリケーションは、
+    プログラムによって DOM 操作を行う必要がありませんが、
+    もし必要ならば DOM 操作を行うコードを書くこともできます。
 
-Angular frees you from the following pain:
+  * **UI とのデータの受け渡し :** 
+    CRUD 操作は AJAX アプリケーションの大半を占めます。
+    サーバからデータを受け取って内部オブジェクト・HTML フォームに渡して、
+    ユーザがフォームを編集できるようにし、入力チェックエラーがあれば表示して、
+    入力内容を内部のモデルに戻して、最後にまたサーバに送り返す、
+    というような処理には、大量の定形コードが必要です。 
+    Angular を使えば、このような定形コードをほぼすべて除去し、詳細な実装方法ではなく、
+    アプリケーション全体の処理フローだけが書かれたコードを作成することができます。
 
-  * **Registering callbacks:** Registering callbacks clutters your code, making it hard to see the
-    forest for the trees. Removing common boilerplate code such as callbacks is a good thing. It
-    vastly reduces the amount of JavaScript coding _you_ have to do, and it makes it easier to see
-    what your application does.
-  * **Manipulating HTML DOM programmatically:** Manipulating HTML DOM is a cornerstone of AJAX
-    applications, but it's cumbersome and error-prone. By declaratively describing how the UI
-    should change as your application state changes, you are freed from low level DOM manipulation
-    tasks. Most applications written with Angular never have to programmatically manipulate the
-    DOM, although you can if you want to.
-  * **Marshaling data to and from the UI:** CRUD operations make up the majority of AJAX
-    applications. The flow of marshaling data from the server to an internal object to an HTML
-    form, allowing users to modify the form, validating the form, displaying validation errors,
-    returning to an internal model, and then back to the server, creates a lot of boilerplate
-    code. Angular eliminates almost all of this boilerplate, leaving code that describes the
-    overall flow of the application rather than all of the implementation details.
-  * **Writing tons of initialization code just to get started:** Typically you need to write a lot
-    of plumbing just to get a basic "Hello World" AJAX app working. With Angular you can bootstrap
-    your app easily using services, which are auto-injected into your application in a {@link
-    http://code.google.com/p/google-guice/ Guice}-like dependency-injection style. This allows you
-    to get started developing features quickly. As a bonus, you get full control over the
-    initialization process in automated tests.
+  * **大量の初期化用コードの記述 :** 
+    単純な "Hello World" AJAX アプリケーションを記述したいだけなのに、
+    初期化を行うためのコードをたくさん書かなければならない、
+    というのはよくあることです。 Angular では、
+    service を使うことで簡単にアプリケーションの初期化をおこなうことができます。 
+    service は Guice に似た依存性注入スタイルで、
+    自動的にアプリケーションに読み込まれます。おまけに、
+    自動テストを行うときには、初期化プロセスを完全にコントロールできます。
 
+# Angular についてのプレゼンテーション
 
-# Watch a Presentation About Angular
-
-Here is a presentation on Angular from May 2012.
+次の動画は、2012年に行われた、Angular に関するプレゼンテーションです。
 
 <iframe width="560" height="315" src="http://www.youtube.com/embed/bfrn5VNpwsg" frameborder="0" allowfullscreen></iframe>
