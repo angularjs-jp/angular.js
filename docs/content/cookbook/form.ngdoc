@@ -2,10 +2,8 @@
 @name Cookbook: Form
 @description
 
-A web application's main purpose is to present and gather data. For this reason Angular strives
-to make both of these operations trivial. This example shows off how you can build a simple form to
-allow a user to enter data.
-
+ウェブアプリケーションの主な目的は、データの表示および収集です。このため、AngularJSではデータの表示および収集を
+簡単にするよう務めています。この例では、ユーザーがデータを入力できる簡単なフォームを作成する方法を示しています。
 
 <doc:example>
  <doc:source>
@@ -100,15 +98,11 @@ allow a user to enter data.
 </doc:example>
 
 
-# Things to notice
+# 注目すべき事
 
-* The user data model is initialized {@link api/ng.directive:ngController controller} and is
-  available in the {@link api/ng.$rootScope.Scope scope} with the initial data.
-* For debugging purposes we have included a debug view of the model to better understand what
-  is going on.
-* The {@link api/ng.directive:input input directives} simply refer
-  to the model and are data-bound.
-* The inputs validate. (Try leaving them blank or entering non digits in the zip field)
-* In your application you can simply read from or write to the model and the form will be updated.
-* By clicking the 'add' link you are adding new items into the `user.contacts` array which are then
-  reflected in the view.
+* ユーザーデータモデルは{@link api/ng.directive:ngController コントローラ}で初期化され、初期データとともに{@link api/ng.$rootScope.Scope スコープ}を通して利用可能です。
+* デバッグのため、何が起こっているのかをより理解するためモデルのデバッグビューを含んでいます。
+* {@link api/ng.directive:input インプットディレクティブ} は単にモデルを参照し、入力欄とモデルのデータを同期させます。
+* 入力値のバリデーションが行われます。（郵便番号の入力欄を空のままにしておくか、数値以外を入力して試してみてください。）
+* アプリケーションの中で、モデルの値を読み書きすることができ、それがフォームに反映されます。
+* 「add」というリンクをクリックすることで、user.contactsプロパティに対し項目を追加することができ、フォームのビューにも入力欄が追加されます。
