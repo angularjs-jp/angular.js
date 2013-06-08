@@ -2,8 +2,8 @@
 @name Cookbook: Advanced Form
 @description
 
-Here we extend the basic form example to include common features such as reverting, dirty state
-detection, and preventing invalid form submission.
+ここでは、基本的なフォームに対しキャンセル、フォームへの入力検知、無効なデータ送信を防ぐといった
+よくあるフォームの機能を追加します。
 
 <doc:example>
 <doc:source>
@@ -116,12 +116,11 @@ detection, and preventing invalid form submission.
 </doc:example>
 
 
-#Things to notice
+# 注目すべき事
 
-* Cancel & save buttons are only enabled if the form is dirty — there is something to cancel or
-save.
-* Save button is only enabled if there are no validation errors on the form.
-* Cancel reverts the form changes back to original state.
-* Save updates the internal model of the form.
-* Debug view shows the two models. One presented to the user form and the other being the pristine
-copy master.
+* キャンセルボタンと保存ボタンは、データが入力されたとき（キャンセルまたは保存すべきデータがあるとき）
+にだけ有効になります。
+* 保存ボタンはフォームのバリデーションエラーがない場合にのみ有効になります。
+* キャンセルボタンを押すと、フォームへの入力値は初期状態に戻ります。
+* 保存ボタンを押すと、フォーム内のモデルのデータが更新されます。
+* デバッグビューは2つのモデルを示します。一つは、ユーザーが入力した値であり、もう一つは初期データです。
