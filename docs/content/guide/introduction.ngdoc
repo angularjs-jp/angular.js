@@ -1,42 +1,49 @@
 @ngdoc overview
-@name Developer Guide: Introduction
+@name Developer Guide: イントロダクション
 @description
 
-Angular is pure client-side technology, written entirely in JavaScript. It works with the
-long-established technologies of the web (HTML, CSS, and JavaScript) to make the development of
-web apps easier and faster than ever before.
+Angular はピュアなクライアントサイドテクノロジで、すべて Javascript で書かれています。
+Angular は古くからある Web のテクノロジ (HTML, CSS, Javascript) と連携し、 
+Web アプリケーション開発をいままでより簡単に、迅速にすることができます。
 
-One important way that Angular simplifies web development is by increasing the level of abstraction
-between the developer and most low-level web app development tasks. Angular automatically takes
-care of many of these tasks, including:
+Angular が Web 開発をシンプルにしている重要な方法の 1 つは、
+低レベルな Web アプリケーション開発タスクと、
+開発者との間の抽象化の度合いを上げていることです。
+Angular は自動的に下記のタスクの大部分の面倒を見てくれます。
 
-  * DOM Manipulation
-  * Setting Up Listeners and Notifiers
-  * Input Validation
+  * DOM 操作
+  * Listeners と Notifiers のセットアップ
+  * 入力のバリデーション
 
-Because Angular handles much of the work involved in these tasks, developers can concentrate more
-on application logic and less on repetitive, error-prone, lower-level coding.
+Angular がこのようなタスクの面倒を見るので、
+開発者はアプリケーションロジックの開発に集中でき、
+同じことの繰り返しで、エラーのもとになる、低レベルな処理のコードに気を配らなくてよくなります。
 
-At the same time that Angular simplifies the development of web apps, it brings relatively
-sophisticated techniques to the client-side, including:
+Web アプリケーション開発をシンプルなものにするのと同時に、 Angular はクライアントサイドに、
+比較的洗練された技術をもたらします。
 
-  * Separation of data, application logic, and presentation components
-  * Data Binding between data and presentation components
-  * Services (common web app operations, implemented as substitutable objects)
-  * Dependency Injection (used primarily for wiring together services)
-  * An extensible HTML compiler (written entirely in JavaScript)
-  * Ease of Testing
+  * データと、アプリケーションロジック、それからプレゼンテーションコンポーネントの分離
+  * データとプレゼンテーションコンポーネントのデータバインディング
+  * Service (代用可能なオブジェクトとして実装された、共通の Web アプリケーション処理)
+  * 依存性注入(主に複数のサービスを連携させるために使用)
+  * 拡張可能な HTML コンパイラ(完全に JavaScript のみで記述)
+  * テスト容易性
 
-These techniques have been for the most part absent from the client-side for far too long.
+これらの技術は、長い間クライアントサイドには存在しませんでした。
 
-## Single-page / Round-trip Applications
+## シングルページアプリケーションと画面遷移型アプリケーション
 
-You can use Angular to develop both single-page and round-trip apps, but Angular is designed
-primarily for developing single-page apps. Angular supports browser history, forward and back
-buttons, and bookmarking in single-page apps.
+Angular はシングルページアプリケーションの開発にも、
+画面遷移型アプリケーションの開発にも使うことができますが、
+主にシングルページアプリケーションの開発のために設計されています。
+Angular はシングルページアプリケーションでも、
+ブラウザ履歴や戻る / 進むボタン、そしてブックマークをサポートしています。
 
-You normally wouldn't want to load Angular with every page change, as would be the case with using
-Angular in a round-trip app. However, it would make sense to do so if you were adding a subset of
-Angular's features (for example, templates to leverage angular's data-binding feature) to an
-existing round-trip app. You might follow this course of action if you were migrating an older app
-to a single-page Angular app.
+通常、ページが変化するごとに Angular をロードするようなことは、あまりないでしょう。
+しかし、ページ遷移型アプリケーションの場合はそうすることになるでしょう。
+また、 Angular の機能の一部 
+(たとえば Angular のデータバインディング機能を使ったテンプレートなど)を、
+既存のページ遷移型アプリケーションに追加する場合も、
+ページが遷移するたびに Angular をロードし直すことになるでしょう。
+古いアプリケーションをシングルページの Angular 
+アプリケーションに移行する場合も、このようなプロセスを経るかもしれません。
