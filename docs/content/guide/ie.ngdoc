@@ -1,25 +1,27 @@
 @ngdoc overview
-@name Developer Guide: Internet Explorer Compatibility
+@name Developer Guide: Internet Explorer との互換性
 @description
 
-# Overview
+# 概要
 
-This document describes the Internet Explorer (IE) idiosyncrasies when dealing with custom HTML
-attributes and tags. Read this document if you are planning on deploying your Angular application
-on IE v8.0 or earlier.
+このドキュメントでは、 HTML のカスタム属性やカスタムタグを扱うときの、 
+Internet Explorer(IE) 特有の注意点について解説します。
+もし、 IE 8.0 以前のバージョンで Angular アプリケーションを動作させようとしているならば、
+このドキュメントに目を通してください。
 
-# Short Version
 
-To make your Angular application work on IE please make sure that:
+# ショートバージョン
 
-  1. You polyfill JSON.stringify if necessary (IE7 will need this). You can use
-     [JSON2](https://github.com/douglascrockford/JSON-js) or
-     [JSON3](http://bestiejs.github.com/json3/) polyfills for this.
+Angular アプリケーションを IE で動作させるためには、下記の点に注意してください。
 
-  2. you **do not** use custom element tags such as `<ng:view>` (use the attribute version
-     `<div ng-view>` instead), or
+  1. 必要に応じて (IE7 では必要) JSON.stringify を polyfill します。
+     [JSON2](https://github.com/douglascrockford/JSON-js) または、
+     [JSON3](http://bestiejs.github.com/json3/) polyfill が利用できます。
 
-  3. if you **do use** custom element tags, then you must take these steps to make IE happy:
+  2. `<ng:view>` のようなカスタム要素タグを **使用しないでください。** 
+     (代わりに、 `<div ng-view>` のような属性を使用してください)
+
+  3. **もし、やむを得ずカスタム要素タグを使用する場合は、** IE 向けに下記のステップに従ってください。
 
 <pre>
   <html xmlns:ng="http://angularjs.org">
@@ -30,7 +32,7 @@ To make your Angular application work on IE please make sure that:
           document.createElement('ng-pluralize');
           document.createElement('ng-view');
 
-          // Optionally these for CSS
+          // オプション: CSS セレクタでタグを選択できるようにするために必要
           document.createElement('ng:include');
           document.createElement('ng:pluralize');
           document.createElement('ng:view');
@@ -43,42 +45,40 @@ To make your Angular application work on IE please make sure that:
   </html>
 </pre>
 
-The **important** parts are:
+**重要なポイント** :
 
-  * `xmlns:ng` - *namespace* - you need one namespace for each custom tag you are planning on
-    using.
+  * `xmlns:ng` - *名前空間* - 使用するカスタムタグそれぞれに、名前空間が 1 つ必要です。
 
-  * `document.createElement(yourTagName)` - *creation of custom tag names* - Since this is an
-    issue only for older version of IE you need to load it conditionally. For each tag which does
-    not have namespace and which is not defined in HTML you need to pre-declare it to make IE
-    happy.
-
-
-# Long Version
-
-IE has issues with element tag names which are not standard HTML tag names. These fall into two
-categories, and each category has its own fix.
-
-  * If the tag name starts with `my:` prefix than it is considered an XML namespace and must
-    have corresponding namespace declaration on `<html xmlns:my="ignored">`
-
-  * If the tag has no `:` but it is not a standard HTML tag, then it must be pre-created using
-    `document.createElement('my-tag')`
-
-  * If you are planning on styling the custom tag with CSS selectors, then it must be
-    pre-created using `document.createElement('my-tag')` regardless of XML namespace.
+  * `document.createElement(タグ名)` - *カスタムタグ名の生成* - これは、
+    古いバージョンのIEのために必要な記述ですので、コンディショナルコメントでロードする必要があります。
+    名前空間を持たず、HTMLで定義されていないタグそれぞれを、前もって宣言することで、 
+    IE でも動作するようになります。
 
 
-## The Good News
+# ロングバージョン
 
-The good news is that these restrictions only apply to element tag names, and not to element
-attribute names. So this requires no special handling in IE: `<div my-tag your:tag></div>`.
+IE には、標準の HTML で定義されていない要素タグ名について、問題があります。
+これらの問題は 3 つのカテゴリに分けることができ、それぞれ解決方法が異なります。
+
+  * タグの名前が `my:` プレフィックスから始まる場合、 IE は XML 名前空間のものと考えるので、
+    対応する名前空間定義 `<html xmlns:my="ignored">` が必要です。
+
+  * 標準 HTML のタグではなく、タグの名前に `:` を含まない場合、
+    `document.createElement('my-tag')` を使って事前に生成しておく必要があります。
+
+  * カスタムタグを CSS セレクタを使ってスタイル付けする場合、 XML 名前空間であるかにかかわらず、
+    `document.createElement('my-tag')` を使って事前に生成しておく必要があります。
 
 
-## What happens if I fail to do this?
+## 良いニュース
 
-Suppose you have HTML with unknown tag `mytag` (this could also be `my:tag` or `my-tag` with same
-result):
+これらの制約は、要素のタグ名のみに適用され、要素の属性名には適用されません。
+したがって、 `<div my-tag your:tag></div>` のような記述は、 IE でも特別な対応は必要ありません。
+
+## もし適切に対応しなければどうなるのか
+
+標準の HTML にないタグ `mytag` (もしくは `my:tag` や `my-tag` でも結果は同じ) 
+を含む HTML があったとします。
 
 <pre>
   <html>
@@ -88,7 +88,7 @@ result):
   </html>
 </pre>
 
-It should parse into the following DOM:
+この HTML は本来次のような DOM にパースされるべきです。
 
 <pre>
 #document
@@ -98,10 +98,10 @@ It should parse into the following DOM:
            +- #text: some text
 </pre>
 
-The expected behavior is that the `BODY` element has a child element `mytag`, which in turn has
-the text `some text`.
+`BODY` 要素は子要素 `mytag` を持ち、 `mytag` 要素は `some text` 
+というテキストを子要素として持っている、と解釈されるはずです。
 
-But this is not what IE does (if the above fixes are not included):
+しかし、先述の対応をしていなければ、 IE では次のようになってしまいます。
 
 <pre>
 #document
@@ -112,33 +112,38 @@ But this is not what IE does (if the above fixes are not included):
         +- /mytag
 </pre>
 
-In IE, the behavior is that the `BODY` element has three children:
+IE では、 `BODY` 要素が次の 3 つの子要素を持っている状態に解釈されます。
 
-  1. A self closing `mytag`. Example of self closing tag is `<br/>`. The trailing `/` is optional,
-  but the `<br>` tag is not allowed to have any children, and browsers consider `<br>some
-  text</br>` as three siblings not a `<br>` with `some text` as child.
+  1. (終了タグが不要な、自動的に閉じられる) `mytag` 。
+     自動的に閉じられるタグの例は `<br/>`で、タグ名末尾の `/` はオプションですが、 `<br>` 
+     タグは子要素を持つことができません。
+     ブラウザは `<br>some text</br>` を 3 つの兄弟要素として解釈し、 
+     `<br>` 要素の中に子要素 `some text` があるようには解釈してくれません。
 
-  2. A text node with `some text`. This should have been a child of `mytag` above, not a sibling.
+  2. `some text` を含むテキストノード。このテキストノードは本来 `mytag` の兄弟要素ではなく、
+     子要素として解釈されるべきです。
 
-  3. A corrupt self closing `/mytag`. This is corrupt since element names are not allowed to have
-  the `/` character. Furthermore this closing element should not be part of the DOM since it is
-  only used to delineate the structure of the DOM.
+  3. 自動的に閉じられる `/mytag` の破損した要素。要素名は `/` から始まってはいけないので、
+     この要素は破損しているとみなされます。さらに、この `/mytag` 要素は 
+     DOM の構造を示すためだけに使用されるべきなので、本来は DOM の 
+     1 要素として解釈されるべきではありません。
 
 
-## CSS Styling of Custom Tag Names
+## カスタムタグ名を CSS でスタイリングする
 
-To make CSS selectors work with custom elements, the custom element name must be pre-created with 
-`document.createElement('my-tag')` regardless of XML namespace.
+カスタム要素に対して CSS セレクタが動作するようにするためには、 
+XML 名前空間にかかわらず、 `document.createElement('my-tag')` を使って、
+カスタム要素名を事前に生成しておく必要があります。
 
 <pre>
   <html xmlns:ng="needed for ng: namespace">
     <head>
       <!--[if lte IE 8]>
         <script>
-          // needed to make ng-include parse properly
+          // ng-include が正常にパースされるために必要
           document.createElement('ng-include');
 
-          // needed to enable CSS reference
+          // CSS で参照できるようにするために必要
           document.createElement('ng:view');
         </script>
       <![endif]-->
