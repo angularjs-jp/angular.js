@@ -1,24 +1,29 @@
 @ngdoc overview
-@name Directives
+@name ディレクティブ
 @description
 
-Directives are a way to teach HTML new tricks. During DOM compilation directives are matched
-against the HTML and executed. This allows directives to register behavior, or transform the DOM.
+ディレクティブは、 HTML に新たな芸当を教えるための手段です。
+DOM のコンパイル中に、ディレクティブは HTML から抽出され、実行されます。
+このようにすることで、ディレクティブはふるまいを登録したり、 
+DOM を変更したりできるようになります。
 
-Angular comes with a built in set of directives which are useful for building web applications but
-can be extended such that HTML can be turned into a declarative domain specific language (DSL).
+Angular には Web アプリケーションを構築するのに便利なディレクティブが組み込まれていますが、
+拡張することで、 HTML を宣言型のドメイン固有言語 (Domain Specific Language; DSL) 
+に変えてしまうこともできます。
 
-# Invoking directives from HTML
+# HTML からディレクティブを呼び出す
 
-Directives have camel cased names such as `ngBind`. The directive can be invoked by translating
-the camel case name into snake case with these special characters `:`, `-`, or `_`. Optionally the
-directive can be prefixed with `x-`, or `data-` to make it HTML validator compliant. Here is a
-list of some of the possible directive names: `ng:bind`, `ng-bind`, `ng_bind`, `x-ng-bind` and
-`data-ng-bind`.
+ディレクティブは `ngBind` のようなキャメルケースの名前を持っています。
+このようなキャメルケースの名前を `:`、 `-`、`_` の特殊文字を使ってスネークケースに変換すると、
+ディレクティブを呼び出すことができます。
+また、ディレクティブには `x-` や `data-` プレフィックスをつけて HTML 
+バリデータをパスするようにすることもできます。
+有効なディレクティブの名前をいくつか列挙します: 
+`ng:bind`, `ng-bind`, `ng_bind`, `x-ng-bind`, `data-ng-bind`
 
-The directives can be placed in element names, attributes, class names, as well as comments. Here
-are some equivalent examples of invoking `myDir`. (However, most directives are restricted to
-attribute only.)
+ディレクティブは、要素の名前・属性・クラス名・コメントとして記述できます。
+次のコードは `myDir` ディレクティブを呼び出す方法のいくつかの例です。
+(ただし、多くのディレクティブは、属性としてのみ呼び出せるようになっています。)
 
 <pre>
   <span my-dir="exp"></span>
@@ -27,8 +32,7 @@ attribute only.)
   <!-- directive: my-dir exp -->
 </pre>
 
-Directives can be invoked in many different ways, but are equivalent in the end result as shown in
-the following example.
+ディレクティブは多くの方法で呼び出すことができますが、結局は下記の例と同等です。
 
 <doc:example>
   <doc:source >
@@ -53,64 +57,65 @@ the following example.
   </doc:scenario>
 </doc:example>
 
-# String interpolation
+# 文字列の展開
 
-During the compilation process the {@link api/ng.$compile compiler} matches text and
-attributes using the {@link api/ng.$interpolate $interpolate} service to see if they
-contain embedded expressions. These expressions are registered as {@link
-api/ng.$rootScope.Scope#$watch watches} and will update as part of normal {@link
-api/ng.$rootScope.Scope#$digest digest} cycle. An example of interpolation is shown
-here:
+コンパイルプロセス中に、{@link api/ng.$compile コンパイラ} はテキストと属性を検索し、
+{@link api/ng.$interpolate $interpolate} サービスを使用して expression 
+が埋め込まれているかをチェックします。
+見つかった expression は {@link api/ng.$rootScope.Scope#$watch watch} として登録され、
+通常の {@link api/ng.$rootScope.Scope#$digest digest} サイクルで更新されます。
+次のコードは、展開の例を示しています。
 
 <pre>
 <a href="img/{{username}}.jpg">Hello {{username}}!</a>
 </pre>
 
-# Compilation process, and directive matching
+# コンパイルプロセスとディレクティブのマッチ
 
-Compilation of HTML happens in three phases:
+HTML のコンパイルは次の 3 段階で行われます。
 
-  1. First the HTML is parsed into DOM using the standard browser API. This is important to
-  realize because the templates must be parsable HTML. This is in contrast to most templating
-  systems that operate on strings, rather than on DOM elements.
+  1. 最初に、ブラウザの標準 API により、 HTML はパースされて DOM になります。
+     テンプレートはパース可能な HTML でなければならないため、この点は重要です。
+     多くのテンプレートシステムが DOM 要素に対してではなく文字列に対して操作を行うのとは対照的です。
 
-  2. The compilation of the DOM is performed by the call to the {@link api/ng.$compile
-  $compile()} method. The method traverses the DOM and matches the directives. If a match is found
-  it is added to the list of directives associated with the given DOM element. Once all directives
-  for a given DOM element have been identified they are sorted by priority and their `compile()`
-  functions are executed. The directive compile function has a chance to modify the DOM structure
-  and is responsible for producing a `link()` function explained next. The {@link
-  api/ng.$compile $compile()} method returns a combined linking function, which is a
-  collection of all of the linking functions returned from the individual directive compile
-  functions.
+  2. {@link api/ng.$compile $compile()} メソッドが呼び出され、 DOM のコンパイルが行われます。
+     このメソッドでは、 DOM をたどり、ディレクティブを検出します。
+     もし、ディレクティブが検出されると、その DOM 
+     要素に関連付けられたディレクティブのリストに追加されます。
+     DOM 要素に含まれるすべてのディレクティブが特定されると、それらは優先度で順位付けされ、
+     それぞれの `compile()` 関数が実行されます。
+     ディレクティブの compile 関数は、 DOM 構造を操作することができ、次に説明する `link()` 
+     関数を生成する責任を負っています。
+     {@link api/ng.$compile $compile()} メソッドは、各ディレクティブの compile 
+     関数が返したリンク関数を結合し、リンク関数の集合を返します。
 
-  3. Link the template with scope by calling the linking function returned from the previous step.
-  This in turn will call the linking function of the individual directives allowing them to
-  register any listeners on the elements and set up any {@link
-  api/ng.$rootScope.Scope#$watch watches} with the {@link
-  api/ng.$rootScope.Scope scope}. The result of this is a live binding between the
-  scope and the DOM. A change in the scope is reflected in the DOM.
+  3. 前のステップで返ってきたリンク関数を呼び出し、テンプレートとスコープをリンクします。
+     このとき、個別のディレクティブのリンク関数を順に呼び出し、
+     要素へのリスナの登録や {@link api/ng.$rootScope.Scope スコープ} への
+     {@link api/ng.$rootScope.Scope#$watch watch} のセットアップを各ディレクティブに行わせます。
+     その結果、スコープと DOM がリアルタイムバインドされた状態になり、
+     スコープへの変更は DOM に反映されるようになります。
 
 <pre>
-  var $compile = ...; // injected into your code
+  var $compile = ...; // コードに注入されます
   var scope = ...;
 
   var html = '<div ng-bind='exp'></div>';
 
-  // Step 1: parse HTML into DOM element
+  // Step 1: HTML をパースして DOM 要素に
   var template = angular.element(html);
 
-  // Step 2: compile the template
+  // Step 2: テンプレートのコンパイル
   var linkFn = $compile(template);
 
-  // Step 3: link the compiled template with the scope.
+  // Step 3: コンパイルされたテンプレートとスコープをリンク
   linkFn(scope);
 </pre>
 
-## Reasons behind the compile/link separation
+## コンパイルとリンクが分かれている理由
 
-At this point you may wonder why the compile process is broken down to a compile and link phase.
-To understand this, let's look at a real world example with a repeater:
+この時点で、なぜコンパイルプロセスがコンパイルとリンクフェーズに分かれているのか疑問に思われるかもしれません。
+これを理解するために、 repeater を使った実例を見てみましょう。
 
 <pre>
   Hello {{user}}, you have these actions:
@@ -121,53 +126,61 @@ To understand this, let's look at a real world example with a repeater:
   </ul>
 </pre>
 
-The short answer is that compile and link separation is needed any time a change in model causes
-a change in DOM structure such as in repeaters.
+repeater の場合のように、モデルでの変更が DOM 構造の変化を起こす場合は、
+常にコンパイルフェーズとリンクフェーズを分けておく必要がある、というのが簡潔な答えです。
 
-When the above example is compiled, the compiler visits every node and looks for directives. The
-`{{user}}` is an example of an {@link api/ng.$interpolate interpolation} directive. {@link
-api/ng.directive:ngRepeat ngRepeat} is another directive. But {@link
-api/ng.directive:ngRepeat ngRepeat} has a dilemma. It needs to be
-able to quickly stamp out new `li`s for every `action` in `user.actions`. This means that it needs
-to save a clean copy of the `li` element for cloning purposes and as new `action`s are inserted,
-the template `li` element needs to be cloned and inserted into `ul`. But cloning the `li` element
-is not enough. It also needs to compile the `li` so that its directives such as
-`{{action.descriptions}}` evaluate against the right {@link api/ng.$rootScope.Scope
-scope}. A naive method would be to simply insert a copy of the `li` element and then compile it.
-But compiling on every `li` element clone would be slow, since the compilation requires that we
-traverse the DOM tree and look for directives and execute them. If we put the compilation inside a
-repeater which needs to unroll 100 items we would quickly run into performance problems.
+上記のサンプルコードがコンパイルされるとき、
+コンパイラはすべてのノードをチェックしてディレクティブを探します。
+`{{user}}` は {@link api/ng.$interpolate interpolation} ディレクティブの例で、
+{@link api/ng.directive:ngRepeat ngRepeat} はまた別のディレクティブです。
+しかし、 {@link api/ng.directive:ngRepeat ngRepeat} はあるジレンマを抱えています。
+`ngRepeat` は、 `user.actions` に含まれるすべての `action` について、`li` 
+要素を高速に出力できなければなりません。
+したがって、 `ngRepeat` は複製のためのクリーンな状態の `li` 要素を保持しておき、
+新しい `action` が挿入されたら、テンプレートの `li` 要素を複製して、 
+`ul` に挿入しなければなりません。
+しかし、 `li` 要素を複製するだけでは十分ではなく、 `li` をコンパイルして、その中に含まれる 
+`{{action.descriptions}}` のようなディレクティブを正しい {@link 
+api/ng.$rootScope.Scope スコープ} で評価しなければなりません。
+簡単な実装としては、 `li` 要素のコピーを単純に挿入し、
+コンパイルすることもできるでしょう。
+しかし、コンパイルするためにすべての DOM ツリーを辿り、ディレクティブを探して実行しなければならず、 
+`li` 要素の複製を毎回コンパイルすると遅くなってしまいます。もし、 100 アイテムを展開しなければならない 
+repeater の中でコンパイルを行うと、すぐにパフォーマンスの問題が発生するでしょう。
 
-The solution is to break the compilation process into two phases; the compile phase where all of
-the directives are identified and sorted by priority, and a linking phase where any work which
-links a specific instance of the {@link api/ng.$rootScope.Scope scope} and the specific
-instance of an `li` is performed.
+このジレンマの解決方法が、コンパイルプロセスを 2 段階に分け、
+コンパイルフェーズではすべてのディレクティブを特定して優先度でソートし、
+リンクフェーズでは {@link api/ng.$rootScope.Scope スコープ} のインスタンスと `li` インスタンスをリンクする、
+というものなのです。
 
-{@link api/ng.directive:ngRepeat ngRepeat} works by preventing the
-compilation process from descending into the `li` element. Instead the {@link
-api/ng.directive:ngRepeat ngRepeat} directive compiles `li`
-separately. The result of the `li` element compilation is a linking function which contains all
-of the directives contained in the `li` element, ready to be attached to a specific clone of the `li`
-element. At runtime the {@link api/ng.directive:ngRepeat ngRepeat}
-watches the expression and as items are added to the array it clones the `li` element, creates a
-new {@link api/ng.$rootScope.Scope scope} for the cloned `li` element and calls the
-link function on the cloned `li`.
+{@link api/ng.directive:ngRepeat ngRepeat} はコンパイルプロセスが 
+通常通り `li` 要素を処理しないようにすることでうまく動作しています。
+その代わり、{@link api/ng.directive:ngRepeat ngRepeat} ディレクティブは
+`li` 要素を別のやり方でコンパイルします。
+`li` 要素をコンパイルした結果は `li` 
+要素に含まれるすべてのディレクティブを含むリンク関数になっており、
+`li` 要素の複製にアタッチできる状態になっています。
+実行時には、 {@link api/ng.directive:ngRepeat ngRepeat} は expression を watch し、
+配列にアイテムが追加されたら `li` 要素を複製し、
+複製した要素のための新しい {@link api/ng.$rootScope.Scope スコープ} を生成し、
+最後に複製した要素に対してリンク関数を呼び出します。
 
-Summary:
+まとめ:
 
-  * *compile function* - The compile function is relatively rare in directives, since most
-    directives are concerned with working with a specific DOM element instance rather than
-    transforming the template DOM element. Any operation which can be shared among the instance of
-    directives should be moved to the compile function for performance reasons.
+  * *コンパイル関数* - ディレクティブの多くは、特定の DOM 要素のインスタンスで動作するようにできており、
+    テンプレートの DOM 要素を書き換えることはあまりないため、
+    ディレクティブにおけるコンパイル関数は比較的少ないです。
+    ディレクティブのインスタンス間で共通の処理は、
+    パフォーマンス維持のためにコンパイル関数に移動させるべきです。
 
-  * *link function* - It is rare for the directive not to have a link function. A link function
-    allows the directive to register listeners to the specific cloned DOM element instance as well
-    as to copy content into the DOM from the scope.
+  * *リンク関数* - ディレクティブがリンク関数を持たないことはほぼありません。
+    リンク関数により、ディレクティブは複製された DOM 要素インスタンスにリスナを登録することができ、
+    同時にスコープから DOM にコンテンツをコピーすることができます。
 
 
-# Writing directives (short version)
+# ディレクティブの作成 (ショートバージョン)
 
-In this example we will build a directive that displays the current time.
+この例では、現在時刻を表示するディレクティブを作成します。
 
 <doc:example module="time">
   <doc:source>
@@ -177,41 +190,41 @@ In this example we will build a directive that displays the current time.
      }
 
      angular.module('time', [])
-       // Register the 'myCurrentTime' directive factory method.
-       // We inject $timeout and dateFilter service since the factory method is DI.
+       // 'myCurrentTime' ディレクティブの factory メソッドを登録します。
+       // factory メソッドは DI なので、$timeout と dateFilter を注入します。
        .directive('myCurrentTime', function($timeout, dateFilter) {
-         // return the directive link function. (compile function not needed)
+         // ディレクティブのリンク関数を返します。(コンパイル関数は不要です。)
          return function(scope, element, attrs) {
-           var format,  // date format
-               timeoutId; // timeoutId, so that we can cancel the time updates
+           var format,  // 日付のフォーマット
+               timeoutId; // timeoutId (時刻の更新をキャンセルできるようにするため)
 
-           // used to update the UI
+           // UI を更新するために使う関数
            function updateTime() {
              element.text(dateFilter(new Date(), format));
            }
 
-           // watch the expression, and update the UI on change.
+           // expression を watch し、変更があったときは UI を更新します
            scope.$watch(attrs.myCurrentTime, function(value) {
              format = value;
              updateTime();
            });
 
-           // schedule update in one second
+           // 1 秒後に更新するようにスケジュールします
            function updateLater() {
-             // save the timeoutId for canceling
+             // キャンセルできるよう、 timeoutId を保持します
              timeoutId = $timeout(function() {
-               updateTime(); // update DOM
-               updateLater(); // schedule another update
+               updateTime(); // DOM を更新
+               updateLater(); // 次の更新をスケジュール
              }, 1000);
            }
 
-           // listen on DOM destroy (removal) event, and cancel the next UI update
-           // to prevent updating time ofter the DOM element was removed.
+           // DOM 破棄(削除)イベントをリスンし、 DOM 要素が削除されたあとに
+           // 時刻を更新しないように、次の更新をキャンセルします
            element.bind('$destroy', function() {
              $timeout.cancel(timeoutId);
            });
 
-           updateLater(); // kick off the UI update process.
+           updateLater(); // UI の更新プロセスをスタートさせます
          }
        });
    </script>
@@ -223,9 +236,9 @@ In this example we will build a directive that displays the current time.
 </doc:example>
 
 
-# Writing directives (long version)
+# ディレクティブの作成 (ロングバージョン)
 
-An example skeleton of the directive is shown here, for the complete list see below.
+次のサンプルコードはディレクティブのスケルトンです。
 
 <pre>
   var myModule = angular.module(...);
@@ -251,12 +264,11 @@ An example skeleton of the directive is shown here, for the complete list see be
   });
 </pre>
 
-In most cases you will not need such fine control and so the above can be simplified. All of the
-different parts of this skeleton are explained in following sections. In this section we are
-interested only in some of this skeleton.
+ほとんどのケースでは、ここまで詳細な設定は不要なので、上記のコードはもっとシンプルにできます。
+このスケルトンの各パーツは以降の節で説明しますが、この節では、ほんの一部のみに注目します。
 
-The first step in simplyfing the code is to rely on the default values. Therefore the above can be
-simplified as:
+このコードをシンプルにする最初のステップは、デフォルト値にたよることです。
+すると、上記のコードは、このようにシンプルになります。
 
 <pre>
   var myModule = angular.module(...);
@@ -271,8 +283,8 @@ simplified as:
   });
 </pre>
 
-Most directives concern themselves only with instances, not with template transformations, allowing
-further simplification:
+ほとんどのディレクティブではテンプレートの変換を気にすることはなく、
+インスタンスのみを気にすればよいため、さらにシンプルになります。
 
 <pre>
   var myModule = angular.module(...);
@@ -283,230 +295,240 @@ further simplification:
 </pre>
 
 
-## Factory method
+## factory メソッド
 
-The factory method is responsible for creating the directive. It is invoked only once, when the
-{@link api/ng.$compile compiler} matches the directive for the first time. You can
-perform any initialization work here. The method is invoked using the {@link
-api/AUTO.$injector#invoke $injector.invoke} which
-makes it injectable following all of the rules of injection annotation.
+factory メソッドはディレクティブの作成を担当します。
+{@link api/ng.$compile compiler} がディレクティブを最初に検出したときのみ、 
+factory メソッドは実行されます。このときあらゆる初期化処理を実行を実行できます。
+factory メソッドは {@link api/AUTO.$injector#invoke $injector.invoke} 使って呼び出されるため、
+注入アノテーションのルールすべてに従うように、依存性の注入を受けることができます。
 
-## Directive Definition Object
+## ディレクティブ定義オブジェクト
 
-The directive definition object provides instructions to the {@link api/ng.$compile
-compiler}. The attributes are:
+ディレクティブ定義オブジェクトは、 {@link api/ng.$compile コンパイラ} に指示を与えます。
+属性は下記の通りです。
 
-  * `name` - Name of the current scope. Optional and defaults to the name at registration.
+  * `name` - カレントスコープの名前です。この属性はオプションで、デフォルトは登録時の名前です。
 
-  * `priority` - When there are multiple directives defined on a single DOM element, sometimes it
-    is necessary to specify the order in which the directives are applied. The `priority` is used
-    to sort the directives before their `compile` functions get called. Higher `priority` goes
-    first. The order of directives within the same priority is undefined.
+  * `priority` - 1 つの DOM 要素に対して複数のディレクティブが宣言されたとき、
+    ディレクティブを適用する順序を指定しなければならないことがあります。
+    `priority` 属性は、ディレクティブの `compile` 関数を呼び出す順序を決めるために使用されます。
+    `priority` の値が高いものから順に呼び出され、同じ値を持つ場合の実行順序は不定です。
 
-  * `terminal` - If set to true then the current `priority` will be the last set of directives
-    which will execute (any directives at the current priority will still execute
-    as the order of execution on same `priority` is undefined).
+  * `terminal` - この属性が `true` のとき、現在の priority 
+    が最後に実行されるディレクティブのセットになります。 
+    (同じプライオリティ値を持つディレクティブの実行順序は定義されていないので、
+    このディレクティブと同じ `priority` 値を持つディレクティブは実行される可能性があります。)
 
-  * `scope` - If set to:
+  * `scope` - 次の値を設定することができます。
 
-    * `true` - then a new scope will be created for this directive. If multiple directives on the
-      same element request a new scope, only one new scope is created. The new scope rule does not
-      apply for the root of the template since the root of the template always gets a new scope.
+    * `true` - このディレクティブ用の新しいスコープが作成されます。
+      もし同じ要素の複数のディレクティブが新しいスコープの作成を要求した場合は、 
+      1 つだけ新しいスコープが作成されます。テンプレートのルートには必ずスコープが存在するため、
+      このような新しいスコープの作成ルールは、テンプレートのルートには適用されません。
 
-    * `{}` (object hash) - then a new 'isolate' scope is created. The 'isolate' scope differs from
-      normal scope in that it does not prototypically inherit from the parent scope. This is useful
-      when creating reusable components, which should not accidentally read or modify data in the
-      parent scope. <br/>
-      The 'isolate' scope takes an object hash which defines a set of local scope properties
-      derived from the parent scope. These local properties are useful for aliasing values for
-      templates. Locals definition is a hash of local scope property to its source:
+    * `{}` (オブジェクトハッシュ) - '隔離された' スコープが作成されます。
+      このスコープは通常のスコープと異なり、親スコープからプロトタイプ継承を行いません。
+      これは、再利用可能なコンポーネントを作成するときに便利で、こうしておけば、
+      親スコープのデータを意図せず読み書きしてしまうことがなくなります。<br/>
+      '隔離された' スコープは、
+      親スコープから継承すべきローカルスコープのプロパティを定義するオブジェクトハッシュを受け取ります。
+      これらのローカルプロパティは、値のエイリアスを作成してテンプレートに使わせるときに便利です。
+      ローカルプロパティの定義は、ローカルスコープのプロパティからそのソースへのハッシュです。
 
-      * `@` or `@attr` - bind a local scope property to the value of DOM attribute. The result is
-        always a string since DOM attributes are strings. If no `attr` name is specified  then the
-        attribute name is assumed to be the same as the local name.
-        Given `<widget my-attr="hello {{name}}">` and widget definition
-        of `scope: { localName:'@myAttr' }`, then widget scope property `localName` will reflect
-        the interpolated value of `hello {{name}}`. As the `name` attribute changes so will the
-        `localName` property on the widget scope. The `name` is read from the parent scope (not
-        component scope).
+      * `@` または `@attr` - ローカルスコーププロパティを DOM 属性の値にバインドします。
+      	DOM 属性は文字列なので、結果は必ず文字列になります。
+		`attr` が指定されなければ、属性名はローカルスコーププロパティの名前と同じであるとみなされます。
+		`<widget my-attr="hello {{name}}">` というウィジェットのディレクティブと、
+		ウィジェットのローカルスコーププロパティが `scope: { localName:'@myAttr' }` と定義されているとき、
+		`localName` には `hello {{name}}` の `{{name}}` が展開された値が反映されます。
+		`name` 属性が変更されたとき、ウィジェットのローカルスコープの `localName` 
+		プロパティも変更されます。 `name` は、ウィジェットのローカルスコープではなく、
+		親スコープから読み取られます。
 
-      * `=` or `=attr` - set up bi-directional binding between a local scope property and the
-        parent scope property of name defined via the value of the `attr` attribute. If no `attr`
-        name is specified then the attribute name is assumed to be the same as the local name.
-        Given `<widget my-attr="parentModel">` and widget definition of
-        `scope: { localModel:'=myAttr' }`, then widget scope property `localModel` will reflect the
-        value of `parentModel` on the parent scope. Any changes to `parentModel` will be reflected
-        in `localModel` and any changes in `localModel` will reflect in `parentModel`.
+      * `=` または `=attr` - `attr` 属性に指定された名前の、
+      	ローカルスコーププロパティと親スコーププロパティ間の双方向バインディングを確立します。
+		`attr` が指定されなければ、属性名はローカルスコーププロパティの名前と同じであるとみなされます。
+		`<widget my-attr="parentModel">` というウィジェットのディレクティブと、
+		ウィジェットのローカルスコーププロパティが `scope: { localModel:'=myAttr' }` と定義されているとき、
+		`localModel` は 親スコープの `parentModel` の値が反映されます。
+		`parentModel` への変更はすべて `localModel` にも反映され、
+		`localModel` への変更はすべて `parentModel` にも反映されます。
 
-      * `&` or `&attr` - provides a way to execute an expression in the context of the parent scope.
-        If no `attr` name is specified then the attribute name is assumed to be the same as the
-        local name. Given `<widget my-attr="count = count + value">` and widget definition of
-        `scope: { localFn:'&myAttr' }`, then isolate scope property `localFn` will point to
-        a function wrapper for the `count = count + value` expression. Often it's desirable to
-        pass data from the isolated scope via an expression and to the parent scope, this can be
-        done by passing a map of local variable names and values into the expression wrapper fn.
-        For example, if the expression is `increment(amount)` then we can specify the amount value
-        by calling the `localFn` as `localFn({amount: 22})`.
+      * `&` または `&attr` - expression を親スコープのコンテキストで実行する手段を提供します。
+	  	`attr` が指定されなければ、属性名はローカルスコーププロパティの名前と同じであるとみなされます。
+		`<widget my-attr="count = count + value">` というウィジェットのディレクティブと、
+		ウィジェットのローカルスコーププロパティが `scope: { localFn:'&myAttr' }` と定義されているとき、
+		ローカルスコーププロパティの `localFn` は `count = count + value` expression 
+		を評価する関数のラッパを指します。
+		expression を通じてローカルスコープから親スコープにデータを受け渡ししたい状況はよく発生しますが、
+		これは、ローカル変数の名前と値を expression のラッパ関数に渡すことで実現できます。
+		たとえば、 expression が `increment(amount)` のとき、 `localFn({amount: 22})` のように、
+		amount の値を指定して `localFn` を呼び出すことができます。
+	
+  * `controller` - コントローラのコンストラクタ関数です。
+    コントローラはリンクフェーズの直前にインスタンス化され、
+    名前が指定されれば他のディレクティブ間でも共有されます (`require` 属性を参照)。
+    こうすることで、ディレクティブ同士でコミュニーケーションを行うことができ、
+    お互いの動作を補完しあうことができます。
+    コントローラには、下記のローカル変数を注入することができます。
 
-  * `controller` - Controller constructor function. The controller is instantiated before the
-    pre-linking phase and it is shared with other directives if they request it by name (see
-    `require` attribute). This allows the directives to communicate with each other and augment
-    each other's behavior. The controller is injectable with the following locals:
+    * `$scope` - 要素に関連付けられたスコープ
+    * `$element` - 現在のエレメント
+    * `$attrs` - 要素の現在の属性
+    * `$transclude` - 適切な transclude スコープに事前にバインドされた transclude リンク関数 : 
+      `function(cloneLinkingFn)`
 
-    * `$scope` - Current scope associated with the element
-    * `$element` - Current element
-    * `$attrs` - Current attributes obeject for the element
-    * `$transclude` - A transclude linking function pre-bound to the correct transclusion scope:
-      `function(cloneLinkingFn)`.
+  * `require` - 現在のディレクティブのリンク関数に別のコントローラを渡します。
+    `require` はディレクティブのコントローラの名前を 1 つ受け取ります。
+    もしそのような名前のコントローラが見つからない場合は、エラーになります。
+    コントローラの名前には次のプレフィックスをつけることができます。
 
-  * `require` - Require another controller be passed into current directive linking function. The
-    `require` takes a name of the directive controller to pass in. If no such controller can be
-    found an error is raised. The name can be prefixed with:
+    * `?` - エラーを発生させません。また、依存性はオプションになります。
+    * `^` - 親要素のコントローラも検索対象にします。
 
-    * `?` - Don't raise an error. This makes the require dependency optional.
-    * `^` - Look for the controller on parent elements as well.
+  * `restrict` - ディレクティブの修飾方法を限定する、 `EACM` 
+    のいずれかの文字を組み合わせた文字列です。省略すると、
+    ディレクティブは要素の属性によってのみ指定出来ます。
 
+    * `E` - 要素名: `<my-directive></my-directive>`
+    * `A` - 属性: `<div my-directive="exp"></div>`
+    * `C` - クラス: `<div class="my-directive: exp;"></div>`
+    * `M` - コメント: `<!-- directive: my-directive exp -->`
 
-  * `restrict` - String of subset of `EACM` which restricts the directive to a specific directive
-    declaration style. If omitted directives are allowed on attributes only.
+  * `template` - 現在の要素を置き換える HTML です。
+    置き換えのプロセスにより、古い要素の属性・クラスは新しい要素に引き継がれます。
+    詳しくは下記の「ウィジェットの作成」を参照してください。
 
-    * `E` - Element name: `<my-directive></my-directive>`
-    * `A` - Attribute: `<div my-directive="exp"></div>`
-    * `C` - Class: `<div class="my-directive: exp;"></div>`
-    * `M` - Comment: `<!-- directive: my-directive exp -->`
+  * `templateUrl` - `template` と同等ですが、 HTML は指定された URL からロードされます。
+    テンプレートの読み込みは非同期で行われるため、テンプレートの読み込みが完了するまで、
+    コンパイルとリンク処理は中断されます。
 
-  * `template` - replace the current element with the contents of the HTML. The replacement process
-    migrates all of the attributes / classes from the old element to the new one. See Creating
-    Widgets section below for more information.
+  * `replace` - `true` のとき、現在の要素に template の HTML を追加するのではなく、
+    現在の要素が template の HTML で置き換えられます。
 
-  * `templateUrl` - Same as `template` but the template is loaded from the specified URL. Because
-    the template loading is asynchronous the compilation/linking is suspended until the template
-    is loaded.
+  * `transclude` - 要素の内容をコンパイルして、その結果をディレクティブから利用可能にします。
+    基本的に {@link api/ng.directive:ngTransclude ngTransclude} と合わせて使用します。
+    transclude を行うことのメリットは、リンク関数が、適切なスコープに事前にバインドされた 
+    transclude 関数を受け取ることができるということです。
+    通常、ウィジェットは '隔離された' スコープを作成しますが、transclude は子スコープではなく、
+    '隔離された' スコープと同階層のスコープです。
+    transclude を使用することで、ウィジェットはプライベートな状態を保持することができ、
+    transclude は (隔離される前の) 親スコープにバインドされます。
 
-  * `replace` - if set to `true` then the template will replace the current element, rather than
-    append the template to the element.
+    * `true` - ディレクティブの内容を transclude します。
+    * `'element'` - 低い優先度で定義されたディレクティブを含め、すべての要素を transclude します。
 
-  * `transclude` - compile the content of the element and make it available to the directive.
-    Typically used with {@link api/ng.directive:ngTransclude
-    ngTransclude}. The advantage of transclusion is that the linking function receives a
-    transclusion function which is pre-bound to the correct scope. In a typical setup the widget
-    creates an `isolate` scope, but the transclusion is not a child, but a sibling of the `isolate`
-    scope. This makes it possible for the widget to have private state, and the transclusion to
-    be bound to the parent (pre-`isolate`) scope.
+  * `compile`: 次の節で説明するコンパイル関数です。
 
-    * `true` - transclude the content of the directive.
-    * `'element'` - transclude the whole element including any directives defined at lower priority.
+  * `link`: 以降の節で説明するリンク関数です。このプロパティは、 `compile` 
+    プロパティが定義されていないときのみ使用します。
 
-
-  * `compile`: This is the compile function described in the section below.
-
-  * `link`: This is the link function described in the section below. This property is used only
-    if the `compile` property is not defined.
-
-## Compile function
+## コンパイル関数
 
 <pre>
   function compile(tElement, tAttrs, transclude) { ... }
 </pre>
 
-The compile function deals with transforming the template DOM. Since most directives do not do
-template transformation, it is not used often. Examples that require compile functions are
-directives that transform template DOM, such as {@link
-api/ng.directive:ngRepeat ngRepeat}, or load the contents
-asynchronously, such as {@link api/ng.directive:ngView ngView}. The
-compile function takes the following arguments.
+コンパイル関数は、テンプレートの DOM を変換する処理を行います。
+多くのディレクティブはテンプレートの変換を行わないため、コンパイル関数はあまり使われません。
+コンパイル関数を使用する例としては、{@link api/ng.directive:ngRepeat ngRepeat} のように、
+テンプレートの DOM を変換するディレクティブや、 {@link api/ng.directive:ngView ngView} 
+のようにコンテンツを非同期でロードするディレクティブがあります。
+コンパイル関数は次の引数を受け取ります。
 
-  * `tElement` - template element - The element where the directive has been declared. It is
-    safe to do template transformation on the element and child elements only.
+  * `tElement` - テンプレートの要素 - ディレクティブが宣言された要素です。
+    この要素と子要素に対してのみ、安全にテンプレートの変換が行えます。
 
-  * `tAttrs` - template attributes - Normalized list of attributes declared on this element shared
-    between all directive compile functions. See {@link
-    guide/directive#Attributes Attributes}.
+  * `tAttrs` - テンプレートの属性 - この要素に宣言された属性の正規化されたリストで、
+    すべてのディレクティブのコンパイル関数で共有されます。{@link
+    guide/directive#Attributes Attributes}を参照してください。
 
-  * `transclude` - A transclude linking function: `function(scope, cloneLinkingFn)`.
+  * `transclude` - transclude リンク関数です。: `function(scope, cloneLinkingFn)`
 
-NOTE: The template instance and the link instance may not be the same objects if the template has
-been cloned. For this reason it is not safe in the compile function to do anything other than DOM
-transformation that applies to all DOM clones. Specifically, DOM listener registration should be
-done in a linking function rather than in a compile function.
+備考: テンプレートが複製された場合は、
+テンプレートインスタンスとリンクインスタンスが別のオブジェクトであることがありえます。
+したがって、 DOM の複製に適用しなければならない変換以外の処理をコンパイル関数で行うのは危険です。
+特に、DOM リスナの登録はコンパイル関数ではなく、リンク関数で行うべきです。
 
-A compile function can have a return value which can be either a function or an object.
+コンパイル関数は、関数またはオブジェクトを返します。
 
-* returning a function - is equivalent to registering the linking function via the `link` property
-  of the config object when the compile function is empty.
+* 関数を返す場合 - 設定オブジェクトのコンパイル関数が空のときに、`link` 
+  プロパティにリンク関数を登録するのと同等です。
 
-* returning an object with function(s) registered via `pre` and `post` properties - allows you to
-  control when a linking function should be called during the linking phase. See info about
-  pre-linking and post-linking functions below.
+* `pre` や `post` プロパティに関数を登録したオブジェクトを返す場合 - 
+  リンクフェーズでリンク関数が呼び出されるタイミングを制御することができます。
+  詳しくは下記の pre-link と post-link 関数を参照してください。
 
 
-## Linking function
+## リンク関数
 
 <pre>
   function link(scope, iElement, iAttrs, controller) { ... }
 </pre>
 
-The link function is responsible for registering DOM listeners as well as updating the DOM. It is
-executed after the template has been cloned. This is where most of the directive logic will be
-put.
+リンク関数は、 DOM リスナの登録と DOM の更新の役割を果たします。
+リンク関数はテンプレートが複製された後、実行されます。
+ここにディレクティブのロジックのほとんどを書きます。
 
-  * `scope` - {@link api/ng.$rootScope.Scope Scope} - The scope to be used by the
-    directive for registering {@link api/ng.$rootScope.Scope#$watch watches}.
+  * `scope` - {@link api/ng.$rootScope.Scope スコープ} - ディレクティブが
+    {@link api/ng.$rootScope.Scope#$watch watch} を登録するときに使用するスコープです。
 
-  * `iElement` - instance element - The element where the directive is to be used. It is safe to
-    manipulate the children of the element only in `postLink` function since the children have
-    already been linked.
+  * `iElement` - 要素のインスタンス - ディレクティブが使用される要素です。
+    この要素の子要素を操作する場合は、リンクが完了している段階の `postLink` 関数でのみ、
+    問題なく行うことができます。
 
-  * `iAttrs` - instance attributes - Normalized list of attributes declared on this element shared
-    between all directive linking functions. See {@link
-    guide/directive#Attributes Attributes}.
+  * `iAttrs` - 属性のインスタンス - この要素に宣言されたすべての属性の正規化されたリストで、
+    すべてのディレクティブのリンク関数で共有されます。{@link
+    guide/directive#Attributes Attributes}を参照してください。
 
-  * `controller` - a controller instance - A controller instance if at least one directive on the
-    element defines a controller. The controller is shared among all the directives, which allows
-    the directives to use the controllers as a communication channel.
+  * `controller` - コントローラのインスタンス - 要素に宣言されたディレクティブのうち、
+    1 つでもコントローラを定義していれば、コントローラのインスタンスが入ります。
+    コントローラのインスタンスはすべてのディレクティブで共有され、
+    ディレクティブ間のコミュニケーションチャネルとして使うことができます。
 
 
+### pre-link 関数
 
-### Pre-linking function
+子要素がリンクされる前に実行されます。
+コンパイラのリンク関数がリンクのための適切な要素を見つけることができなくなるため、
+ここで DOM 変換を行うのは危険です。
 
-Executed before the child elements are linked. Not safe to do DOM transformation since the
-compiler linking function will fail to locate the correct elements for linking.
+### post-link 関数
 
-### Post-linking function
-
-Executed after the child elements are linked. It is safe to do DOM transformation in the post-linking function.
+子要素のリンクが完了した後実行されます。
+ここでは DOM 変換を行なっても問題ありません。
 
 <a name="Attributes"></a>
-## Attributes
+## Attributes オブジェクト
 
-The {@link api/ng.$compile.directive.Attributes Attributes} object - passed as a parameter in the
-link() or compile() functions - is a way of accessing:
+{@link api/ng.$compile.directive.Attributes Attributes} オブジェクトは、link() または compile() 
+関数のパラメータとして渡され、下記のデータにアクセスする手段になります。
 
-  * *normalized attribute names:* Since a directive such as 'ngBind' can be expressed in many ways
-    such as 'ng:bind', or 'x-ng-bind', the attributes object allows for normalized accessed to
-    the attributes.
+  * *正規化された属性名:* `ngBind` のようなディレクティブは、
+    `ng:bind` や `x-ng-bind` などの複数の記法で表現できるため、
+    attributes オブジェクトを使うことで、正規化された属性にアクセスすることができます。
 
-  * *directive inter-communication:* All directives share the same instance of the attributes
-    object which allows the directives to use the attributes object as inter directive
-    communication.
+  * *ディレクティブ間通信:* すべてのディレクティブが同じ attributes オブジェクトを共有しているので、
+    各ディレクティブは attributes オブジェクトをディレクティブ間通信に使用することができます。
 
-  * *supports interpolation:* Interpolation attributes are assigned to the attribute object
-    allowing other directives to read the interpolated value.
+  * *展開のサポート:* 展開された属性を attributes オブジェクトに割り当てることができるので、
+    他のディレクティブは補完された値を読み取ることができます。
 
-  * *observing interpolated attributes:* Use `$observe` to observe the value changes of attributes
-    that contain interpolation (e.g. `src="{{bar}}"`). Not only is this very efficient but it's also
-    the only way to easily get the actual value because during the linking phase the interpolation
-    hasn't been evaluated yet and so the value is at this time set to `undefined`.
+  * *展開された属性の監視:* `src="{{bar}}"` のように展開を含む属性の値を監視するには、 `$observe` 
+    を使います。これは非常に効率的であるだけでなく、リンクフェーズでは展開文字列はまだ評価されず、
+    値が undefined なので、 `$observe` を使わなければ実際の値は簡単には取得できないのです。
+
 
 <pre>
 function linkingFn(scope, elm, attrs, ctrl) {
-  // get the attribute value
+  // 属性の値を取得
   console.log(attrs.ngModel);
 
-  // change the attribute
+  // 属性の値を変更
   attrs.$set('ngModel', 'new value');
 
-  // observe changes to interpolated attribute
+  // 展開文字列を含む属性の値を監視
   attrs.$observe('ngModel', function(value) {
     console.log('ngModel has changed value to ' + value);
   });
@@ -514,10 +536,10 @@ function linkingFn(scope, elm, attrs, ctrl) {
 </pre>
 
 
-# Understanding Transclusion and Scopes
+# transclude とスコープについて
 
-It is often desirable to have reusable components. Below is a pseudo code showing how a simplified
-dialog component may work.
+再利用可能なコンポーネントを作成したいと思うことはよくあります。
+下記の擬似コードはシンプルなダイアログコンポーネントがどのように動作するかを示すためのものです。
 
 <pre>
   <div>
@@ -531,11 +553,11 @@ dialog component may work.
   </div>
 </pre>
 
-Clicking on the "show" button will open the dialog. The dialog will have a title, which is
-data bound to `username`, and it will also have a body which we would like to transclude
-into the dialog.
+"show" ボタンをクリックするとダイアログが開きます。
+ダイアログにはタイトルがあって `username` にデータバインドされ、
+ダイアログに transclude したいボディがあります。
 
-Here is an example of what the template definition for the `dialog` widget may look like.
+`dialog` ウィジェットのテンプレート定義はこのように実装します。
 
 <pre>
   <div ng-show="visible">
@@ -548,66 +570,70 @@ Here is an example of what the template definition for the `dialog` widget may l
   </div>
 </pre>
 
-This will not render properly, unless we do some scope magic.
+スコープのおまじないをしなければ、このダイアログは正常に描画されません。
 
-The first issue we have to solve is that the dialog box template expects `title` to be defined, but
-the place of instantiation would like to bind to `username`. Furthermore the buttons expect the
-`onOk` and `onCancel` functions to be present in the scope. This limits the usefulness of the
-widget. To solve the mapping issue we use the `locals` to create local variables which the template
-expects as follows:
+まず最初に解決しなければならない問題は、ダイアログボックスのテンプレートには `title` 
+が定義されている必要がありながら、インスタンス化するときには `username` 
+をバインドしなければならないということです。
+さらに、各ボタンはスコープ内に `onOk` と `onCancel` 関数が存在しなければ動作しません。
+これではウィジェットの利便性が制限されてしまいます。
+このようなマッピングの問題を解決するために、次のようにローカル変数を使って、
+テンプレートに必要なローカル変数を生成します。
 
 <pre>
   scope: {
-    title: '@',             // the title uses the data-binding from the parent scope
-    onOk: '&',              // create a delegate onOk function
-    onCancel: '&',          // create a delegate onCancel function
-    visible: '='            // set up visible to accept data-binding
+    title: '@',             // title は親要素にデータバインドする
+    onOk: '&',              // onOk 関数の delegate を作成する
+    onCancel: '&',          // onCancel 関数の delegate を作成する
+    visible: '='            // visible 属性でデータバインドが使えるようにする
   }
 </pre>
 
-Creating local properties on widget scope creates two problems:
+ウィジェットスコープにローカルプロパティを作成すると、次の 2 点の問題が発生します。
 
-  1. isolation - if the user forgets to set `title` attribute of the dialog widget the dialog
-     template will bind to parent scope property. This is unpredictable and undesirable.
+  1. 独立性 - ユーザがダイアログウィジェットの `title` 属性をセットし忘れると、
+     テンプレートは親スコープのプロパティにバインドしてしまいます。
+     これは予期しないもので、望ましくありません。
 
-  2. transclusion - the transcluded DOM can see the widget locals, which may overwrite the
-     properties which the transclusion needs for data-binding. In our example the `title`
-     property of the widget clobbers the `title` property of the transclusion.
+  2. transclude - transclude された DOM にはウィジェットのローカル変数が見えてしまうため、
+     transclude される側でデータバインドしたいプロパティが上書きされてしまう可能性があります。
+     上記の例では、ウィジェットの `title` プロパティは、transclude の `title` 
+     プロパティを破壊しています。
 
+独立性の問題を解決するためには、ディレクティブで新しい '隔離された' スコープを宣言します。
+隔離されたスコープは子要素からプロトタイプ継承を行わないので、
+プロパティを意図せず破壊する心配がなくなります。
 
-To solve the issue of lack of isolation, the directive declares a new `isolated` scope. An
-isolated scope does not prototypically inherit from the child scope, and therefore we don't have
-to worry about accidentally clobbering any properties.
+しかしながら、 '隔離された' スコープは新たな問題のもとになります。
+もし、 transclude された DOM がウィジェットの隔離されたスコープの子であれば、
+なにもバインドすることができません。
+このような理由から、 ローカル変数のための隔離されたスコープをウィジェットが生成するまでは、
+transclude されたスコープはオリジナルのスコープの子なのです。
 
-However `isolated` scope creates a new problem: if a transcluded DOM is a child of the widget
-isolated scope then it will not be able to bind to anything. For this reason the transcluded scope
-is a child of the original scope, before the widget created an isolated scope for its local
-variables. This makes the transcluded and widget isolated scope siblings.
+これは思ったより複雑かもしれませんが、
+ウィジェットのユーザと開発者がぶつかる問題を最小限にすることができます。
 
-This may seem to be unexpected complexity, but it gives the widget user and developer the least
-surprise.
-
-Therefore the final directive definition looks something like this:
+したがって、ディレクティブの定義は下記のようになります。
 
 <pre>
 transclude: true,
 scope: {
-    title: '@',             // the title uses the data-binding from the parent scope
-    onOk: '&',              // create a delegate onOk function
-    onCancel: '&',          // create a delegate onCancel function
-    visible: '='            // set up visible to accept data-binding
+    title: '@',             // title は親スコープにデータバインドする
+    onOk: '&',              // onOk 関数の delegate を作成する
+    onCancel: '&',          // onCancel 関数の delegate を作成する
+    visible: '='            // visible 属性でデータバインドが使えるようにする
 },
 restrict: 'E',
 replace: true
 </pre>
 
-# Creating Components
+# コンポーネントの作成
 
-It is often desirable to replace a single directive with a more complex DOM structure. This
-allows the directives to become a short hand for reusable components from which applications
-can be built.
+複雑な DOM 構造を単一のディレクティブに置き換えたい場合はよくあります。
+こうすれば、ディレクティブを使って、
+再利用可能なコンポーネントを簡単に呼び出してアプリケーションを構築することができます。
 
-Following is an example of building a reusable widget.
+下記は、再利用可能なウィジェットを作成する例です。
 
 <doc:example module="zippyModule">
   <doc:source>
@@ -621,7 +647,7 @@ Following is an example of building a reusable widget.
        .directive('zippy', function(){
          return {
            restrict: 'C',
-           // This HTML will replace the zippy directive.
+           // HTML で zippy ディレクティブを置き換える
            replace: true,
            transclude: true,
            scope: { title:'@zippyTitle' },
@@ -629,24 +655,24 @@ Following is an example of building a reusable widget.
                        '<div class="title">{{title}}</div>' +
                        '<div class="body" ng-transclude></div>' +
                      '</div>',
-           // The linking function will add behavior to the template
+           // リンク関数でテンプレートにふるまいを追加する
            link: function(scope, element, attrs) {
-                 // Title element
+                 // タイトル要素
              var title = angular.element(element.children()[0]),
-                 // Opened / closed state
+                 // Opened / closed の状態
                  opened = true;
 
-             // Clicking on title should open/close the zippy
+             // タイトルをクリックすると、 zippy を開く/閉じる
              title.bind('click', toggle);
 
-             // Toggle the closed/opened state
+             // closed/opened 状態を切り替える
              function toggle() {
                opened = !opened;
                element.removeClass(opened ? 'closed' : 'opened');
                element.addClass(opened ? 'opened' : 'closed');
              }
 
-             // initialize the zippy
+             // zippy を初期化する
              toggle();
            }
          }
