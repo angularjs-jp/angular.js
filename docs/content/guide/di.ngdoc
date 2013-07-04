@@ -1,35 +1,34 @@
 @ngdoc overview
-@name Developer Guide: Dependency Injection
+@name Developer Guide: 依存性の注入
 @description
 
-# Dependency Injection
+# 依存性の注入
 
-Dependency Injection (DI) is a software design pattern that deals with how code gets hold of its
-dependencies.
+依存性の注入 (DI) は、 依存関係の持ち方について対処するためのソフトウェアデザインパターンです。
 
-For in-depth discussion about DI, see {@link http://en.wikipedia.org/wiki/Dependency_injection
-Dependency Injection} at Wikipedia, {@link http://martinfowler.com/articles/injection.html
-Inversion of Control} by Martin Fowler, or read about DI in your favorite software design pattern
-book.
+DI についての詳細は、Wikipedia の {@link http://en.wikipedia.org/wiki/Dependency_injection Dependency Injection} や、  
+Martin Fowler によって書かれた {@link http://martinfowler.com/articles/injection.html Inversion of Control} や、
+ソフトウェアデザインパターンの本の DI についての項目を参照してください。
 
-## DI in a nutshell
+## つまるところ DI とは
 
-There are only three ways how an object or a function can get a hold of its dependencies:
+オブジェクトや関数が依存関係を得る方法は3通りしかありません:
 
-  1. The dependency can be created, typically using the `new` operator.
+  1. 依存関係は、典型的な `new` 演算子の使用によって作成することができます。
 
-  2. The dependency can be looked up by referring to a global variable.
+  2. 依存関係は、グローバル変数を参照することによって探し出すことができます。
 
-  3. The dependency can be passed in to where it is needed.
+  3. 依存関係は、それが必要な場所に渡すことができます。
 
 
-The first two option of creating or looking up dependencies are not optimal, because they hard
-code the dependency, making it difficult, if not impossible, to modify the dependencies.
-This is especially problematic in tests, where it is often desirable to provide mock dependencies
-for test isolation.
+依存関係の作成や参照をする最初のふたつの選択肢は、あまりよい方法ではありません。
+なぜなら依存関係をハードコーディングすることになり、依存関係を変更しようとすると、
+不可能ではないにしても複雑になります。
+このことは特にテストにおいて問題になります。テストを独立したものにする目的で、
+しばしば依存するコンポーネントをモックに置き換えたい場合があるからです。
 
-The third option is the most viable, since it removes the responsibility of locating the
-dependency from the component. The dependency is simply handed to the component.
+三番目の選択肢が一番現実的です。依存先がどれか特定するという責任を、コンポーネントから取り除くことができるからです。
+ただ単純に、依存関係がコンポーネントに渡されるだけです。
 
 <pre>
   function SomeClass(greeter) {
@@ -41,27 +40,26 @@ dependency from the component. The dependency is simply handed to the component.
   }
 </pre>
 
-In the above example the `SomeClass` is not concerned with locating the `greeter` dependency, it
-is simply handed the `greeter` at runtime.
+上記の例では、`SomeClass` は依存関係のある `greeter` の場所を知る必要はありません。実行時には単純に
+`greeter` が渡されてきます。
 
-This is desirable, but it puts the responsibility of getting hold of the dependency onto the
-code responsible for the construction of `SomeClass`.
+これは望ましいですが、依存関係を得る責任を `SomeClass` のインスタンスを生成するコードに移します。
 
-To manage the responsibility of dependency creation, each Angular application has an {@link
-api/angular.injector injector}. The injector is a service locator that is responsible for
-construction and lookup of dependencies.
+依存関係作成の責任を管理するために、それぞれの Angular アプリケーションは {@link
+api/angular.injector インジェクター} を持っています。インジェクターは依存関係を作り出すことと、
+探しだすことに責任を持つサービスロケーターです。
 
 
-Here is an example of using  the injector service. 
+インジェクターサービスの使用例です。
 <pre>
-  // Provide the wiring information in a module
+  // モジュールに紐付く情報を記述します
   angular.module('myModule', []).
   
-    // Teach the injector how to build a 'greeter'
-    // Notice that greeter itself is dependent on '$window'
+	 // インジェクターに 'greeter' の構築方法を教えます
+	 // greeter それ自身は '$window' に依存することに注意してください
     factory('greeter', function($window) {
-      // This is a factory function, and is responsible for 
-      // creating the 'greet' service.
+		// これはファクトリ関数で、'greet' サービスを
+		// 作成することに責任を持ちます
       return {
         greet: function(text) {
           $window.alert(text);
@@ -69,56 +67,57 @@ Here is an example of using  the injector service.
       };
     });
 
-  // New injector is created from the module. 
-  // (This is usually done automatically by angular bootstrap)
+  // 新しいインジェクターがモジュールから作成されます
+  // (これは angular bootstrap によってたいてい自動的に行われます)
   var injector = angular.injector(['myModule', 'ng']);
   
-  // Request any dependency from the injector
+  // インジェクターからなにか依存関係を求めます
   var greeter = injector.get('greeter');
 </pre>
 
-Asking for dependencies solves the issue of hard coding, but it also means that the injector needs
-to be passed throughout the application. Passing the injector breaks the {@link
-http://en.wikipedia.org/wiki/Law_of_Demeter Law of Demeter}. To remedy this, we turn the
-dependency lookup responsibility to the injector by declaring the dependencies as in this example:
+依存関係を尋ねることで、ハードコーディングの問題を解決します。
+しかし、これはアプリケーション中でインジェクターを持ち回す必要があるということも意味しています。
+インジェクターを持ち回すことは、{@link http://en.wikipedia.org/wiki/Law_of_Demeter デメテルの法則} に違反します。
+この問題を改善するのに、 依存関係を宣言することによって依存関係を探し出す責任をインジェクターに与えました。
+この例を見てください:
 
 <pre>
-  <!-- Given this HTML -->
+  <!-- この HTML で -->
   <div ng-controller="MyController">
     <button ng-click="sayHello()">Hello</button>
   </div>
 </pre>  
 <pre>
-  // And this controller definition
+  // このコントローラーが定義された場合
   function MyController($scope, greeter) {
     $scope.sayHello = function() {
       greeter.greet('Hello World');
     };
   }
   
-  // The 'ng-controller' directive does this behind the scenes
+  // 'ng-controller' ディレクティブはこれを裏でこっそり実行する
   injector.instantiate(MyController);
 </pre>
 
-Notice that by having the `ng-controller` instantiate the class, it can satisfy all of the
-dependencies of the `MyController` without the controller ever knowing about the injector. This is
-the best outcome. The application code simply ask for the dependencies it needs, without having to
-deal with the injector. This setup does not break the Law of Demeter.
+`ng-controller` がそのクラスをインスタンス化する際、コントローラーがインジェクターについて全く知る必要なしに、
+ `MyController` のすべての依存関係を成立させることに注目してください。
+これが最善の結果です。アプリケーションのコードは、インジェクターを扱う必要なしに、単純に必要な依存関係を要求します。
+このふるまいはデメテルの法則に違反しません。
 
-# Dependency Annotation
+# 依存関係のアノテーション
 
-How does the injector know what service needs to be injected? 
+どのようにしてインジェクターは、サービスがインジェクトしてほしいものを知るのでしょうか?
 
-The application developer needs to provide annotation information that the injector uses in order
-to resolve the dependencies. Throughout Angular certain API functions are invoked using the
-injector, as per the API documentation. The injector needs to know what services to inject into
-the function. Below are three equivalent ways of annotating your code with service name
-information. These can be used interchangeably as you see fit and are equivalent.
+アプリケーションの開発者は、依存関係を解決するためのアノテーション情報をインジェクターに教えてやる必要があります。
+Angular 全体において、いくつかの API 関数は、API ドキュメント通りインジェクターを利用する際に呼び出されます。
+インジェクターはなんのサービスが関数にインジェクトされるか知っておく必要があります。
+下記で紹介している、コードにサービス名情報のアノテーションをつける3通りの書き方はすべて同じ意味です。
+これらは互いに書き換え可能なので、あなたがふさわしいと思う書き方ができます。
 
-# Inferring Dependencies
 
-The simplest way to get hold of the dependencies, is to assume that the function parameter names
-are the names of the dependencies.
+# 依存関係の推察
+
+依存関係を得るための最も単純な方法は、関数の引数の名前を依存関係の名前にすることです。
 
 <pre>
   function MyController($scope, greeter) {
@@ -126,19 +125,18 @@ are the names of the dependencies.
   }
 </pre>
 
-Given a function the injector can infer the names of the service to inject by examining the
-function declaration and extracting the parameter names. In the above example `$scope`, and
-`greeter` are two services which need to be injected into the function.
+関数が与えられたとき、関数宣言と抽出したパラメータ名を検査することによって、
+インジェクターはインジェクトするサービスの名前を推察することができます。
+上記の例では、`$scope` と `greeter` が関数にインジェクトする必要のある2つのサービスとなります。
 
-While straightforward, this method will not work with JavaScript minifiers/obfuscators as they
-rename the method parameter names. This makes this way of annotating only useful for {@link
-http://www.pretotyping.org/ pretotyping}, and demo applications.
+当たり前ですが、メソッドのパラメータ名を変えるような JavaScript の圧縮/難読化ツールを使えば、この方法では動かなくなるでしょう。
+このアノテーションの方法は、{@link http://www.pretotyping.org/ pretotyping} やデモアプリを作るときにのみ有用です。
 
-# `$inject` Annotation
+# `$inject` アノテーション
 
-To allow the minifers to rename the function parameters and still be able to inject right services
-the function needs to be annotate with the `$inject` property. The `$inject` property is an array
-of service names to inject.
+圧縮/難読化ツールが関数のパラメータ名を変更でき、かつ適切なサービスをインジェクトできる状態にするには、
+関数に `$inject` プロパティで教えてやる必要があります。
+`$inject` プロパティはインジェクトするサービス名の配列です。
 
 <pre>
   var MyController = function(renamed$scope, renamedGreeter) {
@@ -147,25 +145,22 @@ of service names to inject.
   MyController.$inject = ['$scope', 'greeter'];
 </pre>
 
-Care must be taken that the `$inject` annotation is kept in sync with the actual arguments in the
-function declaration.
+`$inject` アノテーションは関数宣言の実際の引数と同期させなければならないということに気をつけなければいけません。
 
-This method of annotation is useful for controller declarations since it assigns the annotation
-information with the function.
+この方法はアノテーション情報を関数に付与するので、コントローラの宣言において有用です。
 
-# Inline Annotation
+# インラインアノテーション
 
-Sometimes using the `$inject` annotation style is not convenient such as when annotating
-directives.
+`$inject` アノテーション形式は、ディレクティブにアノテーション情報を教えてやろうとした場合など、しばしば便利でないときがあります。
 
-For example:
+例:
 <pre>
   someModule.factory('greeter', function($window) {
     ...;
   });
 </pre>
 
-Results in code bloat due to the need of temporary variable:
+一時的に変数を定義してやる必要があるため、結果コード量が増えます:
 <pre>
   var greeterFactory = function(renamed$window) {
     ...;
@@ -176,24 +171,22 @@ Results in code bloat due to the need of temporary variable:
   someModule.factory('greeter', greeterFactory);
 </pre>
 
-For this reason the third annotation style is provided as well.
+このような理由から、三番目のアノテーション形式も同様に設けられています:
 <pre>
   someModule.factory('greeter', ['$window', function(renamed$window) {
     ...;
   }]);
 </pre>
 
-Keep in mind that all of the annotation styles are equivalent and can be used anywhere in Angular
-where injection is supported.
+覚えておいてください。すべてのアノテーション形式は同等で、インジェクターがサポートされている場所ならどこでも利用できます。
 
-# Where can I use DI?
+# DI が使える場所は?
 
-DI is pervasive throughout Angular. It is typically used in controllers and factory methods. 
+DI は Angular の至る所に広がっています。コントローラーやファクトリメソッドで主として使われています。
 
-## DI in controllers
+## コントローラーでの DI
 
-Controllers are classes which are responsible for application behavior. The recommended way of 
-declaring controllers is:
+コントローラーはアプリケーションのふるまいに責任を持つクラスです。おすすめのコントローラー宣言の仕方は:
 
 <pre>
   var MyController = function($scope, dep1, dep2) {
@@ -206,11 +199,11 @@ declaring controllers is:
 </pre>
 
 
-## Factory methods
+## ファクトリメソッド
 
-Factory methods are responsible for creating most objects in Angular. Examples are directives,
-services, and filters. The factory methods are registered with the module, and the recommended way
-of declaring factories is:
+ファクトリメソッドは Angular 内のほとんどのオブジェクト生成に責任を持ちます。例えばディレクティブ、サービス、フィルターなどです。
+ファクトリメソッドの登録はモジュールの登録の際に一緒に行います。
+おすすめのファクトリ宣言の仕方は:
 
 <pre>
   angualar.module('myModule', []).
