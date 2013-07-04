@@ -3,29 +3,21 @@
 @name Developer Guide: E2E Testing
 @description
 
-As applications grow in size and complexity, it becomes unrealistic to rely on manual testing to
-verify the correctness of new features, catch bugs and notice regressions.
+アプリケーションが肥大化し複雑さを増すと､手動でのテストに頼って新しい機能が正しく動いていることを確認するのは非現実的になります｡
 
-To solve this problem, we have built an Angular Scenario Runner which simulates user interactions
-that will help you verify the health of your Angular application.
+この問題に対処するために､我々Angular開発チームは Angularシナリオランナーを開発しました｡Angularシナリオランナーは､ユーザーの操作をシミュレートすることで､Angularアプリケーションが常に正しく動いていることを検証する手助けをします｡
 
-# Overview
-You will write scenario tests in JavaScript, which describe how your application should behave,
-given a certain interaction in a specific state. A scenario is comprised of one or more `it` blocks
-(you can think of these as the requirements of your application), which in turn are made of
-**commands** and **expectations**. Commands tell the Runner to do something with the application
-(such as navigate to a page or click on a button), and expectations tell the Runner to assert
-something about the state (such as the value of a field or the current URL). If any expectation
-fails, the runner marks the `it`  as "failed" and continues on to the next one. Scenarios may also
-have **beforeEach** and **afterEach** blocks, which will be run before (or after) each `it`  block,
-regardless of whether they pass or fail.
+# 概要
+テストシナリオはJavaScriptで記述します｡シナリオには特定の状況のユーザー操作に対して､アプリケーションがどのような振る舞いをするのかを詳しく書きます｡
+シナリオは一つまたは複数の`it`ブロック(これをアプリケーションの要求仕様とみなすことが出来るでしょう)から成り､`it`ブロックは**コマンド**や**アサート**から構成されます｡
+コマンドはテストランナーにアプリケーションの操作（たとえばページ移動とかボタンクリックとか）をするように指示するもので､アサートはテストランナーに状態の確認（たとえば入力フィールドの値とか現在のURLとか）をするよう指示します｡
+アサートが失敗すると､テストランナーはその`it`ブロックを「失敗」として記録し､次のテストケースを実行します｡シナリオに**beforeEach**ブロックや**afterEach**ブロックがある場合､各`it`ブロックが実行される前後にそれらが実行されます｡これらの前後処理は`it`ブロックが成功しているか失敗しているかに関わらず実行されます｡
 
 <img src="img/guide/scenario_runner.png">
 
-In addition to the above elements, scenarios may also contain helper functions to avoid duplicating
-code in the `it` blocks.
+上記の要素に加えて､シナリオには`it`内での処理の重複を避けるための関数を含めることもできます｡
 
-Here is an example of a simple scenario:
+シナリオの例は次のようになります:
 <pre>
 describe('Buzz Client', function() {
 it('should filter results', function() {
@@ -37,142 +29,142 @@ it('should filter results', function() {
 });
 });
 </pre>
-This scenario describes the requirements of a Buzz Client, specifically, that it should be able to
-filter the stream of the user. It starts by entering a value in the 'user' input field, clicking
-the only button on the page, and then it verifies that there are 10 items listed. It then enters
-'Bees' in the 'filterText' input field and verifies that the list is reduced to a single item.
+このシナリオにはBuzzクライアントの要求仕様を記述してあります｡
+その内容は､Buzzクライアントはユーザーに表示する内容をフィルタリングできることです｡
+まず'user'入力フィールドに値を入力し､ページにある唯一のボタンをクリックすると､10個のアイテムが表示されることを検証します｡
+次に､'filterText'入力フィールドに'Bees'と入力すると､リストが1つのアイテムに減ることを検証します｡
 
-The API section below lists the available commands and expectations for the Runner.
+次のAPIセクションではテストランナーで利用可能なコマンドとアサート方法の一覧を示します｡
 
 # API
 Source: {@link https://github.com/angular/angular.js/blob/master/src/ngScenario/dsl.js}
 
 ## pause()
-Pauses the execution of the tests until you call `resume()` in the console (or click the resume
-link in the Runner UI).
+テストの実行を一時停止します｡ コンソールで `resume()` が呼ばれるか､ Runner UI の resume リンクがクリックされると実行が再開されます｡
 
 ## sleep(seconds)
-Pauses the execution of the tests for the specified number of `seconds`.
+指定された `秒`数だけテストの実行を停止します｡
 
 ## browser().navigateTo(url)
-Loads the `url` into the test frame.
+テストフレーム内に `url` を読み込みます｡
 
 ## browser().navigateTo(url, fn)
-Loads the URL returned by `fn` into the testing frame. The given `url` is only used for the test
-output. Use this when the destination URL is dynamic (that is, the destination is unknown when you
-write the test).
+`fn` で指定された関数が返すURLをテストフレームに読み込みます｡
+第一引数の `url` はテスト結果表示のためだけに使われます｡URLが動的に決定されるなど､テストを書いている時にURLがわからない時にこの引数を使ってください｡
 
 ## browser().reload()
-Refreshes the currently loaded page in the test frame.
+現在テストフレーム内に読み込まれているページを再読み込みします｡
 
 ## browser().window().href()
-Returns the window.location.href of the currently loaded page in the test frame.
+現在テストフレーム内に読み込まれているページの window.location.href を返します｡
 
 ## browser().window().path()
-Returns the window.location.pathname of the currently loaded page in the test frame.
+現在テストフレーム内に読み込まれているページの window.location.pathname を返します｡
 
 ## browser().window().search()
-Returns the window.location.search of the currently loaded page in the test frame.
+現在テストフレーム内に読み込まれているページの window.location.search を返します｡
 
 ## browser().window().hash()
-Returns the window.location.hash (without `#`) of the currently loaded page in the test frame.
+現在テストフレーム内に読み込まれているページの window.location.hash を `#`無しで返します｡
 
 ## browser().location().url()
-Returns the {@link api/ng.$location $location.url()} of the currently loaded page in
-the test frame.
+現在テストフレーム内に読み込まれているページの {@link api/ng.$location $location.url()} を返します｡
 
 ## browser().location().path()
-Returns the {@link api/ng.$location $location.path()} of the currently loaded page in
-the test frame.
+現在テストフレーム内に読み込まれているページの {@link api/ng.$location $location.path()} を返します｡
 
 ## browser().location().search()
-Returns the {@link api/ng.$location $location.search()} of the currently loaded page
-in the test frame.
+現在テストフレーム内に読み込まれているページの {@link api/ng.$location $location.search()} を返します｡
 
 ## browser().location().hash()
-Returns the {@link api/ng.$location $location.hash()} of the currently loaded page in
-the test frame.
+現在テストフレーム内に読み込まれているページの {@link api/ng.$location $location.hash()} を返します｡
 
 ## expect(future).{matcher}
-Asserts the value of the given `future` satisfies the `matcher`. All API statements return a
-`future` object, which get a `value` assigned after they are executed. Matchers are defined using
-`angular.scenario.matcher`, and they use the value of futures to run the expectation. For example:
+`future`の値が`matcher`と一致するかを検証します｡API命令文はすべて`future`オブジェクトを返します｡
+このオブジェクトは実行された後､その結果を`value`として保持します｡
+Matcherは`angular.scenario.matcher`にて定義されています｡
+Matcherはfutureの値を使って期待値の懸賞を行います｡
+例:
 `expect(browser().location().href()).toEqual('http://www.google.com')`
 
 ## expect(future).not().{matcher}
-Asserts the value of the given `future` satisfies the negation of the `matcher`.
+`future`の値が`matcher`と一致しないことを検証します｡
 
 ## using(selector, label)
+次のDSL要素のスコープを使います｡
 Scopes the next DSL element selection.
 
 ## binding(name)
+スコープ内にバインドされた変数のうち､`name`に一致する最初の値を返します｡
 Returns the value of the first binding matching the given `name`.
 
 ## input(name).enter(value)
-Enters the given `value` in the text field with the given `name`.
+ng-modelが`name`と一致するテキストフィールドの値に`value`を入力します｡
 
 ## input(name).check()
-Checks/unchecks the checkbox with the given `name`.
+ng-modelが`name`と一致するチェックボックスをチェック済みにするかチェックを外します｡
 
 ## input(name).select(value)
-Selects the given `value` in the radio button with the given `name`.
+ng-modelが`name`と一致するラジオボタンのうち､`value`を選択状態にします｡
 
 ## input(name).val()
-Returns the current value of an input field with the given `name`.
+ng-modelが`name`と一致する入力フィールドの現在の値を返します｡
 
 ## repeater(selector, label).count()
-Returns the number of rows in the repeater matching the given jQuery `selector`. The `label` is
-used for test output.
+jQuery形式の`selector`に一致する繰り返しの行の数を返します｡
+`label`はテスト結果出力で表示されます｡
 
 ## repeater(selector, label).row(index)
-Returns an array with the bindings in the row at the given `index` in the repeater matching the
-given jQuery `selector`. The `label` is used for test output.
+jQuery形式の`selector`に一致する繰り返しの行のうち､`index`番目の行の内容を返します｡
+`label`はテスト結果出力で表示されます｡
 
 ## repeater(selector, label).column(binding)
-Returns an array with the values in the column with the given `binding` in the repeater matching
-the given jQuery `selector`. The `label` is used for test output.
+jQuery形式の`selector`に一致する繰り返しの行のうち､`binding`で指定された列の内容を返します
+`label`はテスト結果出力で表示されます｡
 
 ## select(name).option(value)
-Picks the option with the given `value` on the select with the given `name`.
+ng-modelが`name`と一致するドロップダウンのオプションのうち､`value`に一致するものを選択します｡
 
 ## select(name).option(value1, value2...)
-Picks the options with the given `values` on the multi select with the given `name`.
+ng-modelが`name`と一致するドロップダウンの選択肢のうち､`values`に一致する複数のオプションを選択します｡
 
 ## element(selector, label).count()
-Returns the number of elements that match the given jQuery `selector`. The `label` is used for test
-output.
+jQuery形式の`selector`に一致する要素の数を返します
+`label`はテスト結果出力で表示されます｡
 
 ## element(selector, label).click()
-Clicks on the element matching the given jQuery `selector`. The `label` is used for test output.
+jQuery形式の`selector`に一致する要素をクリックします
+`label`はテスト結果出力で表示されます｡
 
 ## element(selector, label).query(fn)
-Executes the function `fn(selectedElements, done)`, where selectedElements are the elements that
-match the given jQuery `selector` and `done` is a function that is called at the end of the `fn`
-function.  The `label` is used for test output.
+引数で指定された関数 `fn(selectedElements, done)` を実行します｡
+selectedElements は jQuery形式の`selector`に一致した要素で､`done`は`fn`関数の最後で呼ばれる関数です｡
+`label`はテスト結果出力で表示されます｡
 
 ## element(selector, label).{method}()
-Returns the result of calling `method` on the element matching the given jQuery `selector`, where
-`method` can be any of the following jQuery methods: `val`, `text`, `html`, `height`,
+jQuery形式の`selector`に一致する要素に対して､`method`を呼び出した結果を返します｡
+`method`には次のjQueryメソッドが使えます: `val`, `text`, `html`, `height`,
 `innerHeight`, `outerHeight`, `width`, `innerWidth`, `outerWidth`, `position`, `scrollLeft`,
-`scrollTop`, `offset`. The `label` is used for test output.
+`scrollTop`, `offset`｡
+`label`はテスト結果出力で表示されます｡
 
 ## element(selector, label).{method}(value)
-Executes the `method` passing in `value` on the element matching the given jQuery `selector`, where
-`method` can be any of the following jQuery methods: `val`, `text`, `html`, `height`,
+jQuery形式の`selector`に一致する要素に対して､`method`を引数`value`で実行します｡
+`method`には次のjQueryメソッドが使えます: `val`, `text`, `html`, `height`,
 `innerHeight`, `outerHeight`, `width`, `innerWidth`, `outerWidth`, `position`, `scrollLeft`,
-`scrollTop`, `offset`.  The `label` is used for test output.
+`scrollTop`, `offset`｡
+`label`はテスト結果出力で表示されます｡
 
 ## element(selector, label).{method}(key)
-Returns the result of calling `method` passing in `key` on the element matching the given jQuery
-`selector`, where `method` can be any of the following jQuery methods: `attr`, `prop`, `css`. The
-`label` is used for test output.
+jQuery形式の`selector`に一致する要素に対して､`method`を引数`key`で呼び出した結果を返します｡
+`method`には次のjQueryメソッドが使えます: `attr`, `prop`, `css`｡
+`label`はテスト結果出力で表示されます｡
 
 ## element(selector, label).{method}(key, value)
-Executes the `method` passing in `key` and `value` on the element matching the given jQuery
-`selector`, where `method` can be any of the following jQuery methods: `attr`,  `prop`, `css`.  The
-`label` is used for test output.
+jQuery形式の`selector`に一致する要素に対して､`method`を引数`key`と`value`で実行します｡
+`method`には次のjQueryメソッドが使えます: `attr`, `prop`, `css`｡
+`label`はテスト結果出力で表示されます｡
 
-JavaScript is a dynamically typed language which comes with great power of expression, but it also
-come with almost no-help from the compiler. For this reason we feel very strongly that any code
-written in JavaScript needs to come with a strong set of tests. We have built many features into
-angular which makes testing your angular applications easy. So there is no excuse for not testing.
+Javascriptは動的片付けの言語であり､式の偉大なパワーを備えています｡しかしそれは同時にコンパイラの助けがないという事でもあります｡そのため､すべてのJavascriptコードはしっかりしたテストを備えている必要があると､我々は考えています｡
+angularにはテストを容易にする多くの機能が備わっています｡
+テストを書かない言い訳はできません｡
