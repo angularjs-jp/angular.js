@@ -1,107 +1,120 @@
 @ngdoc overview
-@name Developer Guide: About MVC in Angular: Understanding the Controller Component
+@name Developer Guide: Angular の MVC について : コントローラコンポーネントを理解する
 @description
 
-In Angular, a controller is a JavaScript function(type/class) that is used to augment instances of
-angular {@link scope Scope}, excluding the root scope. When you or Angular create a new
-child scope object via the {@link api/ng.$rootScope.Scope#$new scope.$new} API        , there is an
-option to pass in a controller as a method argument. This will tell Angular to associate the
-controller with the new scope and to augment its behavior.
+Angular において、コントローラは Angular の {@link scope スコープ} (ルートスコープを除く)
+のインスタンスに必要なものを補うために使われる JavaScript の関数 (型またはクラス) です。
+あなた、もしくは Angular が、{@link api/ng.$rootScope.Scope#$new scope.$new} API 
+を使って新たな子スコープオブジェクトを作成するとき、
+オプションでコントローラをメソッドの引数として渡すことができます。
+こうすると Angular は、渡されたコントローラと新たなスコープを関連付け、
+スコープの振る舞いをコントローラが補うようになります。
 
-Use controllers to:
+コントローラは次の目的で使います。
 
-- Set up the initial state of a scope object.
-- Add behavior to the scope object.
+- スコープオブジェクトの初期状態を設定するため
+- スコープオブジェクトの振る舞いを追加するため
 
-# Setting up the initial state of a scope object
+# スコープオブジェクトの初期状態を設定する
 
-Typically, when you create an application you need to set up an initial state for an Angular scope.
+たいていの場合、アプリケーションを作成するときには、 
+Angular のスコープの初期状態を設定する必要があります。
 
-Angular applies (in the sense of JavaScript's `Function#apply`) the controller constructor function
-to a new Angular scope object, which sets up an initial scope state. This means that Angular never
-creates instances of the controller type (by invoking the `new` operator on the controller
-constructor). Constructors are always applied to an existing scope object.
+Angular は新たな Angular スコープオブジェクトに対して、コントローラのコンストラクタ関数を
+ (JavaScript の `Function#apply` と同じように) 作用させ、これによってスコープの初期状態が設定されます。
+したがって、 Angular が (コントローラのコンストラクタに対して `new` 演算子を呼び出して) 
+コントローラ型のインスタンスを作成することはありません。
+コンストラクタは常に既存のスコープオブジェクトに対して適用されます。
 
-You set up the initial state of a scope by creating model properties. For example:
+スコープの初期状態を設定するには、モデルプロパティを作成します。
+以下に例を示します。
 
+<pre>
 function GreetingCtrl($scope) {
  $scope.greeting = 'Hola!';
 }
+</pre>
 
-The `GreetingCtrl` controller creates a `greeting` model which can be referred to in a template.
+`GreetingCtrl` コントローラは、テンプレートで参照できる `greeting` モデルを作成しています。
 
-**NOTE**: Many of the examples in the documentation show the creation of functions
-in the global scope. This is only for demonstration purposes - in a real
-application you should use the `.controller` method of your Angular module for
-your application as follows:
+**注意**: 本ドキュメントの例の多くでは、関数をグローバルスコープに作成しています。
+これはあくまで例を示すためだけのもので、実際のアプリケーションでは次のように、
+あなたのアプリケーション独自の Angular モジュールの `.controller` メソッドを使用すべきです。
 
+<pre>
 var myApp = angular.module('myApp',[]);
 
 myApp.controller('GreetingCtrl', ['$scope', function(scope) {
   scope.greeting = 'Hola!';
 }]);
+</pre>
 
-Note also that we use the array notation to explicitly specify the dependency
-of the controller on the `$scope` service provided by Angular.
+また、コントローラが Angular の提供する `$scope` サービスに依存していることを明示するために、
+配列表記を使っていることにも注意してください。
 
-# Adding Behavior to a Scope Object
+# スコープオブジェクトに振る舞いを追加する
 
-Behavior on an Angular scope object is in the form of scope method properties available to the
-template/view. This behavior interacts with and modifies the application model.
+Angular のスコープオブジェクトにおける振る舞いは、
+テンプレート / ビューから利用できるスコープのメソッドプロパティの形式をとります。
+この振る舞いは、アプリケーションのモデルと連携したり、モデルを変更したりします。
 
-As discussed in the {@link dev_guide.mvc.understanding_model Model} section of this guide, any
-objects (or primitives) assigned to the scope become model properties. Any functions assigned to
-the scope are available in the template/view, and can be invoked via angular expressions
-and `ng` event handler directives (e.g. {@link api/ng.directive:ngClick ngClick}).
+このガイドの {@link dev_guide.mvc.understanding_model モデル} の章で説明した通り、
+スコープに割り当てられたあらゆるオブジェクトやプリミティブ型はモデルのプロパティになります。
+スコープに割り当てられたすべての関数は、テンプレート / ビューで使用でき、
+Angular の expression や、 `ng` 
+イベントハンドラディレクティブ (例: {@link api/ng.directive:ngClick ngClick}) 
+を通して呼び出すことができます。
 
-# Using Controllers Correctly
+# コントローラを正しく使用する
 
-In general, a controller shouldn't try to do too much. It should contain only the business logic
-needed for a single view.
+一般的に、コントローラであまり多くのことをすべきではありません。
+コントローラには、単一のビューで必要なビジネスロジックのみを含めるべきです。
 
-The most common way to keep controllers slim is by encapsulating work that doesn't belong to
-controllers into services and then using these services in controllers via dependency injection.
-This is discussed in the {@link di Dependency Injection} {@link dev_guide.services
-Services} sections of this guide.
+コントローラを簡潔にするもっとも一般的な方法は、コントローラに属さない処理をサービスにカプセル化して、
+依存性注入を介してこれらのサービスを使用することです。
+この方法は、このガイドの{@link di 依存性注入} や {@link dev_guide.services サービス} の章で説明しています。
 
-Do not use controllers for:
+コントローラを次の目的で使用しないでください。
 
-- Any kind of DOM manipulation — Controllers should contain only business logic. DOM
-manipulation—the presentation logic of an application—is well known for being hard to test.
-Putting any presentation logic into controllers significantly affects testability of the business
-logic. Angular offers {@link dev_guide.templates.databinding databinding} for automatic DOM manipulation. If
-you have to perform your own manual DOM manipulation, encapsulate the presentation logic in
-{@link guide/directive directives}.
-- Input formatting — Use {@link forms angular form controls} instead.
-- Output filtering — Use {@link dev_guide.templates.filters angular filters} instead.
-- To run stateless or stateful code shared across controllers — Use {@link dev_guide.services angular
-services} instead.
-- To instantiate or manage the life-cycle of other components (for example, to create service
-instances).
-
-
-# Associating Controllers with Angular Scope Objects
-
-You can associate controllers with scope objects explicitly via the {@link api/ng.$rootScope.Scope#$new
-scope.$new} api or implicitly via the {@link api/ng.directive:ngController ngController
-directive} or {@link api/ng.$route $route service}.
+- すべての種類の DOM 操作 — コントローラにはビジネスロジックのみが含まれるべきです。
+  DOM 操作 (アプリケーションのプレゼンテーションロジック) は、テストが難しいことでよく知られています。
+  何らかのプレゼンテーションロジックをコントローラに含めてしまうと、
+  ビジネスロジックのテスト容易性に大きな影響を与えてしまいます。
+  Angular では、自動的に DOM 操作を行うために {@link dev_guide.templates.databinding 
+  データバインディング} を用意しています。
+  もし手動の DOM 操作を行う必要があれば、プレゼンテーションロジックを {@link guide/directive 
+  ディレクティブ} にカプセル化してください。
+- 入力のフォーマット処理 — 代わりに {@link forms Angular のフォームコントロール} を使用してください。
+- 出力のフィルタ処理 — 代わりに {@link dev_guide.templates.filters Angular のフィルタ} を使用してください。
+- ステートレス、または、コントローラ間で共有できるステートフルなコードを実行 — 
+  代わりに {@link dev_guide.services Angular のサービス} を使用してください。
+- 他のコンポーネントのインスタンス化やライフサイクルの管理 (サービスのインスタンスを作成するなど)
 
 
-## Controller Constructor and Methods Example
+# コントローラと Angular のスコープオブジェクトを関連付ける
 
-To illustrate how the controller component works in angular, let's create a little app with the
-following components:
-
-- A {@link dev_guide.templates template} with two buttons and a simple message
-- A model consisting of a string named `spice`
-- A controller with two functions that set the value of `spice`
-
-The message in our template contains a binding to the `spice` model, which by default is set to the
-string "very". Depending on which button is clicked, the `spice` model is set to `chili` or
-`jalapeño`, and the message is automatically updated by data-binding.
+{@link api/ng.$rootScope.Scope#$new scope.$new} API を使うと、
+明示的にコントローラとスコープオブジェクトを関連付けることができます。
+また、暗黙的に関連付けを行う場合は、{@link api/ng.directive:ngController ngController 
+ディレクティブ}を使用するか、 {@link api/ng.$route $route サービス} を使用することができます。
 
 
-## A Spicy Controller Example
+## コントローラのコンストラクタとメソッドの例
+
+コントローラコンポーネントが Angular でどのように動作するのかを説明するため、
+次のコンポーネントを持つ小さなアプリケーションを作成してみましょう。
+
+- 2 つのボタンと簡単なメッセージがある {@link dev_guide.templates テンプレート}
+- `spice` という名前の文字列からなるモデル
+- `spice` の値をセットする 2 つの関数を持つコントローラ
+
+テンプレートのメッセージは `spice` モデルとのバインディングを含んでおり、その値は "very" 
+という文字列にデフォルトでセットされています。
+どちらのボタンがクリックされたかにより、 `spice` モデルは `chili` または `jalapeño` にセットされ、
+メッセージはデータバインディングによる自動的に更新されます。
+
+
+## コントローラの例
 
 <pre>
 <body ng-controller="SpicyCtrl">
@@ -123,29 +136,33 @@ function SpicyCtrl($scope) {
 
 </pre>
 
-Things to notice in the example above:
+上記のコードで着目すべきことは下記の通りです。
 
-- The `ngController` directive is used to (implicitly) create a scope for our template, and the
-scope is augmented (managed) by the `SpicyCtrl` controller.
-- `SpicyCtrl` is just a plain JavaScript function. As an (optional) naming convention the name
-starts with capital letter and ends with "Ctrl" or "Controller".
-- Assigning a property to `$scope` creates or updates the model.
-- Controller methods can be created through direct assignment to scope (the `chiliSpicy` method)
-- Both controller methods are available in the template (for the `body` element and and its
-children).
-- NB:  Previous versions of Angular (pre 1.0 RC) allowed you to use `this` interchangeably with
-the $scope method, but this is no longer the case.  Inside of methods defined on the scope
-`this` and $scope are interchangeable (angular sets `this` to $scope), but not otherwise
-inside your controller constructor.
-- NB:  Previous versions of Angular (pre 1.0 RC) added prototype methods into the scope
-automatically, but this is no longer the case; all methods need to be added manually to
-the scope.
+- `ngController` ディレクティブが、
+  (暗黙的に) スコープを作成するためにテンプレートで使用されていて、
+  `SpicyCtrl` コントローラによってスコープに必要なものが補われている (管理されている) 
+  ということ
+- `SpicyCtrl` は単なるプレーンな JavaScript 関数であるということ。
+  (任意の) 命名規則として、コントローラの名前は大文字で始まり、 "Ctrl" または "Controller" 
+  で終わるということ。
+- `$scope` にプロパティを代入すると、モデルが作成または更新されるということ。
+- コントローラメソッドはスコープへの直接代入で作成できるということ
+  (`chiliSpicy` メソッド)
+- 2 つのコントローラメソッドはともにテンプレートで利用できるということ
+  (`body` 要素とその子要素で利用できます)。
+- 注意 : 1.0 RC 以前のバージョンの Angular では $scope メソッドの代わりに 
+  `this` を常に使うことができましたが、現在のバージョンでは使えない場合があります。
+  スコープで定義されたメソッド内では `$scope` の代わりに `this` を使うことができます
+  (Angular が `this` を $scope にセットします)。
+  しかし、コントローラのコンストラクタ内では、 `$scope` の代わりに `this` を使うことはできません。
+- 注意 : 1.0 RC 以前のバージョンの Angular では、
+  スコープにプロトタイプメソッドを自動的に追加していましたが、
+  現在のバージョンでは追加されません。すべてのメソッドは手動でスコープに追加する必要があります。
 
 
-Controller methods can also take arguments, as demonstrated in the following variation of the
-previous example.
+コントローラメソッドは引数を受け取ることができます。先ほどの例を少し変更した次のコードでこれを示します。
 
-## Controller Method Arguments Example
+## コントローラメソッドに引数を渡す例
 
 <pre>
 <body ng-controller="SpicyCtrl">
@@ -163,16 +180,17 @@ function SpicyCtrl($scope) {
 }
 </pre>
 
-Notice that the `SpicyCtrl` controller now defines just one method called `spicy`, which takes one
-argument called `spice`. The template then refers to this controller method and passes in a string
-constant `'chili'` in the binding for the first button and a model property `spice` (bound to an
-input box) in the second button.
+`SpicyCtrl` コントローラには、 `spice` という引数をとる `spicy` という名前のメソッドが 1 
+つだけ定義されるようになった点に着目してください。
+そして、テンプレートではこのコントローラのメソッドを参照し、 1 つ目のボタンのイベントバインディングでは、
+文字列定数 `'chili'` を渡すように、また、2 つ目のボタンのイベントバインディングでは (input 
+要素にバインドされた) モデルプロパティの `customSpice` を渡しています。
 
 
-## Controller Inheritance Example
+## コントローラを継承する例
 
-Controller inheritance in Angular is based on {@link api/ng.$rootScope.Scope Scope} inheritance. Let's
-have a look at an example:
+Angular におけるコントローラの継承は {@link api/ng.$rootScope.Scope スコープ} の継承に基づいています。
+例を見てみましょう。
 
 <pre>
 <body ng-controller="MainCtrl">
@@ -197,30 +215,30 @@ function BabyCtrl($scope) {
 }
 </pre>
 
-Notice how we nested three `ngController` directives in our template. This template construct will
-result in 4 scopes being created for our view:
+3 つの `ngController` のディレクティブをどのようにネストしているかに着目してください。
+このテンプレートの構造の結果、ビューに対して4つのスコープが作成されることになります。
 
-- The root scope
-- The `MainCtrl` scope, which contains `timeOfDay` and `name` models
-- The `ChildCtrl` scope, which shadows the `name` model from the previous scope and inherits the
-`timeOfDay` model
-- The `BabyCtrl` scope, which shadows both the `timeOfDay` model defined in `MainCtrl` and `name`
-model defined in the ChildCtrl
+- ルートスコープ
+- `MainCtrl` スコープ : 内部に `timeOfDay` と `name` モデルを含む
+- `ChildCtrl` スコープ : `MainCtrl` スコープ の `name` モデルをシャドウ化(不可視化)し、
+  `timeOfDay` モデルを `MainCtrl` スコープから継承している
+- `BabyCtrl` スコープ : `MainCtrl` スコープで定義された `timeOfDay` モデルと `ChildCtrl` 
+  スコープで定義された `name` モデルを共にシャドウ化している
 
-Inheritance works between controllers in the same way as it does with models. So in our previous
-examples, all of the models could be replaced with controller methods that return string values.
+コントローラ間の継承は、モデルが継承されるのと同じ方法で行われます。
+したがって、先ほどの例では、すべてのモデルは文字列値を返すコントローラメソッドに置き換えることができます。
 
-Note: Standard prototypical inheritance between two controllers doesn't work as one might expect,
-because as we mentioned earlier, controllers are not instantiated directly by Angular, but rather
-are applied to the scope object.
+注意 : 2 つのコントローラ間の通常のプロトタイプ継承は、期待どおりには動作しません。
+なぜなら、先ほど説明した通り、コントローラは Angular によって直接インスタンス化されるのではなく、
+スコープオブジェクトに対して適用 (apply) されるからです。
 
 
-## Testing Controllers
+## コントローラのテスト
 
-Although there are many ways to test a controller, one of the best conventions, shown below,
-involves injecting the `$rootScope` and `$controller`
+コントローラをテストする方法はたくさんありますが、その中でも最良の方法の1つは下記に示すように、
+`$rootScope` と `$controller` を注入する手法です。
 
-Controller Function:
+コントローラ関数 :
 <pre>
 function myController($scope) {
    $scope.spices = [{"name":"pasilla", "spiciness":"mild"},
@@ -231,7 +249,7 @@ function myController($scope) {
 }
 </pre>
 
-Controller Test:
+コントローラのテスト :
 <pre>
 describe('myController function', function() {
 
@@ -255,8 +273,8 @@ describe('myController function', function() {
 </pre>
 
 
-If you need to test a nested controller you need to create the same scope hierarchy
-in your test that exists in the DOM.
+もしネスト化されたコントローラをテストする必要があれば、 DOM 
+上に存在するのと同じスコープの階層をテストで再現しなければなりません。
 
 <pre>
 describe('state', function() {
@@ -283,10 +301,10 @@ describe('state', function() {
 </pre>
 
 
-## Related Topics
+## 関連トピック
 
-* {@link dev_guide.mvc About MVC in Angular}
-* {@link dev_guide.mvc.understanding_model Understanding the Model Component}
-* {@link dev_guide.mvc.understanding_view Understanding the View Component}
+* {@link dev_guide.mvc Angular における MVC について}
+* {@link dev_guide.mvc.understanding_model モデルコンポーネントを理解する}
+* {@link dev_guide.mvc.understanding_view ビューコンポーネントを理解する}
 
 
