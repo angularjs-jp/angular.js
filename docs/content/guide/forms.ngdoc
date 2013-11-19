@@ -1,20 +1,28 @@
 @ngdoc overview
-@name Forms
+@name フォーム
 @description
 
-Controls (`input`, `select`, `textarea`) are a way for user to enter data.
-Form is a collection of controls for the purpose of grouping related controls together.
+`input`, `select`, `textarea` コントロールは、ユーザがデータを入力するための手段の 1 つです。
+フォームは関連するコントロールを 1 つにまとめるための、コントロールの集合です。
 
-Form and controls provide validation services, so that the user can be notified of invalid input.
-This provides a better user experience, because the user gets instant feedback on how to correct the error.
-Keep in mind that while client-side validation plays an important role in providing good user experience, it can easily be circumvented and thus can not be trusted.
-Server-side validation is still necessary for a secure application.
+フォームとコントロールは、バリデーションサービスを提供しているため、
+ユーザは無効な入力をしたときに、通知を受けることができます。
+こうすれば、ユーザはその場でフィードバックを受け取り、
+どのように間違いを修正すればいいか知ることができるので、
+よりよいユーザエクスペリエンスを提供することができます。
+注意しなければいけないのは、
+クライアントサイドのバリデーションはユーザエクスペリエンスを良くするために重要な役割を果たしますが、
+簡単に迂回できてしまうので信頼できないということです。
+セキュアなアプリケーションを構築するためには、サーバサイドのバリデーションはやはり必要です。
 
 
-# Simple form
-The key directive in understanding two-way data-binding is {@link api/ng.directive:ngModel ngModel}.
-The `ngModel` directive provides the two-way data-binding by synchronizing the model to the view, as well as view to the model.
-In addition it provides an {@link api/ng.directive:ngModel.NgModelController API} for other directives to augment its behavior.
+# 簡単なフォーム
+双方向データバインディングを理解するために重要なディレクティブは
+{@link api/ng.directive:ngModel ngModel} です。
+`ngModel` ディレクティブは、モデルからビューにデータを同期し、
+同時にビューからモデルにデータを同期することで、双方向データバインディングを提供します。
+さらに、他のディレクティブが `ngModel` ディレクティブの振る舞いを補えるよう、
+{@link api/ng.directive:ngModel.NgModelController API} が用意されています。
 
 <doc:example>
 <doc:source>
@@ -50,22 +58,24 @@ In addition it provides an {@link api/ng.directive:ngModel.NgModelController API
 </doc:example>
 
 
-Note that `novalidate` is used to disable browser's native form validation.
+ここで、 `novalidate` はブラウザネイティブなバリデーションを無効にするために使われています。
 
 
 
-# Using CSS classes
+# CSSのクラスを使う
 
-To allow styling of form as well as controls, `ngModel`  add these CSS classes:
+コントロールやフォームのスタイルを変更できるよう、 `ngModel` は以下のクラスを追加します。
 
 - `ng-valid`
 - `ng-invalid`
 - `ng-pristine`
 - `ng-dirty`
 
-The following example uses the CSS to display validity of each form control.
-In the example both `user.name` and `user.email` are required, but are rendered with red background only when they are dirty.
-This ensures that the user is not distracted with an error until after interacting with the control, and failing to satisfy its validity.
+以下の例は、CSSを使用して、それぞれのフォームコントロールの妥当性を表示します。
+`user.name` と `user.email` は必須項目ですが、値が変更されてダーティーになったときだけ、
+背景色が赤で表示されます。
+したがって、ユーザがコントロールを操作をして妥当性を満たさなくなるまで、
+エラー表示で気が散ることがありません。
 
 <doc:example>
 <doc:source>
@@ -111,19 +121,20 @@ This ensures that the user is not distracted with an error until after interacti
 
 
 
-# Binding to form and control state
+# フォームとコントロールの状態にバインドする
 
-A form is in instance of {@link api/ng.directive:form.FormController FormController}.
-The form instance can optionally be published into the scope using the `name` attribute.
-Similarly control is an instance of {@link api/ng.directive:ngModel.NgModelController NgModelController}.
-The control instance can similarly be published into the form instance using the `name` attribute.
-This implies that the internal state of both the form and the control is available for binding in the view using the standard binding primitives.
+フォームは {@link api/ng.directive:form.FormController FormController} のインスタンスです。
+フォームのインスタンスは、オプションで `name` 属性を使ってスコープ内部に公開することもできます。
+同じように、コントロールは {@link api/ng.directive:ngModel.NgModelController NgModelController} 
+のインスタンスで、 `name` 属性を使ってフォームのインスタンス内部に公開することができます。
+これは、フォームやコントロールの内部状態は、ビューの中で標準的なバインディングプリミティブを使って、
+バインドできるということでもあります。
 
-This allows us to extend the above example with these features:
+これを使って、上記の例に次のような機能を拡張することができます。
 
-- RESET button is enabled only if form has some changes
-- SAVE button is enabled only if form has some changes and is valid
-- custom error messages for `user.email` and `user.agree`
+- フォームに何らかの変更が加えられたときだけ、 RESET ボタンを有効にする
+- フォームに何らかの変更が加えられ、その値が有効な場合だけ、 SAVE ボタンを有効にする
+- `user.email` と `user.agree` に対するカスタムエラーメッセージを表示する
 
 <doc:example>
 <doc:source>
@@ -176,32 +187,49 @@ This allows us to extend the above example with these features:
 
 
 
-# Custom Validation
+# カスタムバリデーション
 
-Angular provides basic implementation for most common html5 {@link api/ng.directive:input input}
-types: ({@link api/ng.directive:input.text text}, {@link api/ng.directive:input.number number}, {@link api/ng.directive:input.url url}, {@link api/ng.directive:input.email email}, {@link api/ng.directive:input.radio radio}, {@link api/ng.directive:input.checkbox checkbox}), as well as some directives for validation (`required`, `pattern`, `minlength`, `maxlength`, `min`, `max`).
+Angular には、 HTML5 で最もよく使われる {@link api/ng.directive:input input} type 
+({@link api/ng.directive:input.text text}, {@link api/ng.directive:input.number number}, 
+{@link api/ng.directive:input.url url}, {@link api/ng.directive:input.email email}, 
+{@link api/ng.directive:input.radio radio}, {@link api/ng.directive:input.checkbox checkbox}) 
+に対する基本的な実装が用意されています。
+また、バリデーションのために用意されたディレクティブもあります 
+(`required`, `pattern`, `minlength`, `maxlength`, `min`, `max`) 。
 
-Defining your own validator can be done by defining your own directive which adds a custom validation function to the `ngModel` {@link api/ng.directive:ngModel.NgModelController controller}.
-To get a hold of the controller the directive specifies a dependency as shown in the example below.
-The validation can occur in two places:
+独自のバリデータを定義するには、 `ngModel` の {@link api/ng.directive:ngModel.NgModelController 
+コントローラ} にカスタムバリデーション関数を追加する独自のディレクティブを定義します。
+コントローラにアクセスできるようにするためには、下記の例で示すように、ディレクティブに依存関係を指定します。
+定義したバリデーションは次の 2 つのときに実行されるようにすることができます。
 
-  * **Model to View update** -
-    Whenever the bound model changes, all functions in {@link api/ng.directive:ngModel.NgModelController#$formatters NgModelController#$formatters} array are pipe-lined, so that each of these functions has an opportunity to format the value and change validity state of the form control through {@link api/ng.directive:ngModel.NgModelController#$setValidity NgModelController#$setValidity}.
+  * **モデルの更新をビューに反映するとき** - バインドされたモデルに変更があったときは必ず、
+	{@link api/ng.directive:ngModel.NgModelController#$formatters NgModelController#$formatters}
+	配列に含まれるすべての関数が順番に実行されるため、これらの関数は値をフォーマットし、
+	{@link api/ng.directive:ngModel.NgModelController#$setValidity NgModelController#$setValidity}
+	を使ってフォームコントロールの有効状態を変更することができます。
 
-  * **View to Model update** -
-    In a similar way, whenever a user interacts with a control it calls {@link api/ng.directive:ngModel.NgModelController#$setViewValue NgModelController#$setViewValue}.
-This in turn pipelines all functions in the {@link api/ng.directive:ngModel.NgModelController#$parsers NgModelController#$parsers} array, so that each of these functions has an opportunity to convert the value and change validity state of the form control through {@link api/ng.directive:ngModel.NgModelController#$setValidity NgModelController#$setValidity}.
+  * **ビューの変更をモデルに反映するとき** - 同じような方法で、
+	ユーザがコントロールに対して何らかの操作を行ったときは必ず
+	{@link api/ng.directive:ngModel.NgModelController#$setViewValue NgModelController#$setViewValue}
+	が呼び出されます。
+	すると、{@link api/ng.directive:ngModel.NgModelController#$parsers NgModelController#$parsers}
+	配列に含まれるすべての関数が順番に実行されるため、これらの関数は値を変換して、
+	{@link api/ng.directive:ngModel.NgModelController#$setValidity NgModelController#$setValidity}
+	を使ってフォームコントロールの有効状態を変更することができます。
 
-In the following example we create two directives.
+次の例では、2 つのディレクティブを作成しています。
 
-  * The first one is `integer` and it validates whether the input is a valid integer.
-    For example `1.23` is an invalid value, since it contains a fraction.
-    Note that we unshift the array instead of pushing.
-    This is because we want to be first parser and consume the control string value, as we need to execute the validation function before a conversion to number occurs.
+  * 最初のディレクティブは、 `integer` で、入力が有効な整数値であるかどうかを検証します。
+	たとえば、 `1.23` は小数部を含むので無効な値です。
+	ここで、配列に push するのではなく、配列を unshift していることに着目してください。
+	これは、コントロールに入力された文字列値が数値に変換される前にバリデーション関数を実行できるよう、
+	最初に入力値を読み取って処理を行いたいからです。
 
-  * The second directive is a `smart-float`.
-    It parses both `1.2` and `1,2` into a valid float number `1.2`.
-    Note that we can't use input type `number` here as HTML5 browsers would not allow the user to type what it would consider an invalid number such as `1,2`.
+  * 2 つ目のディレクティブは `smart-float` で、 `1.2` と `1,2` の形式どちらでも、
+	有効な float 値である `1.2` に変換します。
+	ここで、 input type に `number` を使用できないことに注意してください。
+	なぜなら、 HTML5 に対応したブラウザでは、 `1,2` のようにブラウザが数値として無効と判断するものは、
+	ユーザが入力できないからです。
 
 
 <doc:example module="form-example1">
@@ -237,11 +265,11 @@ In the following example we create two directives.
       link: function(scope, elm, attrs, ctrl) {
         ctrl.$parsers.unshift(function(viewValue) {
           if (INTEGER_REGEXP.test(viewValue)) {
-            // it is valid
+            // 有効なとき
             ctrl.$setValidity('integer', true);
             return viewValue;
           } else {
-            // it is invalid, return undefined (no model update)
+            // 無効な値のとき、undefinedを返す(モデルは更新しない)
             ctrl.$setValidity('integer', false);
             return undefined;
           }
@@ -272,18 +300,25 @@ In the following example we create two directives.
 </doc:example>
 
 
-# Implementing custom form controls (using `ngModel`)
-Angular implements all of the basic HTML form controls ({@link api/ng.directive:input input}, {@link api/ng.directive:select select}, {@link api/ng.directive:textarea textarea}), which should be sufficient for most cases.
-However, if you need more flexibility, you can write your own form control as a directive.
+# `ngModel` を使ってカスタムフォームコントロールを実装する
+Angular には HTML の基本的なコントロール ({@link api/ng.directive:input input}, 
+{@link api/ng.directive:select select}, {@link api/ng.directive:textarea textarea}) 
+はすべて実装されており、多くの場合はこれで十分です。
+しかし、もっと柔軟性が必要な場合は、ディレクティブとして独自のフォームコントロールを記述することができます。
 
-In order for custom control to work with `ngModel` and to achieve two-way data-binding it needs to:
+カスタムコントロールが `ngModel` と連携し、双方向データバインディングを実現するためには、
+次のことをしなければなりません。
 
-  - implement `render` method, which is responsible for rendering the data after it passed the {@link   api/ng.directive:ngModel.NgModelController#$formatters NgModelController#$formatters},
-  - call `$setViewValue` method, whenever the user interacts with the control and model needs to be updated. This is usually done inside a DOM Event listener.
+  - カスタムコントロールに `$render` メソッドを実装すること。このメソッドは 
+  	{@link api/ng.directive:ngModel.NgModelController#$formatters NgModelController#$formatters}
+  	を通過したあとのデータの描画を担当します。
+  - ユーザがコントロールに対して何らかの操作を行い、モデルが更新されなければならないときは、
+  	必ず `$setViewValue` メソッドを呼び出すこと。
+  	これは大抵の場合、 DOM イベントリスナの中で行われます。
 
-See {@link guide/directive $compileProvider.directive} for more info.
+詳しくは、 {@link guide/directive $compileProvider.directive} を参照してください。
 
-The following example shows how to add two-way data-binding to contentEditable elements.
+下記の例は、 contentEditable 要素に双方向データバインディングを追加する方法を示しています。
 
 <doc:example module="form-example2">
 <doc:source>
@@ -292,19 +327,19 @@ The following example shows how to add two-way data-binding to contentEditable e
     return {
       require: 'ngModel',
       link: function(scope, elm, attrs, ctrl) {
-        // view -> model
+        // ビュー -> モデル
         elm.bind('blur', function() {
           scope.$apply(function() {
             ctrl.$setViewValue(elm.html());
           });
         });
 
-        // model -> view
+        // モデル -> ビュー
         ctrl.$render = function() {
           elm.html(ctrl.$viewValue);
         };
 
-        // load init value from DOM
+        // DOMから初期値を読み込む
         ctrl.$setViewValue(elm.html());
       }
     };
