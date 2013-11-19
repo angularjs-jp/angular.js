@@ -1,22 +1,24 @@
 @ngdoc overview
-@name Developer Guide: About MVC in Angular: Understanding the View Component
+@name Developer Guide: Angular の MVC について : ビューコンポーネントを理解する
 @description
 
-In Angular, the view is the DOM loaded and rendered in the browser, after Angular has transformed
-the DOM based on information in the template, controller and model.
+Angular がテンプレート・コントローラ・モデルの情報をもとに変換し、
+ブラウザに読み込まれ描画される DOM のことを Angular ではビューといいます。
 
 <img src="img/guide/about_view_final.png">
 
-In the Angular implementation of MVC, the view has knowledge of both the model and the controller.
-The view knows about the model where two-way data-binding occurs. The view has knowledge of the
-controller through Angular directives, such as {@link api/ng.directive:ngController
-ngController} and {@link api/ng.directive:ngView ngView}, and through bindings of this form:
-`{{someControllerFunction()}}`. In these ways, the view can call functions in an associated
-controller function.
+Angular の MVC 実装では、ビューはモデルとコントローラについての情報を持っています。
+ビューには双方向データバインディングが行われているモデルが分かっています。
+また、 {@link api/ng.directive:ngController ngController} や 
+{@link api/ng.directive:ngView ngView} ディレクティブ、 
+`{{someControllerFunction()}}` の形式のバインディングを通して、
+ビューはコントローラの情報を得ています。
+このような実装なので、
+ビューは関連付けられたコントローラ関数に含まれる関数を呼び出すことができるのです。
 
 
-## Related Topics
+## 関連トピック
 
-* {@link dev_guide.mvc About MVC in Angular}
-* {@link dev_guide.mvc.understanding_model Understanding the Model Component}
-* {@link dev_guide.mvc.understanding_controller Understanding the Controller Component}
+* {@link dev_guide.mvc Angular における MVC}
+* {@link dev_guide.mvc.understanding_model モデルコンポーネントを理解する}
+* {@link dev_guide.mvc.understanding_controller コントローラコンポーネントを理解する}
