@@ -1,36 +1,38 @@
 @ngdoc overview
-@name Developer Guide: Angular Services: Understanding Angular Services
+@name Developer Guide: Angular のサービス : Angular のサービスを理解する
 @description
 
-Angular services are singletons that carry out specific tasks common to web apps, such as the
-{@link api/ng.$http $http service} that provides low level access to the browser's
-`XMLHttpRequest` object.
+Angular のサービスは、 Web アプリケーションに共通の、特定のタスクを実行するシングルトンです。
+たとえば、 {@link api/ng.$http $http サービス} は、ブラウザの `XMLHttpRequest` 
+オブジェクトに対する低レベルアクセスを提供します。
 
-To use an Angular service, you identify it as a dependency for the dependent (a controller, or
-another service) that depends on the service.  Angular's dependency injection subsystem takes care
-of the rest. The Angular injector subsystem is in charge of service instantiation, resolution of
-dependencies, and provision of dependencies to factory functions as requested.
+Angular のサービスを使用するには、そのサービスに依存する側 (コントローラや別のサービス) の依存関係として、
+Angular のサービスを指定します。あとは Angular の依存性注入のサブシステムが面倒を見てくれます。
+Angular の依存性注入サブシステムは、サービスのインスタンス化、依存関係の解決、
+そして要求どおりにファクトリ関数へ依存サービスを供給することを担当します。
 
-Angular injects dependencies using "constructor" injection (the service is passed in via a factory
-function). Because JavaScript is a dynamically typed language, Angular's dependency injection
-subsystem cannot use static types to identify service dependencies. For this reason a dependent
-must explicitly define its dependencies by using the `$inject` property.  For example:
+Angular は「コンストラクタ」注入を使って、依存性を注入します (サービスはファクトリ関数を通じて渡されます)。
+JavaScript は動的型付け言語なので、 Angular の依存性注入サブシステムは、
+静的型を使ってサービスの依存性を特定することができません。
+そのため、下記のように、依存する側はその依存関係を `$inject` 
+プロパティを使って明示的に定義しなければなりません。
 
         myController.$inject = ['$location'];
 
-The Angular web framework provides a set of services for common operations. Like other core Angular
-variables and identifiers, the built-in services always start with `$` (such as `$http` mentioned
-above). You can also create your own custom services.
+Angular Web フレームワークは共通の処理のためのサービスセットを用意しています。
+他の Angular コアの変数や識別子のように、組み込みのサービスは必ず `$` で始まります 
+(先述の `$http` サービスと同様です)。
+独自のカスタムサービスを作成することもできます。
 
 
-## Related Topics
+## 関連トピック
 
-* {@link di About Angular Dependency Injection}
-* {@link dev_guide.services.creating_services Creating Angular Services}
-* {@link dev_guide.services.managing_dependencies Managing Service Dependencies}
-* {@link dev_guide.services.testing_services Testing Angular Services}
+* {@link di Angular の依存性注入について}
+* {@link dev_guide.services.creating_services Angular のサービスを作成する}
+* {@link dev_guide.services.managing_dependencies サービスの依存関係を管理する}
+* {@link dev_guide.services.testing_services Angular のサービスをテストする}
 
-## Related API
+## 関連 API
 
-* {@link api/ng Angular Service API}
+* {@link api/ng Angular サービス API}
 * {@link api/angular.injector Injector API}
