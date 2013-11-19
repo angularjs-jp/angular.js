@@ -1,20 +1,22 @@
 @ngdoc overview
-@name Developer Guide: Angular Services
+@name Developer Guide: Angular のサービス
 @description
 
-Services are a feature that Angular brings to client-side web apps from the server side, where
-services have been commonly used for a long time. Services in Angular apps are substitutable
-objects that are wired together using {@link di dependency injection (DI)}.
+これまで長い間、サービスは一般的にサーバサイドで使用されていましたが、
+Angular のサービスとは、 Angular によって、
+サーバサイドからクライアントサイドの Web アプリケーションへと持ち込まれた機能のことを指します。
+Angular アプリケーションにおけるサービスは、 {@link di 依存性注入 (DI)} 
+によってつなぎ合わされる、代用可能なオブジェクトです。
 
 
-## Related Topics
+## 関連トピック
 
-* {@link dev_guide.services.understanding_services Understanding Angular Services}
-* {@link dev_guide.services.creating_services Creating Angular Services}
-* {@link dev_guide.services.managing_dependencies Managing Service Dependencies}
-* {@link dev_guide.services.injecting_controllers Injecting Services Into Controllers}
-* {@link dev_guide.services.testing_services Testing Angular Services}
+* {@link dev_guide.services.understanding_services Angular のサービスを理解する}
+* {@link dev_guide.services.creating_services Angular のサービスを作成する}
+* {@link dev_guide.services.managing_dependencies サービスの依存関係を管理する}
+* {@link dev_guide.services.injecting_controllers コントローラにサービスを注入する}
+* {@link dev_guide.services.testing_services Angular のサービスをテストする}
 
-## Related API
+## 関連 API
 
-* {@link api/ng Angular Service API}
+* {@link api/ng Angular サービス API}
